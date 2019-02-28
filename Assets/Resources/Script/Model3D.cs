@@ -59,6 +59,7 @@ public class Model3D : MonoBehaviour
         const string scriptName = "WallEditor";
         System.Type myScriptType = System.Type.GetType(scriptName + ",Assembly-CSharp");
         model.AddComponent(myScriptType);
+        model.transform.localScale = Size;
 
         return model;
     }

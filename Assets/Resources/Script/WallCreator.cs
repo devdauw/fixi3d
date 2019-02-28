@@ -25,9 +25,9 @@ public class WallCreator : MonoBehaviour
     private Rect position = new Rect(193, 148, 249 - 193, 148 - 104);
     public Color color = Color.green;
     private Vector3[] mousePositions = new Vector3[2];
-    private bool draggingMouse = false;
-    private bool drawRect = false;
-    public float timer = 1.2f;
+    private bool _draggingMouse = false;
+    private bool _drawRect = false;
+    public float Timer = 1.2f;
 
     void Start()
     {
@@ -36,13 +36,13 @@ public class WallCreator : MonoBehaviour
         #endif*/
     }
 
-    void CreateGo(float width, float height)
+    void CreateGo(float width, float height, float x, float y)
     {
         /*Size.Add(GetLengthFromPage());
         Size.Add(GetHeightFromPage());
         Size.Add(GetWidthFromPage());*/
         Model3D model = new Model3D();
-        ListGo.Add(model.CreateModel(0,0, posZ, width, height, 2, "Wall" + _nbWall, "Green"));
+        ListGo.Add(model.CreateModel(x, y, posZ, width, height, 2, "Wall" + _nbWall, "Green"));
         //go = model.CreateModel(0, 0, 0, Size[0], Size[1], Size[2], "Wall" + _nbWall, "Green");
         _nbWall++;
         posZ += 10;
@@ -61,19 +61,19 @@ public class WallCreator : MonoBehaviour
 
     void reset()
     {
-        drawRect = false;
+        _drawRect = false;
         mousePositions[0] = new Vector3();
         mousePositions[1] = new Vector3();
-        timer = 1.2f;
-        draggingMouse = false;
+        Timer = 1.2f;
+        _draggingMouse = false;
     }
     private void Update()
     {
-        if (drawRect)
+        if (_drawRect)
         {
-            if (timer > 0.1)
+            if (Timer > 0.1)
             {
-                timer -= 1 * Time.deltaTime;
+                Timer -= 1 * Time.deltaTime;
             }
             else
             {
@@ -82,30 +82,23 @@ public class WallCreator : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
-            if (!draggingMouse)
+            if (!_draggingMouse)
             {
                 mousePositions[0] = Input.mousePosition;
-                //print("x start:" + mousePositions[0].x);
-                //print("y start:" + mousePositions[0].y);
             }
-            draggingMouse = true;
+            _draggingMouse = true;
         }
         if (Input.GetMouseButtonUp(0))
         {
-            if (draggingMouse)
+            if (_draggingMouse)
             {
                 mousePositions[1] = Input.mousePosition;
                 float x = Math.Min(mousePositions[0].x, mousePositions[1].x);
-                float y = Math.Min(Screen.height - mousePositions[0].y, Screen.height - mousePositions[1].y);
+                float y = Math.Min(mousePositions[0].y, mousePositions[1].y);
                 float width = Math.Max(mousePositions[0].x, mousePositions[1].x) - x;
                 float height = Math.Max(Screen.height - mousePositions[0].y, Screen.height - mousePositions[1].y) - y;
-                //print("width:" + width);
-                //print("height:" + height);
-                //print("x end:" + mousePositions[1].x);
-                //print("y end:" + mousePositions[1].y);
-                //print("Got last mouse position!");
-                drawRect = true;
-                CreateGo(width, height);
+                _drawRect = true;
+                CreateGo((float)(width/30.5), (float)(height/30.5), (float)(((x-335)/30)+0.5), (float)(((y-72)/30)+0.5));
             }
         }
     }

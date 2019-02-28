@@ -65,8 +65,8 @@ public class MouseDrawing : MonoBehaviour
             if (!draggingMouse)
             {
                 mousePositions[0] = Input.mousePosition;
-                //print("x start:" + mousePositions[0].x);
-                //print("y start:" + mousePositions[0].y);
+                print("x start:" + mousePositions[0].x);
+                print("y start:" + mousePositions[0].y);
             }
             draggingMouse = true;
         }
@@ -77,14 +77,23 @@ public class MouseDrawing : MonoBehaviour
                 mousePositions[1] = Input.mousePosition;
                 float x = Math.Min(mousePositions[0].x, mousePositions[1].x);
                 float y = Math.Min(Screen.height - mousePositions[0].y, Screen.height - mousePositions[1].y);
+                float y2 = Math.Min(mousePositions[0].y, mousePositions[1].y);
                 float width = Math.Max(mousePositions[0].x, mousePositions[1].x) - x;
                 float height = Math.Max(Screen.height - mousePositions[0].y, Screen.height - mousePositions[1].y) - y;
-                //print("width:" + width);
-                //print("height:" + height);
-                //print("x end:" + mousePositions[1].x);
-                //print("y end:" + mousePositions[1].y);
+                print("width:" + width);
+                print("height:" + height);
+                print("x end:" + mousePositions[1].x);
+                print("y end:" + mousePositions[1].y);
+                print("X" + x);
+                print("Y2" + y2);
+                print("X-335/30 : " + ((x-335)/30));
+                print("Y2-72/30 : " + ((y2-72)/30));
+                /*print("Width/30:" + (width/30));
+                print("Height/30:" + (height/30));
+                print("Width+335/30 : " + (width-335)/30);
+                print("Height+72/30 : " + (height-72)/30);*/
                 position = new Rect(x, y, width, height);
-                //print("Got last mouse position!");
+                print("Got last mouse position!");
                 drawRect = true;
             }
         }
