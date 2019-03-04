@@ -92,7 +92,13 @@ public class MouseDrawing : MonoBehaviour
                 print("Height/30:" + (height/30));
                 print("Width+335/30 : " + (width-335)/30);
                 print("Height+72/30 : " + (height-72)/30);*/
-                position = new Rect(x, y, width, height);
+                Rect rect = new Rect(x, y, width, height);
+                position = rect;
+                float pixelCountForOneUnit = Screen.height * 0.5f / Camera.main.orthographicSize;
+                float scaleX = rect.width / pixelCountForOneUnit;
+                float scaleY = rect.height / pixelCountForOneUnit;
+                Vector3 scale = new Vector3(scaleX, scaleY, 1.0f);
+                transform.localScale = scale;
                 print("Got last mouse position!");
                 drawRect = true;
             }
