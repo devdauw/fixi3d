@@ -93,34 +93,13 @@ public class WallCreator : MonoBehaviour
             if (_draggingMouse)
             {
                 mousePositions[1] = Input.mousePosition;
-                float x = Math.Min(mousePositions[0].x, mousePositions[1].x);
-                float y = Math.Min(mousePositions[0].y, mousePositions[1].y);
-                float width = Math.Max(mousePositions[0].x, mousePositions[1].x) - x;
-                float height = Math.Max(mousePositions[0].y,  mousePositions[1].y) - y;
                 _drawRect = true;
-                print("MousePosition.x[0] : " + mousePositions[0].x);
-                print("MousePosition.x[1] : " + mousePositions[1].x);
-                print("Screen - MousePosition.x[0] : " + (Screen.width -mousePositions[0].x));
-                print("Screen - MousePosition.x[1] : " + (Screen.width -mousePositions[1].x));
-                print("MousePosition.y[0] : " + mousePositions[0].y);
-                print("MousePosition.y[1] : " + mousePositions[1].y);
-                print("Screen - MousePosition.y[0] : " + (Screen.height - mousePositions[0].y));
-                print("Screen - MousePosition.y[1] : " + (Screen.height - mousePositions[1].y));
-                print("Before X : " + x);
-                print("Before Y : " + y);
-                width = width / 30.5f;
-                height = height / 30.5f;
-                /*
-                 * X = longueur minimale
-                 * -15 = positionnement au bord gauche du mur
-                 * -335 = positionnement au 0 de Unity
-                 * /30.0f = pour convertir les unités de la souris avec celle de Unity
-                 * + 0.5f = 
-                 */
-                x = ((((x - 15)- 335) / 30.0f) + 0.5f);
-                y = ((((y - 15) - 72) / 30.0f) + 0.5f);
-                print("X : " + x);
-                print("Y : " + y);
+                Vector3 beginPos = Camera.main.ScreenToWorldPoint(mousePositions[0]);
+                Vector3 endPos = Camera.main.ScreenToWorldPoint(mousePositions[1]);
+                float x = Math.Min(beginPos.x, endPos.x);
+                float y = Math.Min(beginPos.y, endPos.y);
+                float width = Math.Max(beginPos.x, endPos.x) - x;
+                float height = Math.Max(beginPos.y, endPos.y) - y;
                 CreateGo(width, height, x, y);
             }
         }
