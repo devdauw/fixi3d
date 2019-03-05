@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
@@ -14,13 +12,9 @@ public class CameraController : MonoBehaviour
         for (var i = 0; i < Cameras.Length; i++)
         {
             if (i != 0)
-            {
                 Cameras[i].enabled = false;
-            }
             else
-            {
                 Cameras[i].enabled = true;
-            }
         }
     }
 
@@ -33,7 +27,6 @@ public class CameraController : MonoBehaviour
                 _currentCameraIndex++;
             else
                 _currentCameraIndex = 0;
-
             for (int i = 0; i < Cameras.Length; i++)
             {
                 if (i != _currentCameraIndex)
