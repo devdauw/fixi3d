@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class WallCreator : MonoBehaviour
 {
@@ -16,14 +14,12 @@ public class WallCreator : MonoBehaviour
     [DllImport("__Internal")]
     private static extern float GetWidthFromPage();
     private static int _nbWall = 1;
-    private Vector2 _box_start_pos;
-    private Vector2 _box_end_pos;
 
     public List<GameObject> ListGo = new List<GameObject>();
     private float posZ = 0;
 
-    private Rect position = new Rect(193, 148, 249 - 193, 148 - 104);
-    public Color color = Color.green;
+    private Rect _position = new Rect(193, 148, 249 - 193, 148 - 104);
+    public Color Color = Color.green;
     private Vector3[] mousePositions = new Vector3[2];
     private bool _draggingMouse = false;
     private bool _drawRect = false;
@@ -93,14 +89,17 @@ public class WallCreator : MonoBehaviour
             if (_draggingMouse)
             {
                 mousePositions[1] = Input.mousePosition;
-                _drawRect = true;
-                Vector3 beginPos = Camera.main.ScreenToWorldPoint(mousePositions[0]);
-                Vector3 endPos = Camera.main.ScreenToWorldPoint(mousePositions[1]);
-                float x = Math.Min(beginPos.x, endPos.x);
-                float y = Math.Min(beginPos.y, endPos.y);
-                float width = Math.Max(beginPos.x, endPos.x) - x;
-                float height = Math.Max(beginPos.y, endPos.y) - y;
-                CreateGo(width, height, x, y);
+                if (mousePositions[0] != mousePositions[1])
+                {
+                    _drawRect = true;
+                    Vector3 beginPos = Camera.main.ScreenToWorldPoint(mousePositions[0]);
+                    Vector3 endPos = Camera.main.ScreenToWorldPoint(mousePositions[1]);
+                    float x = Math.Min(beginPos.x, endPos.x);
+                    float y = Math.Min(beginPos.y, endPos.y);
+                    float width = Math.Max(beginPos.x, endPos.x) - x;
+                    float height = Math.Max(beginPos.y, endPos.y) - y;
+                    CreateGo(width, height, x, y);
+                } 
             }
         }
     }
