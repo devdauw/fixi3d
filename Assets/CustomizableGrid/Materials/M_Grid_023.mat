@@ -118,7 +118,7 @@ Material:
     - _WorldPosition: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.9882353, g: 0.98039216, b: 0.8156863, a: 1}
+    - _BaseColor: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
     - _BasePatternColor: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
     - _CenterGridColor: {r: 0.6313726, g: 0.6313726, b: 0.5803922, a: 1}
     - _CenterLineColor: {r: 0.5588235, g: 0.5588235, b: 0.5588235, a: 1}
