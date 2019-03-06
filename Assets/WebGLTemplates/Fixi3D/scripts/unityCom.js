@@ -1,5 +1,4 @@
 var gameInstance;
-var gameContainer = document.getElementById("gameContainer");
 
 document.addEventListener('DOMContentLoaded', function () { 
     gameInstance = UnityLoader.instantiate("gameContainer", 
@@ -54,9 +53,6 @@ function getCSharpModelsList(cSharpList) {
 
 window.addEventListener('keydown', function(event) {
     switch (event.key) {
-        case "Tab":
-            gameInstance.SendMessage('Main Camera', 'SwitchCamera');
-            break;
         case "c":
             gameInstance.SendMessage('Main Camera', 'SwitchCamera');
             break;
@@ -66,4 +62,9 @@ window.addEventListener('keydown', function(event) {
 
     event.preventDefault();
 }, true);
+
+
+
+
+
 
