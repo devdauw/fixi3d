@@ -3,18 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | %UNITY_WEB_NAME%</title>
+    <title>Unity WebGL Player | Fixi3D</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bulma/bulma.css">
     <script src="TemplateData/UnityProgress.js"></script>
-    <script src="%UNITY_WEBGL_LOADER_URL%"></script>
+    <script src="Build/UnityLoader.js"></script>
     <script>
       window.UNITY_CONSTANTS = {
-        UNITY_WEBNAME: "%UNITY_WEB_NAME%",
-        UNITY_WEBGL_LOADER_URL: "%UNITY_WEBGL_LOADER_URL%",
-        UNITY_WEBGL_BUILD_URL: "%UNITY_WEBGL_BUILD_URL%",
-        UNITY_WIDTH: "%UNITY_WIDTH%",
-        UNITY_HEIGHT: "%UNITY_HEIGHT%"
+        UNITY_WEBNAME: "Fixi3D",
+        UNITY_WEBGL_LOADER_URL: "Build/UnityLoader.js",
+        UNITY_WEBGL_BUILD_URL: "Build/FixiBuild.json",
+        UNITY_WIDTH: "960",
+        UNITY_HEIGHT: "600"
       }
     </script>
   </head>
@@ -23,18 +24,16 @@
       <div id="gameContainer"></div>
       <div id="topMenuBar">
           <label for="objectLength">Longueur: </label>
-          <input type="text" name="objectLength" id="input_length" value="5" />
+          <input type="text" name="objectLength" id="input_length" value="5" /> <br>
           <label for="objectHeight">Hauteur: </label>
-          <input type="text" name="objectHeight" id="input_height" value="4" />
+          <input type="text" name="objectHeight" id="input_height" value="4" /> <br>
           <label for="objectWidth">Profondeur: </label>
-          <input type="text" name="objectWidth" id="input_width" value="0.3" />
+          <input type="text" name="objectWidth" id="input_width" value="0.3" /> <br>
           <label for="wallsSelect">Liste de murs: </label>
-          <select id="wallsSelect"></select>
+          <select id="wallsSelect"></select> <br>
           <button id="createWall" onclick="createWall()">Create Wall</button>
           <button id="editWall" onclick="editWall()">Edit Wall</button>
           <button id="destroyWall" onclick="destroyWall()">Destroy Wall</button>
-          <div id="topMenuBar_Content">
-          </div>
       </div>
     </div>
 
