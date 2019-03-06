@@ -51,16 +51,25 @@ function getCSharpModelsList(cSharpList) {
     }
 }
 
+//Fonction permettant de s'assurer que le CANVAS est selectionne afin de permettre l'interaction avec le clavier
 window.addEventListener('keydown', function(event) {
-    switch (event.key) {
-        case "c":
-            gameInstance.SendMessage('Main Camera', 'SwitchCamera');
-            break;
-        default:
-            return;
-    }
+    var gameContainer = "BODY";
+    var isFocused = (document.activeElement.nodeName == gameContainer);
+    console.log(isFocused);
+    if (isFocused) {
+        //Si notre canvas est focus on regarde quelle touche du clavier est utilisee
+        switch (event.key) {
+            //Tranfert d'une camera a l'autre
+            case "c":
+            case "C":
+                gameInstance.SendMessage('Main Camera', 'SwitchCamera');
+                break;
+            default:
+                return;
+        }
 
-    event.preventDefault();
+        event.preventDefault();
+    }
 }, true);
 
 
