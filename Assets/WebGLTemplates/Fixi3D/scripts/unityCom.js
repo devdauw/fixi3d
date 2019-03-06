@@ -71,3 +71,11 @@ window.addEventListener('keydown', function(event) {
         event.preventDefault();
     }
 }, true);
+
+function openNav() {
+    document.getElementById("sideBar").style.width = "25vw";
+}
+
+function closeNav() {
+    document.getElementById("sideBar").style.width = "0";
+  } 
