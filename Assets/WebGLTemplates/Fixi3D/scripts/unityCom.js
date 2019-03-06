@@ -1,4 +1,5 @@
 var gameInstance;
+var gameContainer = document.getElementById("gameContainer");
 
 document.addEventListener('DOMContentLoaded', function () { 
     gameInstance = UnityLoader.instantiate("gameContainer", 
@@ -50,3 +51,19 @@ function getCSharpModelsList(cSharpList) {
         wallsList.appendChild(option);
     }
 }
+
+window.addEventListener('keydown', function(event) {
+    switch (event.key) {
+        case "Tab":
+            gameInstance.SendMessage('Main Camera', 'SwitchCamera');
+            break;
+        case "c":
+            gameInstance.SendMessage('Main Camera', 'SwitchCamera');
+            break;
+        default:
+            return;
+    }
+
+    event.preventDefault();
+}, true);
+

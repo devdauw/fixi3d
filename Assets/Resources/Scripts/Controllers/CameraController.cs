@@ -18,22 +18,18 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    
-    void Update()
+    void SwitchCamera()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Cameras.Length - 1 != _currentCameraIndex)
+            _currentCameraIndex++;
+        else
+            _currentCameraIndex = 0;
+        for (int i = 0; i < Cameras.Length; i++)
         {
-            if (Cameras.Length - 1 != _currentCameraIndex)
-                _currentCameraIndex++;
+            if (i != _currentCameraIndex)
+                Cameras[i].enabled = false;
             else
-                _currentCameraIndex = 0;
-            for (int i = 0; i < Cameras.Length; i++)
-            {
-                if (i != _currentCameraIndex)
-                    Cameras[i].enabled = false;
-                else
-                    Cameras[i].enabled = true;
-            }
-        }   
+                Cameras[i].enabled = true;
+        }
     }
 }
