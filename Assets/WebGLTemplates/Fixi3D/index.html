@@ -24,13 +24,20 @@
       <div id="gameContainer"></div>
       <div id="topMenuBar">
           <label for="objectLength">Longueur: </label>
-          <input type="text" name="objectLength" id="input_length" value="5" /> <br>
+          <input type="text" name="objectLength" id="input_length" class="input is-small" value="5" /> <br>
           <label for="objectHeight">Hauteur: </label>
-          <input type="text" name="objectHeight" id="input_height" value="4" /> <br>
+          <input type="text" name="objectHeight" id="input_height" class="input is-small" value="4" /> <br>
           <label for="objectWidth">Profondeur: </label>
-          <input type="text" name="objectWidth" id="input_width" value="0.3" /> <br>
+          <input type="text" name="objectWidth" id="input_width" class="input is-small" value="0.3" /> <br>
           <label for="wallsSelect">Liste de murs: </label>
-          <select id="wallsSelect"></select> <br>
+          <div class="select">
+            <select id="wallsSelect" class="select">
+              <option style="display: none">Choisir un mur</option>
+            </select>
+          </div>
+
+          <br>
+
           <button id="createWall" onclick="createWall()">Create Wall</button>
           <button id="editWall" onclick="editWall()">Edit Wall</button>
           <button id="destroyWall" onclick="destroyWall()">Destroy Wall</button>
