@@ -3,40 +3,65 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | %UNITY_WEB_NAME%</title>
+    <title>Fixi3D web app</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bulma/bulma.css">
     <script src="TemplateData/UnityProgress.js"></script>
-    <script src="%UNITY_WEBGL_LOADER_URL%"></script>
+    <script src="Build/UnityLoader.js"></script>
     <script>
       window.UNITY_CONSTANTS = {
-        UNITY_WEBNAME: "%UNITY_WEB_NAME%",
-        UNITY_WEBGL_LOADER_URL: "%UNITY_WEBGL_LOADER_URL%",
-        UNITY_WEBGL_BUILD_URL: "%UNITY_WEBGL_BUILD_URL%",
-        UNITY_WIDTH: "%UNITY_WIDTH%",
-        UNITY_HEIGHT: "%UNITY_HEIGHT%"
+        UNITY_WEBNAME: "Fixi3D",
+        UNITY_WEBGL_LOADER_URL: "Build/UnityLoader.js",
+        UNITY_WEBGL_BUILD_URL: "Build/FixiBuild.json",
+        UNITY_WIDTH: "960",
+        UNITY_HEIGHT: "600"
       }
     </script>
   </head>
   <body>
     <div class="webgl-content">
       <div id="gameContainer"></div>
-      <div id="topMenuBar">
-          <label for="objectLength">Longueur: </label>
-          <input type="text" name="objectLength" id="input_length" value="5" />
-          <label for="objectHeight">Hauteur: </label>
-          <input type="text" name="objectHeight" id="input_height" value="4" />
-          <label for="objectWidth">Profondeur: </label>
-          <input type="text" name="objectWidth" id="input_width" value="0.3" />
-          <label for="wallsSelect">Liste de murs: </label>
-          <select id="wallsSelect"></select>
-          <button id="createWall" onclick="createWall()">Create Wall</button>
-          <button id="editWall" onclick="editWall()">Edit Wall</button>
-          <button id="destroyWall" onclick="destroyWall()">Destroy Wall</button>
-          <div id="topMenuBar_Content">
-          </div>
-      </div>
     </div>
+
+    <span onclick="openNav()">&#8594; Ouvrir sidebar</span>
+
+    <div id="sideBar" class="sidebar">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <div class="control is-horizontal">
+        <div class="control-label">
+            <label for="objectLength" class="label">Longueur: </label>
+        </div>
+        <div class="control">
+            <input type="text" name="objectLength" id="input_length" class="input is-small" value="5" />
+        </div>
+        <div class="control-label">
+            <label for="objectHeight" class="label">Hauteur: </label>
+        </div>
+        <div class="control">
+            <input type="text" name="objectHeight" id="input_height" class="input is-small" value="4" />
+        </div>
+        <div class="control-label">
+              <label for="objectWidth" class="label">Profondeur: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectWidth" id="input_width" class="input is-small" value="0.3" /> <br>
+        </div>
+        <div class="control-label">
+            <label for="wallsSelect" class="label">Liste de murs: </label>
+        </div>
+        <div class="select">
+            <select id="wallsSelect" class="select">
+              <option style="display: none">Choisir un mur</option>
+            </select>
+        </div>
+      </div>
+
+      <button id="createWall" onclick="createWall()">Create Wall</button>
+      <button id="editWall" onclick="editWall()">Edit Wall</button>
+      <button id="destroyWall" onclick="destroyWall()">Destroy Wall</button>
+    </div>
+
 
     <script src="scripts/unityCom.js"></script>
   </body>
