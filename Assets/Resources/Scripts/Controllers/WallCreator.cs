@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -157,21 +158,15 @@ public class WallCreator : MonoBehaviour
     {
         //Debug.Log("access + model: " + selectedWall);
         SzModel model = JsonUtility.FromJson<SzModel>(selectedWall);
-        foreach (var item in modelsList)
+        for (int i = 0; i < modelsList.Count; i++)
         {
-            if (item.Name == model.modelName)
+            if (modelsList[i].Name == model.modelName)
             {
-                GameObject hiddenWall = item.Model;
+                GameObject hiddenWall = modelsList[i].Model;
                 hiddenWall.SetActive(false);
-                Debug.Log("Wall hidden");
-                var itemToRemove = modelsList.Find(r => r.Name == item.Name);
-                Debug.Log(itemToRemove);
-                if (itemToRemove != null)
-                {
-                    modelsList.Remove(itemToRemove);
-                    GetWallsList();
-                }
-
+                Debug.Log(modelsList[i]);
+                modelsList.Remove(modelsList[i]);
+                GetWallsList();
             }
         }
     }
