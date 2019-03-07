@@ -61,7 +61,8 @@ function sendCurrentSelectedWall() {
         jsonWallsList[items].forEach(element => {
             if (element.modelName == selectValue) {
                 var ob = element;
-                console.log(ob);
+                var jsonString = JSON.stringify(ob);
+                gameInstance.SendMessage("WallCreator", "RemoveWall", jsonString);
             }
         });
     }

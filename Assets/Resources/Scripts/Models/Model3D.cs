@@ -13,6 +13,7 @@ public class Model3D : MonoBehaviour
     public Vector3 Size { get; set; }
     public string Name { get; set; }
     public Material Material { get; set; }
+    public GameObject Model { get; set; }
 
     #region Vertices
     public Vector3 FrontLeftBottom { get; set; }
@@ -25,7 +26,7 @@ public class Model3D : MonoBehaviour
     public Vector3 BackRightTop { get; set; }
     #endregion
 
-    public GameObject CreateModel(float posX, float posY, float posZ, float sizeX, float sizeY, float sizeZ, string name, string materialName)
+    public void CreateModel(float posX, float posY, float posZ, float sizeX, float sizeY, float sizeZ, string name, string materialName)
     {
         Position = new Vector3(posX, posY, posZ);
         Size = new Vector3(sizeX, sizeY, sizeZ);
@@ -52,15 +53,10 @@ public class Model3D : MonoBehaviour
 
         mesh.RecalculateNormals();
 
-        GameObject model = new GameObject(Name, typeof(MeshFilter), typeof(MeshRenderer));
-        model.GetComponent<MeshRenderer>().material = Material;
-        model.GetComponent<MeshFilter>().mesh = mesh;
-        model.transform.position = Position;
-        /*const string scriptName = "WallEditor";
-        System.Type myScriptType = System.Type.GetType(scriptName + ",Assembly-CSharp");
-        model.AddComponent(myScriptType);*/
-
-        return model;
+        Model = new GameObject(Name, typeof(MeshFilter), typeof(MeshRenderer));
+        Model.GetComponent<MeshRenderer>().material = Material;
+        Model.GetComponent<MeshFilter>().mesh = mesh;
+        Model.transform.position = Position;
     }
 
     private Vector3[] GetVertices()

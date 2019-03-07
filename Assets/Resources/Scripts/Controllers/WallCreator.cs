@@ -60,7 +60,6 @@ public class WallCreator : MonoBehaviour
     //Method that takes our C# walls list and send it back to our webpage using pointers to the adress of the list
     public void GetWallsList()
     {
-        Debug.Log("List:");
         //We need to have a simple serializable object
         List<SzModel> szModelList = new List<SzModel>();
         foreach (var item in modelsList)
@@ -69,7 +68,6 @@ public class WallCreator : MonoBehaviour
             newWall.modelName = item.Name;
             newWall.modelSize = item.Size;
             szModelList.Add(newWall);
-            Debug.Log(item.Name);
         }
 
         //We serialize our list of simple objects and pass it back to our html
@@ -152,11 +150,29 @@ public class WallCreator : MonoBehaviour
     {
         go.transform.localScale = new Vector3(GetLengthFromPage()/Size[0], GetHeightFromPage()/Size[1], GetWidthFromPage()/Size[2]);
     }
+    */
  
     //Destroy the Wall selected
-    void DestroyWall(Model3D wallSelected)
+    void RemoveWall(string selectedWall)
     {
-        Destroy(wallSelected);
-        modelsList.Remove(wallSelected);
+        //Debug.Log("access + model: " + selectedWall);
+        SzModel model = JsonUtility.FromJson<SzModel>(selectedWall);
+        foreach (var item in modelsList)
+        {
+            if (item.Name == model.modelName)
+            {
+                GameObject hiddenWall = item.Model;
+                hiddenWall.SetActive(false);
+                Debug.Log("Wall hidden");
+                var itemToRemove = modelsList.Find(r => r.Name == item.Name);
+                Debug.Log(itemToRemove);
+                if (itemToRemove != null)
+                {
+                    modelsList.Remove(itemToRemove);
+                    GetWallsList();
+                }
+
+            }
+        }
     }
 }
