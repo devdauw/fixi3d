@@ -44,7 +44,9 @@ public class WallCreator : MonoBehaviour
         model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + wallNum, "Green");
         modelsList.Add(model);
         wallNum++;
-        GetWallsList();
+        #if !UNITY_EDITOR && UNITY_WEBGL
+            GetWallsList();
+        #endif
     }
 
     //Creation use by drawing with mouse
@@ -55,24 +57,9 @@ public class WallCreator : MonoBehaviour
         modelsList.Add(model);
         wallNum++;
         posZ += 10;
-        GetWallsList();
-    }
-
-    //Method that takes our C# walls list and send it back to our webpage using pointers to the adress of the list
-    public void GetWallsList()
-    {
-        //We need to have a simple serializable object
-        List<SzModel> szModelList = new List<SzModel>();
-        foreach (var item in modelsList)
-        {
-            SzModel newWall = new SzModel();
-            newWall.modelName = item.Name;
-            newWall.modelSize = item.Size;
-            szModelList.Add(newWall);
-        }
-
-        //We serialize our list of simple objects and pass it back to our html
-        GetModelsList(JsonHelper.ToJson<SzModel>(szModelList.ToArray(), true));
+        #if !UNITY_EDITOR && UNITY_WEBGL
+            GetWallsList();
+        #endif
     }
 
     //Copy Paste function
@@ -86,13 +73,10 @@ public class WallCreator : MonoBehaviour
                 wallSelected.Size.x, wallSelected.Size.y, wallSelected.Size.z, "Wall" + wallNum, "Green");
             wallNum++;
             modelsList.Add(copyWall);
-            GetWallsList();
+            #if !UNITY_EDITOR && UNITY_WEBGL
+                GetWallsList();
+            #endif
         }
-    }
-
-    public void GetSelectedWall()
-    {
-        SzModel selectedWall = new SzModel();
     }
 
     // Reset the event for drawing with mouse after a certain amount of time
@@ -156,7 +140,6 @@ public class WallCreator : MonoBehaviour
     //Destroy the Wall selected
     void RemoveWall(string selectedWall)
     {
-        //Debug.Log("access + model: " + selectedWall);
         SzModel model = JsonUtility.FromJson<SzModel>(selectedWall);
         for (int i = 0; i < modelsList.Count; i++)
         {
@@ -164,10 +147,28 @@ public class WallCreator : MonoBehaviour
             {
                 GameObject hiddenWall = modelsList[i].Model;
                 hiddenWall.SetActive(false);
-                Debug.Log(modelsList[i]);
                 modelsList.Remove(modelsList[i]);
-                GetWallsList();
+                #if !UNITY_EDITOR && UNITY_WEBGL
+                    GetWallsList();
+                #endif
             }
         }
+    }
+
+    //Method that takes our C# walls list and send it back to our webpage using pointers to the adress of the list
+    public void GetWallsList()
+    {
+        //We need to have a simple serializable object
+        List<SzModel> szModelList = new List<SzModel>();
+        foreach (var item in modelsList)
+        {
+            SzModel newWall = new SzModel();
+            newWall.modelName = item.Name;
+            newWall.modelSize = item.Size;
+            szModelList.Add(newWall);
+        }
+
+        //We serialize our list of simple objects and pass it back to our html
+        GetModelsList(JsonHelper.ToJson<SzModel>(szModelList.ToArray(), true));
     }
 }

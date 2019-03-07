@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Model3D : MonoBehaviour
+public class Model3D
 {
     private Vector3 _position;
     private Vector3 _size;
