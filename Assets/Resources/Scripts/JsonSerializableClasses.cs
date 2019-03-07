@@ -11,4 +11,5 @@ public class SzModel
 {
     public string modelName;
     public Vector3 modelSize;
+    public Vector3 modelPosition;
 }
