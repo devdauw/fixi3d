@@ -26,7 +26,6 @@ function getWidthFromPage() {
 
 function createWall() {
     gameInstance.SendMessage('WallCreator', 'CreateWall');
-    gameInstance.SendMessage('WallCreator', 'GetWallsList');
 }
 
 function editWall() {
@@ -41,9 +40,11 @@ function getCSharpModelsList(cSharpList) {
     jsonWallsList = JSON.parse(cSharpList);
     var wallsList = document.getElementById("wallsSelect"),
         option,
-        i = jsonWallsList.Items.length - 1,
+        i = 0,
         length = jsonWallsList.Items.length;
-
+    for(a in wallsList.options){
+        wallsList.options.remove(0);
+    }
     for (; i < length; i++) {
         option = document.createElement('option');
         option.setAttribute('value', jsonWallsList.Items[i]['modelName']);
@@ -64,6 +65,11 @@ function sendCurrentSelectedWall() {
             }
         });
     }
+}
+
+function sendWallSelected(){
+    var wallsList = document.getElementById("wallsSelect");
+    gameInstance.SendMessage('WallCreator', 'CopyPaste', wallsList.options[wallsList.selectedIndex].text);
 }
 
 //Fonction permettant de s'assurer que le CANVAS est selectionne afin de permettre l'interaction avec le clavier

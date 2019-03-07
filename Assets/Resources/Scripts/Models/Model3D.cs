@@ -56,9 +56,9 @@ public class Model3D : MonoBehaviour
         model.GetComponent<MeshRenderer>().material = Material;
         model.GetComponent<MeshFilter>().mesh = mesh;
         model.transform.position = Position;
-        const string scriptName = "WallEditor";
+        /*const string scriptName = "WallEditor";
         System.Type myScriptType = System.Type.GetType(scriptName + ",Assembly-CSharp");
-        model.AddComponent(myScriptType);
+        model.AddComponent(myScriptType);*/
 
         return model;
     }

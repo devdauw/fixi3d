@@ -36,14 +36,17 @@ public class WallCreator : MonoBehaviour
         #endif
     }
 
+    //Creation use by the Html button
     void CreateWall()
     {
         Model3D model = new Model3D();
         model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + wallNum, "Green");
         modelsList.Add(model);
         wallNum++;
+        GetWallsList();
     }
 
+    //Creation use by drawing with mouse
     void CreateWall(float width, float height, float x, float y)
     {
         Model3D model = new Model3D();
@@ -51,11 +54,13 @@ public class WallCreator : MonoBehaviour
         modelsList.Add(model);
         wallNum++;
         posZ += 10;
+        GetWallsList();
     }
 
     //Method that takes our C# walls list and send it back to our webpage using pointers to the adress of the list
     public void GetWallsList()
     {
+        Debug.Log("List:");
         //We need to have a simple serializable object
         List<SzModel> szModelList = new List<SzModel>();
         foreach (var item in modelsList)
@@ -64,12 +69,34 @@ public class WallCreator : MonoBehaviour
             newWall.modelName = item.Name;
             newWall.modelSize = item.Size;
             szModelList.Add(newWall);
+            Debug.Log(item.Name);
         }
 
         //We serialize our list of simple objects and pass it back to our html
         GetModelsList(JsonHelper.ToJson<SzModel>(szModelList.ToArray(), true));
     }
 
+    //Copy Paste function
+    public void CopyPaste(string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            Model3D wallSelected = modelsList.Find(x => x.Name == value);
+            Model3D copyWall = new Model3D();
+            copyWall.CreateModel(wallSelected.Position.x + wallSelected.Size.x, wallSelected.Position.y, wallSelected.Position.z,
+                wallSelected.Size.x, wallSelected.Size.y, wallSelected.Size.z, "Wall" + wallNum, "Green");
+            wallNum++;
+            modelsList.Add(copyWall);
+            GetWallsList();
+        }
+    }
+
+    public void GetSelectedWall()
+    {
+        SzModel selectedWall = new SzModel();
+    }
+
+    // Reset the event for drawing with mouse after a certain amount of time
     void resetMouseClickTimer()
     {
         _drawRect = false;
@@ -124,10 +151,12 @@ public class WallCreator : MonoBehaviour
     void EditWall()
     {
         go.transform.localScale = new Vector3(GetLengthFromPage()/Size[0], GetHeightFromPage()/Size[1], GetWidthFromPage()/Size[2]);
-    }*/
-
-    void RemoveWall()
+    }
+ 
+    //Destroy the Wall selected
+    void DestroyWall(Model3D wallSelected)
     {
-        
+        Destroy(wallSelected);
+        modelsList.Remove(wallSelected);
     }
 }
