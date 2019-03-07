@@ -53,6 +53,7 @@ public class WallCreator : MonoBehaviour
         modelsList.Add(model);
         wallNum++;
         posZ += 10;
+        GetWallsList();
     }
 
     //Method that takes our C# walls list and send it back to our webpage using pointers to the adress of the list
@@ -85,6 +86,7 @@ public class WallCreator : MonoBehaviour
                 wallSelected.Size.x, wallSelected.Size.y, wallSelected.Size.z, "Wall" + wallNum, "Green");
             wallNum++;
             modelsList.Add(copyWall);
+            GetWallsList();
         }
     }
 
