@@ -24,10 +24,7 @@
       <div id="gameContainer"></div>
     </div>
 
-    <span onclick="openNav()">&#8594; Ouvrir sidebar</span>
-
     <div id="sideBar" class="sidebar">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       <div class="control is-horizontal">
         <div class="control-label">
             <label for="objectLength" class="label">Longueur: </label>
@@ -60,7 +57,7 @@
 
       <button id="createWall" onclick="createWall()">Create Wall</button>
       <button id="editWall" onclick="editWall()">Edit Wall</button>
-      <button id="destroyWall" onclick="destroyWall()">Destroy Wall</button>
+      <button id="removeWall" onclick="sendCurrentSelectedWall()">Remove Wall</button>
     </div>
 
 

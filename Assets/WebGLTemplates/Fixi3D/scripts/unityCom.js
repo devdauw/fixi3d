@@ -1,4 +1,5 @@
 var gameInstance;
+var jsonWallsList;
 
 document.addEventListener('DOMContentLoaded', function () { 
     gameInstance = UnityLoader.instantiate("gameContainer", 
@@ -36,7 +37,7 @@ function destroyWall(){
 }
 
 function getCSharpModelsList(cSharpList) {
-    var jsonWallsList = JSON.parse(cSharpList);
+    jsonWallsList = JSON.parse(cSharpList);
     var wallsList = document.getElementById("wallsSelect"),
         option,
         i = 0,
@@ -46,9 +47,24 @@ function getCSharpModelsList(cSharpList) {
     }
     for (; i < length; i++) {
         option = document.createElement('option');
-        option.setAttribute('value', jsonWallsList.Items.modelName);
+        option.setAttribute('value', jsonWallsList.Items[i]['modelName']);
         option.appendChild(document.createTextNode(jsonWallsList.Items[i]['modelName']));
         wallsList.appendChild(option);
+    }
+    return jsonWallsList;
+}
+
+function sendCurrentSelectedWall() {
+    var select = document.getElementById("wallsSelect");
+    var selectValue = select[select.selectedIndex].value;
+    for(var items in jsonWallsList) {
+        jsonWallsList[items].forEach(element => {
+            if (element.modelName == selectValue) {
+                var ob = element;
+                var jsonString = JSON.stringify(ob);
+                gameInstance.SendMessage("WallCreator", "RemoveWall", jsonString);
+            }
+        });
     }
 }
 

@@ -17,18 +17,10 @@
     top: 0;
     left: 0;
     background-color: rgba(0,0,0,0.5);
-    width: 0;
+    width: 25vw;
     height: 100vh;
     padding-top: 60px;
     transition: 0.5s;
-}
-
-.sidebar .closeBtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
 }
 
 .webgl-content .logo, .progress {position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
