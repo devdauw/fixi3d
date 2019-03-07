@@ -25,7 +25,6 @@ function getWidthFromPage() {
 
 function createWall() {
     gameInstance.SendMessage('WallCreator', 'CreateWall');
-    gameInstance.SendMessage('WallCreator', 'GetWallsList');
 }
 
 function editWall() {

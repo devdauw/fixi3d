@@ -43,6 +43,7 @@ public class WallCreator : MonoBehaviour
         model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + wallNum, "Green");
         modelsList.Add(model);
         wallNum++;
+        GetWallsList();
     }
 
     //Creation use by drawing with mouse
