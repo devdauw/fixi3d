@@ -54,7 +54,7 @@ function getCSharpModelsList(cSharpList) {
 
 function sendWallSelected(){
     var wallsList = document.getElementById("wallsSelect");
-    gameInstance.SendMessage('WallCreator', 'SelectedWall', wallsList.options[wallsList.selectedIndex].text);
+    gameInstance.SendMessage('WallCreator', 'CopyPaste', wallsList.options[wallsList.selectedIndex].text);
 }
 
 //Fonction permettant de s'assurer que le CANVAS est selectionne afin de permettre l'interaction avec le clavier

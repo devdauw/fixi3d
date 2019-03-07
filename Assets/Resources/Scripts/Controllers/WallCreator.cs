@@ -77,7 +77,7 @@ public class WallCreator : MonoBehaviour
     }
 
     //Copy Paste function
-    public void SelectedWall(string value)
+    public void CopyPaste(string value)
     {
         if (!string.IsNullOrEmpty(value))
         {
