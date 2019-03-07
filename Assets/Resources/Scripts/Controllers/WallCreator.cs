@@ -124,11 +124,10 @@ public class WallCreator : MonoBehaviour
     void EditWall()
     {
         go.transform.localScale = new Vector3(GetLengthFromPage()/Size[0], GetHeightFromPage()/Size[1], GetWidthFromPage()/Size[2]);
-    }
+    }*/
 
-    void DestroyWall()
+    void RemoveWall()
     {
-        Destroy(go);
+        
     }
-    */
 }
