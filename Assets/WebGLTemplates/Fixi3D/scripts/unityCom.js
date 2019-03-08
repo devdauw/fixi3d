@@ -1,7 +1,7 @@
 var gameInstance;
 var jsonWallsList;
 
-document.addEventListener('DOMContentLoaded', function () { 
+document.addEventListener("DOMContentLoaded", function () { 
     gameInstance = UnityLoader.instantiate("gameContainer", 
     UNITY_CONSTANTS.UNITY_WEBGL_BUILD_URL, {
         onProgress: UnityProgress
@@ -25,15 +25,25 @@ function getWidthFromPage() {
 }
 
 function createWall() {
-    gameInstance.SendMessage('WallCreator', 'CreateWall');
+    gameInstance.SendMessage("WallCreator", "CreateWall");
 }
 
 function editWall() {
-    gameInstance.SendMessage('WallCreator', 'EditWall');
+    var selectedWall = getCurrentSelectedWall();
+    var jsonString = JSON.stringify(selectedWall);
+    gameInstance.SendMessage("WallCreator", "EditWall", jsonString);
 }
 
-function destroyWall(){
-    gameInstance.SendMessage('WallCreator', 'DestroyWall');
+function removeWall(){
+    var selectedWall = getCurrentSelectedWall();
+    var jsonString = JSON.stringify(selectedWall);
+    gameInstance.SendMessage("WallCreator", "RemoveWall", jsonString);
+}
+
+function copyWall(){
+    var selectedWall = getCurrentSelectedWall();
+    var jsonString = JSON.stringify(selectedWall);
+    gameInstance.SendMessage("WallCreator", "CopyWall", jsonString);
 }
 
 function getCSharpModelsList(cSharpList) {
@@ -46,35 +56,30 @@ function getCSharpModelsList(cSharpList) {
         wallsList.options.remove(0);
     }
     for (; i < length; i++) {
-        option = document.createElement('option');
-        option.setAttribute('value', jsonWallsList.Items[i]['modelName']);
-        option.appendChild(document.createTextNode(jsonWallsList.Items[i]['modelName']));
+        option = document.createElement("option");
+        option.setAttribute("value", jsonWallsList.Items[i]["modelName"]);
+        option.appendChild(document.createTextNode(jsonWallsList.Items[i]["modelName"]));
         wallsList.appendChild(option);
     }
     return jsonWallsList;
 }
 
-function sendCurrentSelectedWall() {
+function getCurrentSelectedWall() {
+    var ob = new Object;
     var select = document.getElementById("wallsSelect");
     var selectValue = select[select.selectedIndex].value;
     for(var items in jsonWallsList) {
         jsonWallsList[items].forEach(element => {
             if (element.modelName == selectValue) {
-                var ob = element;
-                var jsonString = JSON.stringify(ob);
-                gameInstance.SendMessage("WallCreator", "RemoveWall", jsonString);
+                ob = element;             
             }
         });
     }
-}
-
-function sendWallSelected(){
-    var wallsList = document.getElementById("wallsSelect");
-    gameInstance.SendMessage('WallCreator', 'CopyPaste', wallsList.options[wallsList.selectedIndex].text);
+    return ob;
 }
 
 //Fonction permettant de s'assurer que le CANVAS est selectionne afin de permettre l'interaction avec le clavier
-window.addEventListener('keydown', function(event) {
+window.addEventListener("keydown", function(event) {
     var gameContainer = "BODY";
     var isFocused = (document.activeElement.nodeName == gameContainer);
     console.log(isFocused);
@@ -84,7 +89,7 @@ window.addEventListener('keydown', function(event) {
             //Tranfert d'une camera a l'autre
             case "c":
             case "C":
-                gameInstance.SendMessage('Main Camera', 'SwitchCamera');
+                gameInstance.SendMessage("Main Camera", "SwitchCamera");
                 break;
             default:
                 return;

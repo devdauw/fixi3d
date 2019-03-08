@@ -37,58 +37,6 @@ public class WallCreator : MonoBehaviour
         #endif
     }
 
-    //Creation use by the Html button
-    void CreateWall()
-    {
-        Model3D model = new Model3D();
-        model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + wallNum, "Green");
-        modelsList.Add(model);
-        wallNum++;
-        #if !UNITY_EDITOR && UNITY_WEBGL
-            GetWallsList();
-        #endif
-    }
-
-    //Creation use by drawing with mouse
-    void CreateWall(float width, float height, float x, float y)
-    {
-        Model3D model = new Model3D();
-        model.CreateModel(x, y, posZ, width, height, 2, "Wall" + wallNum, "Green");
-        modelsList.Add(model);
-        wallNum++;
-        posZ += 10;
-        #if !UNITY_EDITOR && UNITY_WEBGL
-            GetWallsList();
-        #endif
-    }
-
-    //Copy Paste function
-    public void CopyPaste(string value)
-    {
-        if (!string.IsNullOrEmpty(value))
-        {
-            Model3D wallSelected = modelsList.Find(x => x.Name == value);
-            Model3D copyWall = new Model3D();
-            copyWall.CreateModel(wallSelected.Position.x + wallSelected.Size.x, wallSelected.Position.y, wallSelected.Position.z,
-                wallSelected.Size.x, wallSelected.Size.y, wallSelected.Size.z, "Wall" + wallNum, "Green");
-            wallNum++;
-            modelsList.Add(copyWall);
-            #if !UNITY_EDITOR && UNITY_WEBGL
-                GetWallsList();
-            #endif
-        }
-    }
-
-    // Reset the event for drawing with mouse after a certain amount of time
-    void resetMouseClickTimer()
-    {
-        _drawRect = false;
-        mousePositions[0] = new Vector3();
-        mousePositions[1] = new Vector3();
-        Timer = 1.2f;
-        _draggingMouse = false;
-    }
-
     private void Update()
     {
         if (_drawRect)
@@ -125,11 +73,66 @@ public class WallCreator : MonoBehaviour
                     float width = Math.Max(beginPos.x, endPos.x) - x;
                     float height = Math.Max(beginPos.y, endPos.y) - y;
                     CreateWall(width, height, x, y);
-                } 
+                }
             }
         }
     }
 
+    //Creation use by the Html button
+    void CreateWall()
+    {
+        Model3D model = new Model3D();
+        model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + wallNum, "Green");
+        modelsList.Add(model);
+        wallNum++;
+        #if !UNITY_EDITOR && UNITY_WEBGL
+            GetWallsList();
+        #endif
+    }
+
+    //Creation use by drawing with mouse
+    void CreateWall(float width, float height, float x, float y)
+    {
+        Model3D model = new Model3D();
+        model.CreateModel(x, y, posZ, width, height, 2, "Wall" + wallNum, "Green");
+        modelsList.Add(model);
+        wallNum++;
+        posZ += 10;
+        #if !UNITY_EDITOR && UNITY_WEBGL
+            GetWallsList();
+        #endif
+    }
+
+    //Copy Paste function
+    public void CopyWall(string selectedWall)
+    {
+        SzModel model = JsonUtility.FromJson<SzModel>(selectedWall);
+        for (int i = 0; i < modelsList.Count; i++)
+        {
+            if (modelsList[i].Name == model.modelName)
+            {
+                Model3D wallToCopy = modelsList[i];
+                Model3D copyWall = new Model3D();
+                copyWall.CreateModel(wallToCopy.Position.x + wallToCopy.Size.x, wallToCopy.Position.y, wallToCopy.Position.z,
+               wallToCopy.Size.x, wallToCopy.Size.y, wallToCopy.Size.z, "Wall" + wallNum, "Green");
+                wallNum++;
+                modelsList.Add(copyWall);
+                #if !UNITY_EDITOR && UNITY_WEBGL
+                                GetWallsList();
+                #endif
+            }
+        }
+    }
+
+    // Reset the event for drawing with mouse after a certain amount of time
+    void resetMouseClickTimer()
+    {
+        _drawRect = false;
+        mousePositions[0] = new Vector3();
+        mousePositions[1] = new Vector3();
+        Timer = 1.2f;
+        _draggingMouse = false;
+    }
     
     void EditWall(string selectedWall)
     {
@@ -139,7 +142,7 @@ public class WallCreator : MonoBehaviour
             if (modelsList[i].Name == model.modelName)
             {
                 GameObject editedWall = modelsList[i].Model;
-                editedWall.transform.localScale = new Vector3(GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage());
+                editedWall.transform.localScale = new Vector3(GetLengthFromPage() / modelsList[i].Size[0], GetHeightFromPage() / modelsList[i].Size[1], GetWidthFromPage()/modelsList[i].Size[2]);
                 #if !UNITY_EDITOR && UNITY_WEBGL
                     GetWallsList();
                 #endif
