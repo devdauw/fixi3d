@@ -94,10 +94,20 @@ window.addEventListener('keydown', function(event) {
     }
 }, true);
 
-function openNav() {
-    document.getElementById("sideBar").style.width = "25vw";
+document.getElementById("wallsSelect").onchange = function(event) {
+    var length = document.getElementById("input_length");
+    var height = document.getElementById("input_height");
+    var width = document.getElementById("input_width");
+    var select = document.getElementById("wallsSelect");
+    var selectValue = select[select.selectedIndex].value;
+    for(var items in jsonWallsList) {
+        jsonWallsList[items].forEach(element => {
+            if (element.modelName == selectValue) {
+                var ob = element;
+                length.value = ob.modelSize.x;
+                height.value = ob.modelSize.y;
+                width.value = ob.modelSize.z;
+            }
+        });
+    }
 }
-
-function closeNav() {
-    document.getElementById("sideBar").style.width = "0";
-  } 

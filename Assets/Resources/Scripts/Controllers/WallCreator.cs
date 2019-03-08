@@ -130,12 +130,24 @@ public class WallCreator : MonoBehaviour
         }
     }
 
-    /*
-    void EditWall()
+    
+    void EditWall(string selectedWall)
     {
-        go.transform.localScale = new Vector3(GetLengthFromPage()/Size[0], GetHeightFromPage()/Size[1], GetWidthFromPage()/Size[2]);
+        SzModel model = JsonUtility.FromJson<SzModel>(selectedWall);
+        for (int i = 0; i < modelsList.Count; i++)
+        {
+            if (modelsList[i].Name == model.modelName)
+            {
+                GameObject editedWall = modelsList[i].Model;
+                editedWall.transform.localScale = new Vector3(GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage());
+                #if !UNITY_EDITOR && UNITY_WEBGL
+                    GetWallsList();
+                #endif
+            }
+        }
+
+        //go.transform.localScale = new Vector3(GetLengthFromPage()/Size[0], GetHeightFromPage()/Size[1], GetWidthFromPage()/Size[2]);
     }
-    */
  
     //Destroy the Wall selected
     void RemoveWall(string selectedWall)
