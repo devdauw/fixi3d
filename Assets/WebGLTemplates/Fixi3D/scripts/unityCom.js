@@ -99,6 +99,11 @@ window.addEventListener("keydown", function(event) {
     }
 }, true);
 
+window.addEventListener("wheel", event => {
+    const delta = Math.sign(event.deltaY);
+    gameInstance.SendMessage("Main Camera", "ZoomCamera", delta);
+});
+
 document.getElementById("wallsSelect").onchange = function(event) {
     var length = document.getElementById("input_length");
     var height = document.getElementById("input_height");
