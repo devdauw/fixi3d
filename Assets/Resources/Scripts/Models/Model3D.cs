@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class Model3D
 {
@@ -31,7 +30,7 @@ public class Model3D
         Position = new Vector3(posX, posY, posZ);
         Size = new Vector3(sizeX, sizeY, sizeZ);
         Name = name;
-        Material = Resources.Load("Materials/" + materialName, typeof(Material)) as Material;
+        Material = UnityEngine.Resources.Load<Material>("Materials/" + materialName);
         FrontLeftBottom = new Vector3(0, 0, 0);
         FrontLeftTop = new Vector3(0, Size.y, 0);
         FrontRightTop = new Vector3(Size.x, Size.y, 0);
@@ -56,6 +55,8 @@ public class Model3D
         Model = new GameObject(Name, typeof(MeshFilter), typeof(MeshRenderer));
         Model.GetComponent<MeshRenderer>().material = Material;
         Model.GetComponent<MeshFilter>().mesh = mesh;
+        //Using a BoxCollider give us the option to select our object later
+        Model.AddComponent<BoxCollider>();
         Model.transform.position = Position;
     }
 

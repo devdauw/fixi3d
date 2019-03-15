@@ -589,10 +589,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
-  cloudProjectId: 83b7e779-1241-482a-9d41-84ebf150b999
+  cloudProjectId: 4e18cd83-1872-478f-830c-29101cb61edb
   framebufferDepthMemorylessMode: 0
-  projectName: Test 2D
-  organizationId: massimogentile
+  projectName: Fixi3D (1)
+  organizationId: jdenbe
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
