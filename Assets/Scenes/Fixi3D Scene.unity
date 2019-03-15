@@ -386,6 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedObject: {fileID: 0}
+  startingColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1001 &796608921
 PrefabInstance:
   m_ObjectHideFlags: 0
