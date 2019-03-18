@@ -74,16 +74,13 @@ namespace Resources.Scripts.Controllers
             wall.modelPosition = selectedObject.GetComponent<Renderer>().transform.position;
             
             SendClickedWallToPage(JsonUtility.ToJson(wall));
-            SetSelectionCamera();
+            ShowSelectedWall();
         }
    
-        public void SetSelectionCamera()
-        { 
-            if (fixiWalls == null)
-            {
-                fixiWalls = GameObject.FindGameObjectsWithTag("FixiWalls");
-                Debug.Log(fixiWalls);
-            }
+        public void ShowSelectedWall()
+        {
+            GameObject[] fixiWalls;
+            fixiWalls = GameObject.FindGameObjectsWithTag("FixiWalls");
 
             foreach (GameObject gameObject in fixiWalls)
             {

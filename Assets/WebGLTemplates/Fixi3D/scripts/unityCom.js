@@ -83,64 +83,46 @@ function getCurrentSelectedWall() {
     return ob;
 }
 
-onkeydown = onkeyup = function(e) {
-	e = e || event; // to deal with IE
-	key[e.keyCode] = e.type == 'keydown';
-	var y = 0,
-		l = key.length,
-		i,
-		t;
-	var gameContainer = 'BODY';
-	var isFocused = document.activeElement.nodeName == gameContainer;
+window.addEventListener("keydown", function(event) {
+	var gameContainer = "BODY";
+	var isFocused = (document.activeElement.nodeName == gameContainer);
 	if (isFocused) {
-		var p = 1;
-		for (i = 0; i < l; i++) {
-			if (key[17] && key[37]) {
+		var x = event.key;
+		if (event.ctrlKey) {
+			if (x == "ArrowLeft") {
 				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlLeft');
-				console.log('Test' + p);
-				p++;
-			} else if (key[17] && key[38]) {
+			} else if (x == "ArrowUp") {
 				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlTop');
-				console.log('Test' + p);
-				p++;
-			} else if (key[17] && key[39]) {
+			} else if (x == "ArrowRight") {
 				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlRight');
-				console.log('Test' + p);
-				p++;
-			} else if (key[17] && key[40]) {
+			} else if (x == "ArrowDown") {
 				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlBottom');
-				console.log('Test' + p);
-				p++;
 			}
-			if (key[i]) {
-				switch (i) {
-					//Tranfert d'une camera a l'autre
-					case 67: // "C" key
-						gameInstance.SendMessage('Main Camera', 'SwitchCamera');
-						break;
-					case 37: // Left Arrow
-						gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Left');
-						break;
-					case 38: // Top Arrow
-						gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Top');
-						break;
-					case 39: // Right Arrow
-						gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Right');
-						break;
-					case 40: // Down Arrow
-						gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Bottom');
-						break;
-					default:
-						return;
-				}
+		} else {
+			switch (x) {
+				case "c":
+				case "C":
+					gameInstance.SendMessage('Main Camera', 'SwitchCamera');
+					break;
+				case "ArrowLeft":
+					gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Left');
+					break;
+				case "ArrowUp":
+					gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Top');
+					break;
+				case "ArrowRight":
+					gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Right');
+					break;
+				case "ArrowDown":
+					gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Bottom');
+					break;
+				default:
+					break;
 			}
 		}
 	}
-};
-
-        event.preventDefault();
-    }
-}, true);
+	event.preventDefault();
+});
 
 window.addEventListener("wheel", event => {
     const delta = Math.sign(event.deltaY);
