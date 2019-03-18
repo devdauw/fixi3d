@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Resources.Scripts;
 using UnityEngine;
 
 public class WallCreator : MonoBehaviour
@@ -18,80 +19,86 @@ public class WallCreator : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void GetModelsList(string cSharpList);
     #endregion
-
+    
     #region MouseCreation
     private float _posZ = 0;
-    private Vector3[] mousePositions = new Vector3[2];
+    private readonly Vector3[] _mousePositions = new Vector3[2];
     private bool _draggingMouse = false;
-    private bool _drawRect = false;
-    public float Timer = 1.2f;
     #endregion
 
     public List<Model3D> modelSList = new List<Model3D>();
-    public static int wallNum = 0;
+    private static int _wallNum = 0;
 
-    void Start() {
+    private void Start() {
         //We disable the capture keyboard function from the WebGL plugin, otherwise we would not be able to communicate with our webpage using JS (our inputs would not take keyboard)
         #if !UNITY_EDITOR && UNITY_WEBGL
             UnityEngine.WebGLInput.captureAllKeyboardInput = false;
         #endif
     }
 
-    private void Update()
+    void Update()
     {
-        if (_drawRect)
+        //Check pour verifier que l'on est sur le plan en 2D afin d'eviter les null exception
+        if (Camera.main != null)
         {
-            if (Timer > 0.1)
+            if (Input.GetMouseButtonDown(0))
             {
-                Timer -= 1 * Time.deltaTime;
+                _draggingMouse = true;
+                _mousePositions[0] = Input.mousePosition;
             }
-            else
-            {
-                ResetMouseClickTimer();
-            }
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (!_draggingMouse)
-            {
-                mousePositions[0] = Input.mousePosition;
-            }
-            _draggingMouse = true;
-        }
 
-        if (!Input.GetMouseButtonUp(0)) return;
-        if (!_draggingMouse) return;
-        mousePositions[1] = Input.mousePosition;
-        if (mousePositions[0] == mousePositions[1]) return;
-        _drawRect = true;
-        var beginPos = Camera.main.ScreenToWorldPoint(mousePositions[0]);
-        var endPos = Camera.main.ScreenToWorldPoint(mousePositions[1]);
-        var x = Math.Min(beginPos.x, endPos.x);
-        var y = Math.Min(beginPos.y, endPos.y);
-        var width = Math.Max(beginPos.x, endPos.x) - x;
-        var height = Math.Max(beginPos.y, endPos.y) - y;
-        CreateWall(width, height, x, y);
+            if (Input.GetMouseButtonUp(0))
+            {
+                _draggingMouse = false;
+            
+                //On transform les donnees de notre souris pour les faire correspondre aux coordonnees de notre monde
+                var beginPos = Camera.main.ScreenToWorldPoint(_mousePositions[0]);
+                _mousePositions[1] = Input.mousePosition;
+                var endPos = Camera.main.ScreenToWorldPoint(_mousePositions[1]);
+
+                if (Math.Abs(beginPos.x - endPos.x) > 1)
+                {
+                    var topCorner = Math.Min(beginPos.x, endPos.x);
+                    var bottomCorner = Math.Min(beginPos.y, endPos.y);
+                    var width = Math.Max(beginPos.x, endPos.x) - topCorner;
+                    var height = Math.Max(beginPos.y, endPos.y) - bottomCorner;
+            
+                    CreateWall(width, height, topCorner, bottomCorner); 
+                }      
+            } 
+        } 
     }
 
+    //Nous permet de tracer un rectangle de selection par dessus notre canvas pour voir ce que l'on trace
+    void OnGUI()
+    {
+        if (_draggingMouse)
+        {
+            var rect = Utils.GetMousePositions(_mousePositions[0], Input.mousePosition);
+            Utils.DrawMouseRect(rect, new Color( 0.8f, 0.8f, 0.95f, 0.25f ));
+            Utils.DrawMouseRectBorder( rect, 2, new Color( 0.8f, 0.8f, 0.95f ) ); 
+        }
+    }
+   
     //Creation use by the Html button
-    void CreateWall()
+    private void CreateWall()
     {
         var model = new Model3D();
-        model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + wallNum, "Green");
+        model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + _wallNum, "Green");
         modelSList.Add(model);
-        wallNum++;
+        _wallNum++;
         #if !UNITY_EDITOR && UNITY_WEBGL
             GetWallsList();
         #endif
     }
 
     //Creation use by drawing with mouse
-    void CreateWall(float width, float height, float x, float y)
+    private void CreateWall(float width, float height, float topCornerPos, float bottomCornerPos)
     {
         var model = new Model3D();
-        model.CreateModel(x, y, _posZ, width, height, 2, "Wall" + wallNum, "Green");
+        model.CreateModel(topCornerPos, bottomCornerPos, _posZ, width, height, 2, "Wall" + _wallNum, "Green");
         modelSList.Add(model);
-        wallNum++;
+        _wallNum++;
         _posZ += 10;
         #if !UNITY_EDITOR && UNITY_WEBGL
             GetWallsList();
@@ -106,8 +113,8 @@ public class WallCreator : MonoBehaviour
         {
             var copyWall = new Model3D();
             copyWall.CreateModel(item.Position.x + item.Size.x, item.Position.y, item.Position.z,
-                item.Size.x, item.Size.y, item.Size.z, "Wall" + wallNum, "Green");
-            wallNum++;
+                item.Size.x, item.Size.y, item.Size.z, "Wall" + _wallNum, "Green");
+            _wallNum++;
             modelSList.Add(copyWall);
             #if !UNITY_EDITOR && UNITY_WEBGL
                 GetWallsList();
@@ -115,17 +122,7 @@ public class WallCreator : MonoBehaviour
         }
     }
 
-    // Reset the event for drawing with mouse after a certain amount of time
-    private void ResetMouseClickTimer()
-    {
-        _drawRect = false;
-        mousePositions[0] = new Vector3();
-        mousePositions[1] = new Vector3();
-        Timer = 1.2f;
-        _draggingMouse = false;
-    }
-    
-    void EditWall(string selectedWall)
+    private void EditWall(string selectedWall)
     {
         var model = JsonUtility.FromJson<SzModel>(selectedWall);
         foreach (var item in modelSList.Where(x => x.Name == model.modelName))
@@ -145,7 +142,7 @@ public class WallCreator : MonoBehaviour
     }
  
     //Destroy the Wall selected
-    void RemoveWall(string selectedWall)
+    private void RemoveWall(string selectedWall)
     {
         var model = JsonUtility.FromJson<SzModel>(selectedWall);
         foreach (var item in modelSList.Where(x => x.Name == model.modelName))
