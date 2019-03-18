@@ -1,11 +1,17 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Resources.Scripts.Controllers
 {
     public class ObjectSelector : MonoBehaviour
-    {
+    { 
+        [DllImport("__Internal")]
+        private static extern void SendClickedWallToPage(string wallObject);
+        
         public GameObject selectedObject;
         public Color startingColor;
+        public GameObject[] fixiWalls;
         private void Update()
         {
             if (Camera.main != null)
@@ -56,6 +62,35 @@ namespace Resources.Scripts.Controllers
                 startingColor = m.color;
                 m.color = Color.magenta;
                 r.material = m;
+            }
+            SendClickedWallToPage();
+        }
+
+        public void SendClickedWallToPage()
+        {
+            SzModel wall = new SzModel();
+            wall.modelName = selectedObject.name;
+            wall.modelSize = selectedObject.GetComponent<Renderer>().bounds.size;
+            wall.modelPosition = selectedObject.GetComponent<Renderer>().transform.position;
+            
+            SendClickedWallToPage(JsonUtility.ToJson(wall));
+            SetSelectionCamera();
+        }
+   
+        public void SetSelectionCamera()
+        { 
+            if (fixiWalls == null)
+            {
+                fixiWalls = GameObject.FindGameObjectsWithTag("FixiWalls");
+                Debug.Log(fixiWalls);
+            }
+
+            foreach (GameObject gameObject in fixiWalls)
+            {
+                if (gameObject.name != selectedObject.name)
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
     }

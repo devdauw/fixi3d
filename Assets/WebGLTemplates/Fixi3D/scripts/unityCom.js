@@ -64,6 +64,11 @@ function getCSharpModelsList(cSharpList) {
     return jsonWallsList;
 }
 
+function mouseSelectAction(wallObject) {
+	wallObject = JSON.parse(wallObject);
+	console.log(wallObject);
+}
+
 function getCurrentSelectedWall() {
     var ob = new Object;
     var select = document.getElementById("wallsSelect");
@@ -78,22 +83,60 @@ function getCurrentSelectedWall() {
     return ob;
 }
 
-//Fonction permettant de s'assurer que le CANVAS est selectionne afin de permettre l'interaction avec le clavier
-window.addEventListener("keydown", function(event) {
-    var gameContainer = "BODY";
-    var isFocused = (document.activeElement.nodeName == gameContainer);
-    console.log(isFocused);
-    if (isFocused) {
-        //Si notre canvas est focus on regarde quelle touche du clavier est utilisee
-        switch (event.key) {
-            //Tranfert d'une camera a l'autre
-            case "c":
-            case "C":
-                gameInstance.SendMessage("Main Camera", "SwitchCamera");
-                break;
-            default:
-                return;
-        }
+onkeydown = onkeyup = function(e) {
+	e = e || event; // to deal with IE
+	key[e.keyCode] = e.type == 'keydown';
+	var y = 0,
+		l = key.length,
+		i,
+		t;
+	var gameContainer = 'BODY';
+	var isFocused = document.activeElement.nodeName == gameContainer;
+	if (isFocused) {
+		var p = 1;
+		for (i = 0; i < l; i++) {
+			if (key[17] && key[37]) {
+				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlLeft');
+				console.log('Test' + p);
+				p++;
+			} else if (key[17] && key[38]) {
+				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlTop');
+				console.log('Test' + p);
+				p++;
+			} else if (key[17] && key[39]) {
+				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlRight');
+				console.log('Test' + p);
+				p++;
+			} else if (key[17] && key[40]) {
+				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlBottom');
+				console.log('Test' + p);
+				p++;
+			}
+			if (key[i]) {
+				switch (i) {
+					//Tranfert d'une camera a l'autre
+					case 67: // "C" key
+						gameInstance.SendMessage('Main Camera', 'SwitchCamera');
+						break;
+					case 37: // Left Arrow
+						gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Left');
+						break;
+					case 38: // Top Arrow
+						gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Top');
+						break;
+					case 39: // Right Arrow
+						gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Right');
+						break;
+					case 40: // Down Arrow
+						gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Bottom');
+						break;
+					default:
+						return;
+				}
+			}
+		}
+	}
+};
 
         event.preventDefault();
     }
