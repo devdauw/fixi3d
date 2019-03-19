@@ -1,10 +1,12 @@
 var gameInstance;
 var jsonWallsList;
+const webglDiv = document.getElementById("webgl");
+var isFocused;
 
-document.addEventListener("DOMContentLoaded", function () { 
-    gameInstance = UnityLoader.instantiate("gameContainer", 
-    UNITY_CONSTANTS.UNITY_WEBGL_BUILD_URL, {
-        onProgress: UnityProgress
+document.addEventListener("DOMContentLoaded", function () {
+    gameInstance = UnityLoader.instantiate("gameContainer",
+        UNITY_CONSTANTS.UNITY_WEBGL_BUILD_URL, {
+            onProgress: UnityProgress
         });
     return gameInstance;
 }, false);
@@ -65,8 +67,8 @@ function getCSharpModelsList(cSharpList) {
 }
 
 function mouseSelectAction(wallObject) {
-	wallObject = JSON.parse(wallObject);
-	console.log(wallObject);
+    wallObject = JSON.parse(wallObject);
+    console.log(wallObject);
 }
 
 function getCurrentSelectedWall() {
@@ -76,57 +78,73 @@ function getCurrentSelectedWall() {
     for(var items in jsonWallsList) {
         jsonWallsList[items].forEach(element => {
             if (element.modelName == selectValue) {
-                ob = element;             
-            }
-        });
+            ob = element;
+        }
+    });
     }
     return ob;
 }
 
-window.addEventListener("keydown", function(event) {
-	var gameContainer = "BODY";
-	var isFocused = (document.activeElement.nodeName == gameContainer);
-	if (isFocused) {
-		var x = event.key;
-		if (event.ctrlKey) {
-			if (x == "ArrowLeft") {
-				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlLeft');
-			} else if (x == "ArrowUp") {
-				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlTop');
-			} else if (x == "ArrowRight") {
-				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlRight');
-			} else if (x == "ArrowDown") {
-				gameInstance.SendMessage('Main Camera', 'MoveCamera', 'CtrlBottom');
-			}
-		} else {
-			switch (x) {
-				case "c":
-				case "C":
-					gameInstance.SendMessage('Main Camera', 'SwitchCamera');
-					break;
-				case "ArrowLeft":
-					gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Left');
-					break;
-				case "ArrowUp":
-					gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Top');
-					break;
-				case "ArrowRight":
-					gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Right');
-					break;
-				case "ArrowDown":
-					gameInstance.SendMessage('Main Camera', 'MoveCamera', 'Bottom');
-					break;
-				default:
-					break;
-			}
-		}
-	}
-	event.preventDefault();
-});
+//Function to handlekey press, to use with an eventHandler
+function handleKeyPress() {
+    event.preventDefault();
+    if (event.ctrlKey) {
+        var arrow = event.key;
+        switch (arrow) {
+            case "ArrowLeft":
+                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlLeft');
+                break;
+            case "ArrowUp":
+                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlTop');
+                break;
+            case "ArrowRight":
+                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlRight');
+                break;
+            case "ArrowDown":
+                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlBottom');
+                break;
+            default:
+                break;
+        }
+    } else {
+        switch (event.key) {
+            case "c":
+            case "C":
+                gameInstance.SendMessage('MainCamera', 'SwitchCamera');
+                break;
+            case "ArrowLeft":
+                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Left');
+                break;
+            case "ArrowUp":
+                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Top');
+                break;
+            case "ArrowRight":
+                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Right');
+                break;
+            case "ArrowDown":
+                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Bottom');
+                break;
+            default:
+                break;
+        }
+    }
+}
 
-window.addEventListener("wheel", event => {
+function handleWheel() {
     const delta = Math.sign(event.deltaY);
-    gameInstance.SendMessage("Main Camera", "ZoomCamera", delta);
+    gameInstance.SendMessage("MainCamera", "ZoomCamera", delta);
+}
+
+document.addEventListener("click", function(event) {
+    if (event.target.id == "#canvas") {
+        console.log("Clicked on our div with WebGL content");
+        document.addEventListener("keydown", handleKeyPress);
+        document.addEventListener("wheel", handleWheel);
+    } else {
+        console.log("Clicked on another div, removing event and restoring normal keys function");
+        document.removeEventListener("keydown", handleKeyPress);
+        document.removeEventListener("wheel", handleWheel);
+    }
 });
 
 document.getElementById("wallsSelect").onchange = function(event) {
@@ -138,11 +156,11 @@ document.getElementById("wallsSelect").onchange = function(event) {
     for(var items in jsonWallsList) {
         jsonWallsList[items].forEach(element => {
             if (element.modelName == selectValue) {
-                var ob = element;
-                length.value = ob.modelSize.x;
-                height.value = ob.modelSize.y;
-                width.value = ob.modelSize.z;
-            }
-        });
+            var ob = element;
+            length.value = ob.modelSize.x;
+            height.value = ob.modelSize.y;
+            width.value = ob.modelSize.z;
+        }
+    });
     }
 }

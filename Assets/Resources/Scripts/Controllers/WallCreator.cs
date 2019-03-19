@@ -85,6 +85,7 @@ public class WallCreator : MonoBehaviour
     {
         var model = new Model3D();
         model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + _wallNum, "Green");
+        model.Model.gameObject.tag = "FixiWalls";
         modelSList.Add(model);
         _wallNum++;
         #if !UNITY_EDITOR && UNITY_WEBGL
@@ -116,6 +117,7 @@ public class WallCreator : MonoBehaviour
             copyWall.CreateModel(item.Position.x + item.Size.x, item.Position.y, item.Position.z,
                 item.Size.x, item.Size.y, item.Size.z, "Wall" + _wallNum, "Green");
             _wallNum++;
+            copyWall.Model.gameObject.tag = "FixiWalls";
             modelSList.Add(copyWall);
             #if !UNITY_EDITOR && UNITY_WEBGL
                 SendWallsList();
@@ -150,6 +152,7 @@ public class WallCreator : MonoBehaviour
         {
             var hiddenWall = item.Model;
             hiddenWall.SetActive(false);
+            hiddenWall.tag = "Untagged";
             modelSList.Remove(item);
             #if !UNITY_EDITOR && UNITY_WEBGL
                     SendWallsList();
