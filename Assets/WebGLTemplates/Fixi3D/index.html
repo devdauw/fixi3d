@@ -1,66 +1,92 @@
 ﻿<!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Fixi3D web app</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/bulma/bulma.css">
-    <script src="TemplateData/UnityProgress.js"></script>
-    <script src="Build/UnityLoader.js"></script>
-    <script>
-      window.UNITY_CONSTANTS = {
-        UNITY_WEBNAME: "Fixi3D",
-        UNITY_WEBGL_LOADER_URL: "Build/UnityLoader.js",
-        UNITY_WEBGL_BUILD_URL: "%UNITY_WEBGL_BUILD_URL%",
-        UNITY_WIDTH: "960",
-        UNITY_HEIGHT: "600"
-      }
-    </script>
-  </head>
-  <body>
-    <div class="webgl-content" id="webgl">
-      <div id="gameContainer"></div>
-    </div>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Fixi3D web app</title>
+  <link rel="shortcut icon" href="TemplateData/favicon.ico">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/bulma/bulma.css">
+  <script src="TemplateData/UnityProgress.js"></script>
+  <script src="Build/UnityLoader.js"></script>
+  <script>
+    window.UNITY_CONSTANTS = {
+      UNITY_WEBNAME: "Fixi3D",
+      UNITY_WEBGL_LOADER_URL: "Build/UnityLoader.js",
+      UNITY_WEBGL_BUILD_URL: "Build/FixiBuild.json",
+      UNITY_WIDTH: "960",
+      UNITY_HEIGHT: "600"
+    }
+  </script>
+</head>
+<body>
+<div class="webgl-content" id="webgl">
+  <div id="gameContainer"></div>
+</div>
 
-    <div id="sideBar" class="sidebar">
-      <div class="control is-horizontal">
-        <div class="control-label">
-            <label for="objectLength" class="label">Longueur: </label>
-        </div>
-        <div class="control">
-            <input type="text" name="objectLength" id="input_length" class="input is-small" value="5" />
-        </div>
-        <div class="control-label">
-            <label for="objectHeight" class="label">Hauteur: </label>
-        </div>
-        <div class="control">
-            <input type="text" name="objectHeight" id="input_height" class="input is-small" value="4" />
-        </div>
-        <div class="control-label">
-              <label for="objectWidth" class="label">Profondeur: </label>
-        </div>
-        <div class="control">
-          <input type="text" name="objectWidth" id="input_width" class="input is-small" value="0.3" /> <br>
-        </div>
-        <div class="control-label">
-            <label for="wallsSelect" class="label">Liste de murs: </label>
-        </div>
-        <div class="select">
-            <select id="wallsSelect" class="select">
-              <option style="display: none">Choisir un mur</option>
-            </select>
-        </div>
+<div id="sideBar" class="sidebar">
+
+  <button class="clickableCollapse">Create Wall</button>
+  <div id="createSideBar" class="sidebarContent">
+    <div class="control is-horizontal">
+      <div class="control-label">
+        <label for="input_length" class="label">Longueur: </label>
       </div>
-
-      <button id="createWall" onclick="createWall()">Create Wall</button>
-      <button id="editWall" onclick="editWall()">Edit Wall</button>
-      <button id="removeWall" onclick="removeWall()">Remove Wall</button>
-      <button id="CopyPaste" onclick="copyWall()">Copy Paste</button>
+      <div class="control">
+        <input type="text" name="objectLength" id="input_length" class="input is-small" value="500" />
+      </div>
+      <div class="control-label">
+        <label for="input_height" class="label">Hauteur: </label>
+      </div>
+      <div class="control">
+        <input type="text" name="objectHeight" id="input_height" class="input is-small" value="400" />
+      </div>
+      <div class="control-label">
+        <label for="input_width" class="label">Profondeur: </label>
+      </div>
+      <div class="control">
+        <input type="text" name="objectWidth" id="input_width" class="input is-small" value="40" /> <br>
+      </div>
     </div>
+    <button id="createWall" onclick="createWall()">Create Wall</button>
+  </div>
 
+  <button class="clickableCollapse">Selected Wall</button>
+  <div id="selectSideBar" class="sidebarContent">
+    <div class="control is-horizontal">
+      <div class="control-label">
+        <label for="input_edit_length" class="label">Longueur: </label>
+      </div>
+      <div class="control">
+        <input type="text" name="objectLength" id="input_edit_length" class="input is-small"/>
+      </div>
+      <div class="control-label">
+        <label for="input_edit_height" class="label">Hauteur: </label>
+      </div>
+      <div class="control">
+        <input type="text" name="objectHeight" id="input_edit_height" class="input is-small"/>
+      </div>
+      <div class="control-label">
+        <label for="input_edit_width" class="label">Profondeur: </label>
+      </div>
+      <div class="control">
+        <input type="text" name="objectWidth" id="input_edit_width" class="input is-small"/> <br>
+      </div>
+      <div class="control-label">
+        <label for="wallsSelect" class="label">Liste de murs: </label>
+      </div>
+      <div class="select">
+        <select id="wallsSelect" class="select">
+          <option style="display: none">Choisir un mur</option>
+        </select>
+      </div>
+    </div>
+    <button id="editWall" onclick="editWall()">Edit Wall</button>
+    <button id="removeWall" onclick="removeWall()">Remove Wall</button>
+    <button id="CopyPaste" onclick="copyWall()">Copy Paste</button>
+  </div>
+</div>
 
-    <script src="scripts/unityCom.js"></script>
-  </body>
+<script src="scripts/unityCom.js"></script>
+</body>
 </html>

@@ -10,6 +10,8 @@ public class WallCreator : MonoBehaviour
     #region UnityWebGLCom
     //We import our methods from js_cross. Somes are pure js calls to grab data from the page. Others are calls sent from our C# to get data back in our page
     [DllImport("__Internal")]
+    private static extern float GetFloatValueFromInput(string input_name);
+    [DllImport("__Internal")]
     private static extern float GetLengthFromPage();
     [DllImport("__Internal")]
     private static extern float GetHeightFromPage();
@@ -84,7 +86,7 @@ public class WallCreator : MonoBehaviour
     private void CreateWall()
     {
         var model = new Model3D();
-        model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + _wallNum, "Green");
+        model.CreateModel(0, 0, 0, GetFloatValueFromInput("input_length"), GetFloatValueFromInput("input_height"), GetFloatValueFromInput("input_width"), "Wall" + _wallNum, "Green");
         model.Model.gameObject.tag = "FixiWalls";
         modelSList.Add(model);
         _wallNum++;
@@ -132,7 +134,7 @@ public class WallCreator : MonoBehaviour
         {
             var size = item.Model.GetComponent<Renderer>().bounds.size;
             var rescale = item.Model.transform.localScale;
-            var newSize = new Vector3(GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage());
+            var newSize = new Vector3(GetFloatValueFromInput("input_edit_length"), GetFloatValueFromInput("input_edit_height"), GetFloatValueFromInput("input_edit_width"));
             rescale.x = newSize.x * rescale.x / size.x;
             rescale.y = newSize.y * rescale.y / size.y;
             rescale.z = newSize.z * rescale.z / size.z;

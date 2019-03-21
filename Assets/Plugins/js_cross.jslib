@@ -10,16 +10,9 @@ mergeInto (LibraryManager.library, {
 		mouseSelectAction(wallObject);	
 	},
 	
-	GetLengthFromPage : function() {
-		return getLengthFromPage();
-	},
-
-	GetHeightFromPage : function() {
-		return getHeightFromPage();
-	},
-
-	GetWidthFromPage : function() {
-		return getWidthFromPage();
+	GetFloatValueFromInput : function(input_name) {
+		input_name = Pointer_stringify(input_name);
+		return getFloatValueFromInput(input_name);
 	},
 
 });

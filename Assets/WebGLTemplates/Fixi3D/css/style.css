@@ -1,15 +1,49 @@
-
 * {
     margin: 0;
     padding: 0;
 }
 #gameContainer {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
 }
 .webgl-content {width: 100vw; height: 100vh;}
+
+.clickableCollapse {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+
+.active, .clickableCollapse:hover {
+    background-color: #555;
+}
+
+.clickableCollapse:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2212";
+}
+
+.sidebarContent {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
 
 .sidebar{
     position: fixed;
@@ -25,11 +59,11 @@
 }
 
 .sidebar label {
-  color: gainsboro;
+    color: gainsboro;
 }
 
 .select {
-  width: 100%;
+    width: 100%;
 }
 
 .webgl-content .logo, .progress {position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
