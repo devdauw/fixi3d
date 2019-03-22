@@ -11,12 +11,6 @@ public class WallCreator : MonoBehaviour
     //We import our methods from js_cross. Somes are pure js calls to grab data from the page. Others are calls sent from our C# to get data back in our page
     [DllImport("__Internal")]
     private static extern float GetFloatValueFromInput(string input_name);
-    [DllImport("__Internal")]
-    private static extern float GetLengthFromPage();
-    [DllImport("__Internal")]
-    private static extern float GetHeightFromPage();
-    [DllImport("__Internal")]
-    private static extern float GetWidthFromPage();
     //This method is used to get data back in our page, in this case we pass back the list of objects we created
     [DllImport("__Internal")]
     private static extern void SendWallsToPage(string cSharpList);
@@ -82,7 +76,7 @@ public class WallCreator : MonoBehaviour
         }
     }
    
-    //Creation use by the Html button
+    //Create a wall using our page input fields
     private void CreateWall()
     {
         var model = new Model3D();
@@ -95,7 +89,7 @@ public class WallCreator : MonoBehaviour
         #endif
     }
 
-    //Creation use by drawing with mouse
+    //Create a wall with our mouse
     private void CreateWall(float width, float height, float topCornerPos, float bottomCornerPos)
     {
         var model = new Model3D();
