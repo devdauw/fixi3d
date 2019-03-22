@@ -3,8 +3,8 @@ var jsonWallsList;
 var keysStatus = {};
 
 document.addEventListener("DOMContentLoaded", function () {
-    var sidebarColl = document.getElementsByClassName("clickableCollapse");
-    var i;
+    let sidebarColl = document.getElementsByClassName("clickableCollapse");
+    let i;
 
     gameInstance = UnityLoader.instantiate("gameContainer",
         UNITY_CONSTANTS.UNITY_WEBGL_BUILD_URL, {
@@ -32,60 +32,58 @@ function getFloatValueFromInput(input_name) {
     if (size.indexOf(",")) {
         size = size.replace(/,/g, '.');
     }
-    var sizeFloat = parseFloat(size);
-    return sizeFloat;
+    return parseFloat(size);
 }
 
 function createWall() {
     gameInstance.SendMessage("WallCreator", "CreateWall");
-};
+}
 
 function editWall() {
-    var selectedWall = getCurrentSelectedWall();
-    var jsonString = JSON.stringify(selectedWall);
+    let selectedWall = getCurrentSelectedWall();
+    let jsonString = JSON.stringify(selectedWall);
     gameInstance.SendMessage("WallCreator", "EditWall", jsonString);
-};
+}
 
 function removeWall(){
-    var selectedWall = getCurrentSelectedWall();
-    var jsonString = JSON.stringify(selectedWall);
+    let selectedWall = getCurrentSelectedWall();
+    let jsonString = JSON.stringify(selectedWall);
     gameInstance.SendMessage("WallCreator", "RemoveWall", jsonString);
-};
+}
 
 function copyWall(){
-    var selectedWall = getCurrentSelectedWall();
-    var jsonString = JSON.stringify(selectedWall);
+    let selectedWall = getCurrentSelectedWall();
+    let jsonString = JSON.stringify(selectedWall);
     gameInstance.SendMessage("WallCreator", "CopyWall", jsonString);
-};
+}
 
 function getCSharpModelsList(cSharpList) {
     jsonWallsList = JSON.parse(cSharpList);
-    var wallsList = document.getElementById("wallsSelect"),
+    let wallsList = document.getElementById("wallsSelect"),
         option,
-        i = 0,
         length = jsonWallsList.Items.length;
-    for(a in wallsList.options){
+    for(let item in wallsList.options){
         wallsList.options.remove(0);
     }
-    for (; i < length; i++) {
+    for (let i = 0; i < length; i++) {
         option = document.createElement("option");
         option.setAttribute("value", jsonWallsList.Items[i]["modelName"]);
         option.appendChild(document.createTextNode(jsonWallsList.Items[i]["modelName"]));
         wallsList.appendChild(option);
     }
     return jsonWallsList;
-};
+}
 
 function mouseSelectAction(wallObject) {
     wallObject = JSON.parse(wallObject);
     console.log(wallObject);
-};
+}
 
 function getCurrentSelectedWall() {
-    var ob = new Object;
-    var select = document.getElementById("wallsSelect");
-    var selectValue = select[select.selectedIndex].value;
-    for(var items in jsonWallsList) {
+    let ob = {};
+    let select = document.getElementById("wallsSelect");
+    let selectValue = select[select.selectedIndex].value;
+    for(let items in jsonWallsList) {
         jsonWallsList[items].forEach(element => {
             if (element.modelName == selectValue) {
             ob = element;
@@ -93,13 +91,13 @@ function getCurrentSelectedWall() {
     });
     }
     return ob;
-};
+}
 
 //Function to handlekey press, to use with an eventHandler
-function handleKeyDown() {
+function handleKeyDown(event) {
     event.preventDefault();
     if (event.ctrlKey) {
-        var arrow = event.key;
+        keysStatus[event.key] = true;
         switch (arrow) {
             case "ArrowLeft":
                 gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlLeft');
@@ -117,44 +115,41 @@ function handleKeyDown() {
                 break;
         }
     } else {
-        if (event.code == "KeyC") {
+        keysStatus[event.code] = true;
+        if (keysStatus["KeyC"]) {
             gameInstance.SendMessage('MainCamera', 'SwitchCamera');
-            return;
-        } else {
-            keysStatus[event.code] = true;
-            if (keysStatus["ArrowUp"] && keysStatus["ArrowRight"]) {
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Top');
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Right');
-            } else if (keysStatus["ArrowUp"] && keysStatus["ArrowLeft"]) {
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Top');
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Left');
-            } else if (keysStatus["ArrowDown"] && keysStatus["ArrowRight"]) {
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Bottom');
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Right');
-            } else if (keysStatus["ArrowDown"] && keysStatus["ArrowLeft"]) {
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Bottom');
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Left');
-            }  else if (keysStatus["ArrowUp"]) {
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Top');
-            } else if (keysStatus["ArrowDown"]) {
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Bottom');
-            } else if (keysStatus["ArrowRight"]) {
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Right');
-            } else if (keysStatus["ArrowLeft"]) {
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Left');
-            }
+        } else if (keysStatus["ArrowUp"] && keysStatus["ArrowRight"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Top');
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Right');
+        } else if (keysStatus["ArrowUp"] && keysStatus["ArrowLeft"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Top');
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Left');
+        } else if (keysStatus["ArrowDown"] && keysStatus["ArrowRight"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Bottom');
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Right');
+        } else if (keysStatus["ArrowDown"] && keysStatus["ArrowLeft"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Bottom');
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Left');
+        }  else if (keysStatus["ArrowUp"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Top');
+        } else if (keysStatus["ArrowDown"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Bottom');
+        } else if (keysStatus["ArrowRight"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Right');
+        } else if (keysStatus["ArrowLeft"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Left');
         }
     }
-};
+}
 
-function handleKeyUp() {
+function handleKeyUp(event) {
     keysStatus[event.code] = false;
 }
 
 function handleWheel() {
     const delta = Math.sign(event.deltaY);
     gameInstance.SendMessage("MainCamera", "ZoomCamera", delta);
-};
+}
 
 document.addEventListener("click", function(event) {
     if (event.target.id == "#canvas") {
@@ -171,18 +166,18 @@ document.addEventListener("click", function(event) {
 });
 
 document.getElementById("wallsSelect").onchange = function(event) {
-    var length = document.getElementById("input_edit_length");
-    var height = document.getElementById("input_edit_height");
-    var width = document.getElementById("input_edit_width");
-    var select = document.getElementById("wallsSelect");
-    var selectValue = select[select.selectedIndex].value;
-    for(var items in jsonWallsList) {
-        jsonWallsList[items].forEach(element => {
+    let length = document.getElementById("input_edit_length");
+    let height = document.getElementById("input_edit_height");
+    let width = document.getElementById("input_edit_width");
+    let select = document.getElementById("wallsSelect");
+    let selectValue = select[select.selectedIndex].value;
+    for(let item in jsonWallsList) {
+        jsonWallsList[item].forEach(element => {
             if (element.modelName == selectValue) {
-            var ob = element;
-            length.value = ob.modelSize.x.toFixed(3);
-            height.value = ob.modelSize.y.toFixed(3);
-            width.value = ob.modelSize.z.toFixed(3);
+                let ob = element;
+                length.value = ob.modelSize.x.toFixed(3);
+                height.value = ob.modelSize.y.toFixed(3);
+                width.value = ob.modelSize.z.toFixed(3);
         }
     });
     }
