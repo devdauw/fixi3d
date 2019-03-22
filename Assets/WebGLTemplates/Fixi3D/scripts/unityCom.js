@@ -97,22 +97,27 @@ function getCurrentSelectedWall() {
 function handleKeyDown(event) {
     event.preventDefault();
     if (event.ctrlKey) {
-        keysStatus[event.key] = true;
-        switch (arrow) {
-            case "ArrowLeft":
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlLeft');
-                break;
-            case "ArrowUp":
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlTop');
-                break;
-            case "ArrowRight":
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlRight');
-                break;
-            case "ArrowDown":
-                gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlBottom');
-                break;
-            default:
-                break;
+        keysStatus[event.code] = true; 
+        if (keysStatus["ArrowUp"] && keysStatus["ArrowRight"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlTop');
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlRight');
+        } else if (keysStatus["ArrowUp"] && keysStatus["ArrowLeft"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlTop');
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlLeft');
+        } else if (keysStatus["ArrowDown"] && keysStatus["ArrowRight"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlBottom');
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlRight');
+        } else if (keysStatus["ArrowDown"] && keysStatus["ArrowLeft"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlBottom');
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlLeft');
+        }  else if (keysStatus["ArrowUp"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlTop');
+        } else if (keysStatus["ArrowDown"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlBottom');
+        } else if (keysStatus["ArrowRight"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlRight');
+        } else if (keysStatus["ArrowLeft"]) {
+            gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlLeft');
         }
     } else {
         keysStatus[event.code] = true;
