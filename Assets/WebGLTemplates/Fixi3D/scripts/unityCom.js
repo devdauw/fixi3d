@@ -111,9 +111,9 @@ function handleKeyDown(event) {
 	event.preventDefault();
 	if (event.ctrlKey) {
 		keysStatus[event.code] = true;
-		if(keysStatus['ShiftLeft'] && keysStatus['BackSpace']){
-		    gameInstance.SendMessage('MainCamera', 'MoveCamera', 'ResetRot');
-		}else if (keysStatus['ArrowUp'] && keysStatus['ArrowRight']) {
+		if (keysStatus['ShiftLeft'] && keysStatus['Backspace']) {
+			gameInstance.SendMessage('MainCamera', 'MoveCamera', 'ResetRot');
+		} else if (keysStatus['ArrowUp'] && keysStatus['ArrowRight']) {
 			gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlTop');
 			gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlRight');
 		} else if (keysStatus['ArrowUp'] && keysStatus['ArrowLeft']) {
@@ -133,7 +133,6 @@ function handleKeyDown(event) {
 			gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlRight');
 		} else if (keysStatus['ArrowLeft']) {
 			gameInstance.SendMessage('MainCamera', 'MoveCamera', 'CtrlLeft');
-
 		}
 	} else {
 		keysStatus[event.code] = true;
@@ -141,7 +140,7 @@ function handleKeyDown(event) {
 			gameInstance.SendMessage('MainCamera', 'SwitchCamera');
 		} else if (keysStatus['ArrowUp'] && keysStatus['ArrowRight']) {
 			gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Top');
-			firsTimeT = true;
+			firstTimeT = true;
 			gameInstance.SendMessage('MainCamera', 'MoveCamera', 'Right');
 			firstTimeR = true;
 		} else if (keysStatus['ArrowUp'] && keysStatus['ArrowLeft']) {
@@ -177,16 +176,16 @@ function handleKeyDown(event) {
 
 function handleKeyUp(event) {
 	keysStatus[event.code] = false;
-	if (keysStatus['ArrowUp'] == false && firstTimeT) {
+	if (!keysStatus['ArrowUp'] && firstTimeT) {
 		gameInstance.SendMessage('MainCamera', 'MoveCamera', 'TopDisable');
 		firstTimeT = false;
-	} else if (keysStatus['ArrowDown'] == false && firstTimeB) {
+	} else if (!keysStatus['ArrowDown'] && firstTimeB) {
 		gameInstance.SendMessage('MainCamera', 'MoveCamera', 'BottomDisable');
-	    firstTimeB = false;
-	} else if (keysStatus['ArrowRight'] == false && firstTimeR) {
+		firstTimeB = false;
+	} else if (!keysStatus['ArrowRight'] && firstTimeR) {
 		gameInstance.SendMessage('MainCamera', 'MoveCamera', 'RightDisable');
 		firstTimeR = false;
-	} else if (keysStatus['ArrowLeft'] == false && firstTimeL) {
+	} else if (!keysStatus['ArrowLeft'] && firstTimeL) {
 		gameInstance.SendMessage('MainCamera', 'MoveCamera', 'LeftDisable');
 		firstTimeL = false;
 	}
