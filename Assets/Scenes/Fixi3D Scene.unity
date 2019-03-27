@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: MainCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -625,7 +625,7 @@ GameObject:
   - component: {fileID: 1655896412}
   - component: {fileID: 1655896413}
   m_Layer: 0
-  m_Name: 3D Ortho Camera
+  m_Name: 3DCamera
   m_TagString: 3DIso
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

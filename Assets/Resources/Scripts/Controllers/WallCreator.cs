@@ -10,14 +10,10 @@ public class WallCreator : MonoBehaviour
     #region UnityWebGLCom
     //We import our methods from js_cross. Somes are pure js calls to grab data from the page. Others are calls sent from our C# to get data back in our page
     [DllImport("__Internal")]
-    private static extern float GetLengthFromPage();
-    [DllImport("__Internal")]
-    private static extern float GetHeightFromPage();
-    [DllImport("__Internal")]
-    private static extern float GetWidthFromPage();
+    private static extern float GetFloatValueFromInput(string input_name);
     //This method is used to get data back in our page, in this case we pass back the list of objects we created
     [DllImport("__Internal")]
-    private static extern void GetModelsList(string cSharpList);
+    private static extern void SendWallsToPage(string cSharpList);
     #endregion
     
     #region MouseCreation
@@ -80,28 +76,30 @@ public class WallCreator : MonoBehaviour
         }
     }
    
-    //Creation use by the Html button
+    //Create a wall using our page input fields
     private void CreateWall()
     {
         var model = new Model3D();
-        model.CreateModel(0, 0, 0, GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage(), "Wall" + _wallNum, "Green");
+        model.CreateModel(0, 0, 0, GetFloatValueFromInput("input_length"), GetFloatValueFromInput("input_height"), GetFloatValueFromInput("input_width"), "Wall" + _wallNum, "Green");
+        model.Model.gameObject.tag = "FixiWalls";
         modelSList.Add(model);
         _wallNum++;
         #if !UNITY_EDITOR && UNITY_WEBGL
-            GetWallsList();
+            SendWallsList();
         #endif
     }
 
-    //Creation use by drawing with mouse
+    //Create a wall with our mouse
     private void CreateWall(float width, float height, float topCornerPos, float bottomCornerPos)
     {
         var model = new Model3D();
         model.CreateModel(topCornerPos, bottomCornerPos, _posZ, width, height, 2, "Wall" + _wallNum, "Green");
+        model.Model.gameObject.tag = "FixiWalls";
         modelSList.Add(model);
         _wallNum++;
         _posZ += 10;
         #if !UNITY_EDITOR && UNITY_WEBGL
-            GetWallsList();
+            SendWallsList();
         #endif
     }
 
@@ -115,9 +113,10 @@ public class WallCreator : MonoBehaviour
             copyWall.CreateModel(item.Position.x + item.Size.x, item.Position.y, item.Position.z,
                 item.Size.x, item.Size.y, item.Size.z, "Wall" + _wallNum, "Green");
             _wallNum++;
+            copyWall.Model.gameObject.tag = "FixiWalls";
             modelSList.Add(copyWall);
             #if !UNITY_EDITOR && UNITY_WEBGL
-                GetWallsList();
+                SendWallsList();
             #endif
         }
     }
@@ -129,14 +128,14 @@ public class WallCreator : MonoBehaviour
         {
             var size = item.Model.GetComponent<Renderer>().bounds.size;
             var rescale = item.Model.transform.localScale;
-            var newSize = new Vector3(GetLengthFromPage(), GetHeightFromPage(), GetWidthFromPage());
+            var newSize = new Vector3(GetFloatValueFromInput("input_edit_length"), GetFloatValueFromInput("input_edit_height"), GetFloatValueFromInput("input_edit_width"));
             rescale.x = newSize.x * rescale.x / size.x;
             rescale.y = newSize.y * rescale.y / size.y;
             rescale.z = newSize.z * rescale.z / size.z;
             item.Model.transform.localScale = rescale;
             item.Size = newSize;
             #if !UNITY_EDITOR && UNITY_WEBGL
-                GetWallsList();
+                SendWallsList();
             #endif
         }
     }
@@ -149,15 +148,16 @@ public class WallCreator : MonoBehaviour
         {
             var hiddenWall = item.Model;
             hiddenWall.SetActive(false);
+            hiddenWall.tag = "Untagged";
             modelSList.Remove(item);
             #if !UNITY_EDITOR && UNITY_WEBGL
-                    GetWallsList();
+                    SendWallsList();
             #endif
         }
     }
 
     //Method that takes our C# walls list and send it back to our webpage using pointers to the adress of the list
-    public void GetWallsList()
+    public void SendWallsList()
     {
         //We need to have a simple serializable object
         var szModelList = new List<SzModel>();
@@ -168,6 +168,6 @@ public class WallCreator : MonoBehaviour
         }
 
         //We serialize our list of simple objects and pass it back to our html
-        GetModelsList(JsonHelper.ToJson(szModelList.ToArray(), true));
+        SendWallsToPage(JsonHelper.ToJson(szModelList.ToArray()));
     }
 }

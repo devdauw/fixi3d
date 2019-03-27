@@ -1,20 +1,18 @@
 mergeInto (LibraryManager.library, {
 
-	GetModelsList : function(cSharpList){
+	SendWallsToPage : function(cSharpList){
 		cSharpList = Pointer_stringify(cSharpList);
 		getCSharpModelsList(cSharpList);
 	},
 	
-	GetLengthFromPage : function() {
-		return getLengthFromPage();
+	SendClickedWallToPage : function(wallObject) {
+		wallObject = Pointer_stringify(wallObject);
+		mouseSelectAction(wallObject);	
 	},
-
-	GetHeightFromPage : function() {
-		return getHeightFromPage();
-	},
-
-	GetWidthFromPage : function() {
-		return getWidthFromPage();
+	
+	GetFloatValueFromInput : function(input_name) {
+		input_name = Pointer_stringify(input_name);
+		return getFloatValueFromInput(input_name);
 	},
 
 });
