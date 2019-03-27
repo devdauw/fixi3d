@@ -3,21 +3,25 @@
 public class CameraController : MonoBehaviour
 {
     public Camera[] Cameras;
-    private float moveSpeed = 0.125f;
+    private const float MoveSpeed = 0.125f;
+    private const float MoveSpeedR = 40f;
+    private Quaternion _defaultCameraRotation;
     private int _currentCameraIndex;// 0 : 2D camera
                                     // 1 : 3D Ortho Camera
+    private GameObject _cameraRotator;
+    private bool _moveLeft = false;
+    private bool _moveTop = false;
+    private bool _moveRight = false;
+    private bool _moveBottom = false;
 
     void Start()
     {
         _currentCameraIndex = 0;
         Cameras = Camera.allCameras;
         for (var i = 0; i < Cameras.Length; i++)
-        {
-            if (i != 0)
-                Cameras[i].enabled = false;
-            else
-                Cameras[i].enabled = true;
-        }
+            Cameras[i].enabled = i == 0;
+        _cameraRotator = GameObject.Find("Camera Rotator");
+        _defaultCameraRotation = _cameraRotator.transform.rotation;
     }
 
     void SwitchCamera()
@@ -26,13 +30,8 @@ public class CameraController : MonoBehaviour
             _currentCameraIndex++;
         else
             _currentCameraIndex = 0;
-        for (int i = 0; i < Cameras.Length; i++)
-        {
-            if (i != _currentCameraIndex)
-                Cameras[i].enabled = false;
-            else
-                Cameras[i].enabled = true;
-        }
+        for (var i = 0; i < Cameras.Length; i++)
+            Cameras[i].enabled = i == _currentCameraIndex;
     }
 
     void ZoomCamera(int n)
@@ -61,7 +60,6 @@ public class CameraController : MonoBehaviour
     void MoveCamera(string direction)
     {
         var pos = Cameras[_currentCameraIndex].transform.position;
-        var rot = Cameras[_currentCameraIndex].transform.eulerAngles;
         switch (_currentCameraIndex)
         {
             // 2D Camera
@@ -70,15 +68,19 @@ public class CameraController : MonoBehaviour
                 {
                     case "Left":
                         pos.x -= 0.1f;
+                        Cameras[_currentCameraIndex].transform.position = pos;
                         break;
                     case "Top":
                         pos.y += 0.1f;
+                        Cameras[_currentCameraIndex].transform.position = pos;
                         break;
                     case "Right":
                         pos.x += 0.1f;
+                        Cameras[_currentCameraIndex].transform.position = pos;
                         break;
                     case "Bottom":
                         pos.y -= 0.1f;
+                        Cameras[_currentCameraIndex].transform.position = pos;
                         break;
                     default:
                         return;
@@ -89,51 +91,64 @@ public class CameraController : MonoBehaviour
             case 1:
                 switch (direction)
                 {
-                    case "Left":
-                        pos.x -= moveSpeed;
-                        pos.y += moveSpeed / 10;
-                        pos.z -= moveSpeed * 1.9f;
-                        break;
-                    case "Top":
-                        pos.x -= moveSpeed / 4;
-                        pos.y += moveSpeed;
-                        pos.z += moveSpeed / 10;
-                        break;
-                    case "Right":
-                        pos.x += moveSpeed;
-                        pos.y -= moveSpeed / 10;
-                        pos.z += moveSpeed * 1.9f;
-                        break;
-                    case "Bottom":
-                        pos.x += moveSpeed / 4;
-                        pos.y -= moveSpeed;
-                        pos.z -= moveSpeed / 10;
-                        break;
                     case "CtrlLeft":
-                        rot.y -= 0.1f;
-                        Cameras[1].transform.eulerAngles = rot;
+                        pos.x -= MoveSpeed;
+                        pos.y += MoveSpeed / 10;
+                        pos.z -= MoveSpeed * 1.9f;
+                        Cameras[_currentCameraIndex].transform.position = pos;
                         break;
                     case "CtrlTop":
-                        rot.x -= 0.1f;
-                        Cameras[1].transform.eulerAngles = rot;
+                        pos.x -= MoveSpeed / 4;
+                        pos.y += MoveSpeed;
+                        pos.z += MoveSpeed / 10;
+                        Cameras[_currentCameraIndex].transform.position = pos;
                         break;
                     case "CtrlRight":
-                        rot.y += 0.1f;
-                        Cameras[1].transform.eulerAngles = rot;
+                        pos.x += MoveSpeed;
+                        pos.y -= MoveSpeed / 10;
+                        pos.z += MoveSpeed * 1.9f;
+                        Cameras[_currentCameraIndex].transform.position = pos;
                         break;
                     case "CtrlBottom":
-                        rot.x += 0.1f;
-                        Cameras[1].transform.eulerAngles = rot;
+                        pos.x += MoveSpeed / 4;
+                        pos.y -= MoveSpeed;
+                        pos.z -= MoveSpeed / 10;
+                        Cameras[_currentCameraIndex].transform.position = pos;
+                        break;
+                    case "Left":
+                        _moveLeft = true;
+                        break;
+                    case "LeftDisable":
+                        _moveLeft = false;
+                        break;
+                    case "Top":
+                        _moveTop = true;
+                        break;
+                    case "TopDisable":
+                        _moveTop = false;
+                        break;
+                    case "Right":
+                        _moveRight = true;
+                        break;
+                    case "RightDisable":
+                        _moveRight = false;
+                        break;
+                    case "Bottom":
+                        _moveBottom = true;
+                        break;
+                    case "BottomDisable":
+                        _moveBottom = false;
+                        break;
+                    case "ResetRot":
+                        _cameraRotator.transform.rotation = _defaultCameraRotation;
                         break;
                     default:
                         return;
                 }
                 break;
-
             default:
                 return;
         }
-        Cameras[_currentCameraIndex].transform.position = pos;
     }
 
     private void Move(Vector3 m)
@@ -143,5 +158,17 @@ public class CameraController : MonoBehaviour
         pos.y += m.y;
         pos.z += m.z;
         Cameras[_currentCameraIndex].transform.position = pos;
+    }
+
+    void Update()
+    {
+        if(_moveLeft)
+            _cameraRotator.transform.Rotate(0, MoveSpeedR * Time.deltaTime, 0);
+        else if (_moveTop)
+            _cameraRotator.transform.Rotate(MoveSpeedR * Time.deltaTime, 0, 0);
+        else if (_moveRight)
+            _cameraRotator.transform.Rotate(0, -MoveSpeedR * Time.deltaTime, 0);
+        else if(_moveBottom)
+            _cameraRotator.transform.Rotate(-MoveSpeedR * Time.deltaTime, 0, 0);
     }
 }

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class FixationCreator : MonoBehaviour
 {
-    public void CreateFix()
+    public void CreateFix(Vector3 wallSize, Vector3 wallPosition)
     {
-        /*Object prefab = Resources.Load("Fixations/Suspente27kN-3DView-{3D}");
-        GameObject t = (GameObject)Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
+        var prefab = UnityEngine.Resources.Load("Fixations/Suspente");
+        var fixPosition = new Vector3(wallPosition.x, wallPosition.y, wallPosition.z - 3);
+        var gbFix = (GameObject)Instantiate(prefab, fixPosition, Quaternion.identity);
+        /*
         Camera cam = t.AddComponent<Camera>();
         cam.transform.position = new Vector3(11.16f, 6.59f, -2.62f);
         cam.transform.Rotate(new Vector3(18.141f, -33.983f, 1.991f));

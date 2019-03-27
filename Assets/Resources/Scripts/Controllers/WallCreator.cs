@@ -170,4 +170,15 @@ public class WallCreator : MonoBehaviour
         //We serialize our list of simple objects and pass it back to our html
         SendWallsToPage(JsonHelper.ToJson(szModelList.ToArray()));
     }
+
+    //TODO créer une méthode qui permet de renvoyer un mur en fonction du string avec son nom
+    public void PlaceFixation(string selectedWall)
+    {
+        var model = JsonUtility.FromJson<SzModel>(selectedWall);
+        foreach (var item in modelSList.Where(x => x.Name == selectedWall))
+        {
+            FixationCreator fixation = new FixationCreator();
+            fixation.CreateFix(item.Model.GetComponent<Renderer>().bounds.size, item.Model.transform.position);
+        }
+    }
 }
