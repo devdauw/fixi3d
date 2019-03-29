@@ -84,6 +84,12 @@ function getCSharpModelsList(cSharpList) {
 function mouseSelectAction(wallObject) {
 	wallObject = JSON.parse(wallObject);
 	console.log(wallObject);
+	let length = document.getElementById('input_edit_length');
+	let height = document.getElementById('input_edit_height');
+	let width = document.getElementById('input_edit_width');
+	length.value = wallObject.modelSize.x;
+	height.value = wallObject.modelSize.y;
+	width.value = wallObject.modelSize.z;
 }
 
 function getCurrentSelectedWall() {
