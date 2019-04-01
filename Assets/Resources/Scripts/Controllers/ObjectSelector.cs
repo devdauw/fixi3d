@@ -80,6 +80,7 @@ namespace Resources.Scripts.Controllers
         {
             var disable = new List<GameObject>();
             var fixiWalls = GameObject.FindGameObjectsWithTag("FixiWalls");
+
             _inactiveObjects.Clear();
             foreach (var gameObject in fixiWalls)
             {

@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class FixationCreator : MonoBehaviour
 {
-    public void CreateFix(Vector3 wallSize, Vector3 wallPosition)
+    /*public GameObject Fixation = new GameObject();
+
+    public void CreateFix(Model3D item)
     {
-        var prefab = UnityEngine.Resources.Load("Fixations/Suspente");
-        var fixPosition = new Vector3(wallPosition.x, wallPosition.y, wallPosition.z - 3);
-        var gbFix = (GameObject)Instantiate(prefab, fixPosition, Quaternion.identity);
-        /*
-        Camera cam = t.AddComponent<Camera>();
-        cam.transform.position = new Vector3(11.16f, 6.59f, -2.62f);
-        cam.transform.Rotate(new Vector3(18.141f, -33.983f, 1.991f));
-        */
-    }
+        var wallSize = item.Model.GetComponent<Renderer>().bounds.size;
+        var wallPosition = item.Model.transform.position;
+        var Go_Current = (GameObject)Instantiate(Fixation);
+        Go_Current.transform.position = new Vector3(wallPosition.x, wallPosition.y, wallPosition.z - 1);
+    }*/
 }

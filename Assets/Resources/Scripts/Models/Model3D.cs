@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Tilemaps;
 
 public class Model3D
 {
@@ -7,6 +8,7 @@ public class Model3D
     private Vector3 _size;
     private string _name;
     private Material _material;
+    private GameObject _suspente = (GameObject)UnityEngine.Resources.Load("Fixations/Suspente");
 
     public Vector3 Position { get; set; }
     public Vector3 Size { get; set; }
@@ -58,6 +60,49 @@ public class Model3D
         //Using a BoxCollider give us the option to select our object later
         Model.AddComponent<BoxCollider>();
         Model.transform.position = Position;
+
+        var fixPosX = Model.gameObject.transform.position.x;
+        var fixPosY = Model.gameObject.transform.position.y;
+        var fixTopPosY = fixPosY + sizeY * 0.8f;
+        var fixCenterPosY = fixPosY + sizeY * 0.45f;
+        var fixBottomPosY = fixPosY + sizeY * 0.1f;
+        var fixPosZ = Model.gameObject.transform.position.z - 0.23f;
+
+        //Top Left Fixation
+        var Suspente_TopLeft = (GameObject)Object.Instantiate(_suspente);
+        Suspente_TopLeft.transform.position = new Vector3(fixPosX + 1, fixTopPosY, fixPosZ);
+        Suspente_TopLeft.name = "TopLeft Suspente " + Model.name;
+        Suspente_TopLeft.transform.parent = Model.transform;
+
+        //Top Right Fixation
+        var Suspente_TopRight = (GameObject)Object.Instantiate(_suspente);
+        Suspente_TopRight.transform.position = new Vector3(fixPosX + sizeX - 0.5f, fixTopPosY, fixPosZ);
+        Suspente_TopRight.name = "TopRight Suspente " + Model.name;
+        Suspente_TopRight.transform.parent = Model.transform;
+
+        //Left Fixation
+        var Suspente_Left = (GameObject)Object.Instantiate(_suspente);
+        Suspente_Left.transform.position = new Vector3(fixPosX + 1, fixCenterPosY, fixPosZ);
+        Suspente_Left.name = "Left Suspente " + Model.name;
+        Suspente_Left.transform.parent = Model.transform;
+
+        //Right Fixation
+        var Suspente_Right = (GameObject)Object.Instantiate(_suspente);
+        Suspente_Right.transform.position = new Vector3(fixPosX + sizeX - 0.5f, fixCenterPosY, fixPosZ);
+        Suspente_Right.name = "Right Suspente " + Model.name;
+        Suspente_Right.transform.parent = Model.transform;
+
+        //BottomLeft Fixation
+        var Suspente_BottomLeft = (GameObject)Object.Instantiate(_suspente);
+        Suspente_BottomLeft.transform.position = new Vector3(fixPosX + 1, fixBottomPosY, fixPosZ);
+        Suspente_BottomLeft.name = "BottomLeft Suspente " + Model.name;
+        Suspente_BottomLeft.transform.parent = Model.transform;
+
+        //BottomRight Fixation
+        var Suspente_BottomRight = (GameObject)Object.Instantiate(_suspente);
+        Suspente_BottomRight.transform.position = new Vector3(fixPosX + sizeX - 0.5f, fixBottomPosY, fixPosZ);
+        Suspente_BottomRight.name = "BottomRight Suspente " + Model.name;
+        Suspente_BottomRight.transform.parent = Model.transform;
     }
 
     private Vector3[] GetVertices()

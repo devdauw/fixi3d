@@ -23,6 +23,7 @@ public class WallCreator : MonoBehaviour
     #endregion
 
     public List<Model3D> modelSList = new List<Model3D>();
+    public GameObject Suspente;
     private static int _wallNum = 0;
 
     private void Start() {
@@ -99,7 +100,7 @@ public class WallCreator : MonoBehaviour
         _wallNum++;
         _posZ += 10;
         #if !UNITY_EDITOR && UNITY_WEBGL
-            SendWallsList();
+                    SendWallsList();
         #endif
     }
 
@@ -175,10 +176,10 @@ public class WallCreator : MonoBehaviour
     public void PlaceFixation(string selectedWall)
     {
         var model = JsonUtility.FromJson<SzModel>(selectedWall);
-        foreach (var item in modelSList.Where(x => x.Name == selectedWall))
+        foreach (var item in modelSList.Where(x => x.Name == model.modelName))
         {
-            FixationCreator fixation = new FixationCreator();
-            fixation.CreateFix(item.Model.GetComponent<Renderer>().bounds.size, item.Model.transform.position);
+            var fixationCreator = GameObject.Find("FixationCreator");
+            fixationCreator.SendMessage("CreateFix",item);
         }
     }
 }
