@@ -5,6 +5,7 @@ var firstTimeL = false;
 var firstTimeT = false;
 var firstTimeR = false;
 var firstTimeB = false;
+var wall;
 
 document.addEventListener(
 	'DOMContentLoaded',
@@ -47,69 +48,46 @@ function createWall() {
 }
 
 function editWall() {
-	let selectedWall = getCurrentSelectedWall();
-	let jsonString = JSON.stringify(selectedWall);
+	if (wall == null) return;
+	let jsonString = JSON.stringify(wall);
 	gameInstance.SendMessage('WallCreator', 'EditWall', jsonString);
 }
 
 function removeWall() {
-	let selectedWall = getCurrentSelectedWall();
-	let jsonString = JSON.stringify(selectedWall);
+	if (wall == null) return;
+	let jsonString = JSON.stringify(wall);
 	gameInstance.SendMessage('WallCreator', 'RemoveWall', jsonString);
+	let length = document.getElementById('input_edit_length');
+	let height = document.getElementById('input_edit_height');
+	let width = document.getElementById('input_edit_width');
+	length.value = '';
+	height.value = '';
+	width.value = '';
+	wall = null;
 }
 
 function copyWall() {
-	let selectedWall = getCurrentSelectedWall();
-	let jsonString = JSON.stringify(selectedWall);
+	if (wall == null) return;
+	let jsonString = JSON.stringify(wall);
 	gameInstance.SendMessage('WallCreator', 'CopyWall', jsonString);
 }
 
 function getCSharpModelsList(cSharpList) {
 	jsonWallsList = JSON.parse(cSharpList);
-	let wallsList = document.getElementById('wallsSelect'),
-		option,
-		length = jsonWallsList.Items.length;
-	for (let item in wallsList.options) {
-		wallsList.options.remove(0);
-	}
-	for (let i = 0; i < length; i++) {
-		option = document.createElement('option');
-		option.setAttribute('value', jsonWallsList.Items[i]['modelName']);
-		option.appendChild(document.createTextNode(jsonWallsList.Items[i]['modelName']));
-		wallsList.appendChild(option);
-	}
-	return jsonWallsList;
+	console.log(jsonWallsList);
 }
 
 function mouseSelectAction(wallObject) {
-	wallObject = JSON.parse(wallObject);
+	if (wallObject == null) console.log('Null !');
 	console.log(wallObject);
+	wallObject = JSON.parse(wallObject);
 	let length = document.getElementById('input_edit_length');
 	let height = document.getElementById('input_edit_height');
 	let width = document.getElementById('input_edit_width');
 	length.value = wallObject.modelSize.x;
 	height.value = wallObject.modelSize.y;
 	width.value = wallObject.modelSize.z;
-}
-
-function getCurrentSelectedWall() {
-	let ob = {};
-	let select = document.getElementById('wallsSelect');
-	let selectValue = select[select.selectedIndex].value;
-	for (let items in jsonWallsList) {
-		jsonWallsList[items].forEach((element) => {
-			if (element.modelName == selectValue) {
-				ob = element;
-			}
-		});
-	}
-	return ob;
-}
-
-function createFix() {
-	var selectedWall = getCurrentSelectedWall();
-	var jsonString = JSON.stringify(selectedWall);
-	gameInstance.SendMessage('WallCreator', 'PlaceFixation', jsonString);
+	wall = wallObject;
 }
 
 //Function to handlekey press, to use with an eventHandler
@@ -215,21 +193,3 @@ document.addEventListener('click', function(event) {
 		document.removeEventListener('wheel', handleWheel);
 	}
 });
-
-document.getElementById('wallsSelect').onchange = function(event) {
-	let length = document.getElementById('input_edit_length');
-	let height = document.getElementById('input_edit_height');
-	let width = document.getElementById('input_edit_width');
-	let select = document.getElementById('wallsSelect');
-	let selectValue = select[select.selectedIndex].value;
-	for (let item in jsonWallsList) {
-		jsonWallsList[item].forEach((element) => {
-			if (element.modelName == selectValue) {
-				let ob = element;
-				length.value = ob.modelSize.x.toFixed(3);
-				height.value = ob.modelSize.y.toFixed(3);
-				width.value = ob.modelSize.z.toFixed(3);
-			}
-		});
-	}
-};

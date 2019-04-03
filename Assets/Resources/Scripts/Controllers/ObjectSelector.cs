@@ -65,13 +65,13 @@ namespace Resources.Scripts.Controllers
 
         public void SendClickedWallToPage()
         {
-            var wall = new SzModel
+            var wall = new SzModel()
             {
                 modelName = selectedObject.name,
                 modelSize = selectedObject.GetComponent<Renderer>().bounds.size,
                 modelPosition = selectedObject.GetComponent<Renderer>().transform.position
             };
-
+            
             SendClickedWallToPage(JsonUtility.ToJson(wall));
             ShowSelectedWall();
         }
