@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Resources.Scripts.Controllers
 {
@@ -65,13 +62,19 @@ namespace Resources.Scripts.Controllers
 
         public void SendClickedWallToPage()
         {
-            var wall = new SzModel()
+            var wall = new SzModel
             {
                 modelName = selectedObject.name,
                 modelSize = selectedObject.GetComponent<Renderer>().bounds.size,
-                modelPosition = selectedObject.GetComponent<Renderer>().transform.position
+                modelPosition = selectedObject.GetComponent<Renderer>().transform.position,
+                modelFixationsName = new string[selectedObject.transform.childCount],
+                modelFixationsPosition = new Vector3[selectedObject.transform.childCount]
             };
-            
+            for (var i = 0; i < selectedObject.transform.childCount; i++)
+            {
+                wall.modelFixationsName[i] = selectedObject.transform.GetChild(i).name;
+                wall.modelFixationsPosition[i] = selectedObject.transform.GetChild(i).position;
+            }
             SendClickedWallToPage(JsonUtility.ToJson(wall));
             ShowSelectedWall();
         }
