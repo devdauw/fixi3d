@@ -146,14 +146,26 @@ public class WallCreator : MonoBehaviour
         #endif
     }
 
-    //Method that takes our C# walls list and send it back to our webpage using pointers to the adress of the list
+    //Method that takes our C# walls list and send it back to our webpage using pointers to the address of the list
     public void SendWallsList()
     {
         //We need to have a simple serializable object
         var szModelList = new List<SzModel>();
         foreach (var item in modelSList)
         {
-            var newWall = new SzModel {modelName = item.Name, modelSize = item.Size};
+            Debug.Log("Number of child: " + item.Model.transform.childCount);
+            var newWall = new SzModel
+            {
+                modelName = item.Name,
+                modelSize = item.Size,
+                modelFixationsName = new string[item.Model.transform.childCount],
+                modelFixationsPosition = new Vector3[item.Model.transform.childCount]
+            };
+            for (var i = 0; i < item.Model.transform.childCount; i++)
+            {
+                newWall.modelFixationsName[i] = item.Model.transform.GetChild(i).name;
+                newWall.modelFixationsPosition[i] = item.Model.transform.GetChild(i).position;
+            }
             szModelList.Add(newWall);
         }
 
