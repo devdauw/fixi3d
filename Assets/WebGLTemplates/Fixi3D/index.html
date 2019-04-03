@@ -13,7 +13,7 @@
     window.UNITY_CONSTANTS = {
       UNITY_WEBNAME: "Fixi3D",
       UNITY_WEBGL_LOADER_URL: "Build/UnityLoader.js",
-      UNITY_WEBGL_BUILD_URL: "%UNITY_WEBGL_BUILD_URL%",
+      UNITY_WEBGL_BUILD_URL: "Build/_build.json",
       UNITY_WIDTH: "960",
       UNITY_HEIGHT: "600"
     }
@@ -72,19 +72,10 @@
       <div class="control">
         <input type="text" name="objectWidth" id="input_edit_width" class="input is-small"/> <br>
       </div>
-      <div class="control-label">
-        <label for="wallsSelect" class="label">Liste de murs: </label>
-      </div>
-      <div class="select">
-        <select id="wallsSelect" class="select">
-          <option style="display: none">Choisir un mur</option>
-        </select>
-      </div>
     </div>
     <button id="editWall" onclick="editWall()">Edit Wall</button>
     <button id="removeWall" onclick="removeWall()">Remove Wall</button>
     <button id="CopyPaste" onclick="copyWall()">Copy Paste</button>
-    <button id="Fix" onclick="createFix()">Create Fixation</button>
   </div>
 </div>
 
