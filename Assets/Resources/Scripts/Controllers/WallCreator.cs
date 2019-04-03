@@ -153,7 +153,6 @@ public class WallCreator : MonoBehaviour
         var szModelList = new List<SzModel>();
         foreach (var item in modelSList)
         {
-            Debug.Log("Number of child: " + item.Model.transform.childCount);
             var newWall = new SzModel
             {
                 modelName = item.Name,
