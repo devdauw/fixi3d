@@ -17,7 +17,7 @@ public class WallCreator : MonoBehaviour
     #endregion
     
     #region MouseCreation
-    private float _posZ = 0;
+    private const float PosZ = 0;
     private readonly Vector3[] _mousePositions = new Vector3[2];
     private bool _draggingMouse = false;
     #endregion
@@ -85,13 +85,12 @@ public class WallCreator : MonoBehaviour
     private void CreateWall(float width, float height, float topCornerPos, float bottomCornerPos)
     {
         var model = new Model3D();
-        model.CreateModel(topCornerPos, bottomCornerPos, _posZ, width, height, 2, "Wall" + _wallNum, "Green");
+        model.CreateModel(topCornerPos, bottomCornerPos, PosZ, width, height, 2, "Wall" + _wallNum, "Green");
         model.Model.gameObject.tag = "FixiWalls";
         modelSList.Add(model);
         _wallNum++;
-        _posZ += 10;
         #if !UNITY_EDITOR && UNITY_WEBGL
-                    SendWallsList();
+            SendWallsList();
         #endif
     }
 
