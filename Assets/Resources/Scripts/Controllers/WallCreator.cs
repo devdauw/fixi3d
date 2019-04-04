@@ -123,8 +123,10 @@ public class WallCreator : MonoBehaviour
         rescale.x = newSize.x * rescale.x / size.x;
         rescale.y = newSize.y * rescale.y / size.y;
         rescale.z = newSize.z * rescale.z / size.z;
+        var newPosition = new Vector3(GetFloatValueFromInput("input_edit_posX"), GetFloatValueFromInput("input_edit_posY"), GetFloatValueFromInput("input_edit_posZ"));
         walls.First().Model.transform.localScale = rescale;
         walls.First().Size = newSize;
+        walls.First().Model.transform.position = newPosition;
         #if !UNITY_EDITOR && UNITY_WEBGL
             SendWallsList();
         #endif

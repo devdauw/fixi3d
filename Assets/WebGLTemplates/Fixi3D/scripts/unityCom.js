@@ -83,9 +83,15 @@ function mouseSelectAction(wallObject) {
 	let length = document.getElementById('input_edit_length');
 	let height = document.getElementById('input_edit_height');
 	let width = document.getElementById('input_edit_width');
+	let posX = document.getElementById('input_edit_posX');
+	let posY = document.getElementById('input_edit_posY');
+	let posZ = document.getElementById('input_edit_posZ');
 	length.value = wallObject.modelSize.x;
 	height.value = wallObject.modelSize.y;
 	width.value = wallObject.modelSize.z;
+	posX.value = wallObject.modelPosition.x;
+	posY.value = wallObject.modelPosition.y;
+	posZ.value = wallObject.modelPosition.z;
 	//TODO: Implementation de toutes les fixations en arbre
 	var array_fixName = wallObject.modelFixationsName;
 	var array_fixPosition = wallObject.modelFixationsPosition;
