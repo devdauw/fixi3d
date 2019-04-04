@@ -78,7 +78,6 @@ function getCSharpModelsList(cSharpList) {
 }
 
 function mouseSelectAction(wallObject) {
-	if (wallObject == null) console.log('Null !');
 	console.log(wallObject);
 	wallObject = JSON.parse(wallObject);
 	let length = document.getElementById('input_edit_length');
@@ -87,6 +86,73 @@ function mouseSelectAction(wallObject) {
 	length.value = wallObject.modelSize.x;
 	height.value = wallObject.modelSize.y;
 	width.value = wallObject.modelSize.z;
+	//TODO: Implementation de toutes les fixations en arbre
+	var array_fixName = wallObject.modelFixationsName;
+	var array_fixPosition = wallObject.modelFixationsPosition;
+	var currentDiv = document.getElementById('fixControl');
+	for (var i = 0; i < array_fixName.length; i++) {
+		var newName = document.createElement('LABEL');
+		newName.setAttribute('class', 'label');
+		newName.innerHTML = array_fixName[i];
+		var newDiV = document.createElement('div');
+		newDiV.setAttribute('class', 'control-label');
+		newDiV.appendChild(newName);
+		currentDiv.appendChild(newDiV);
+
+		var newLabX = document.createElement('LABEL');
+		newLabX.innerHTML = 'X:';
+		var newDivPosX = document.createElement('div');
+		newDivPosX.setAttribute('class', 'control-label');
+		newDivPosX.appendChild(newLabX);
+		currentDiv.appendChild(newDivPosX);
+
+		var newInpX = document.createElement('INPUT');
+		newInpX.setAttribute('type', 'text');
+		newInpX.setAttribute('name', 'fixX' + i);
+		newInpX.setAttribute('id', 'input_edit_fixX' + i);
+		newInpX.setAttribute('class', 'input is-small');
+		newInpX.value = array_fixPosition[i].x;
+		var newDivInpPosX = document.createElement('div');
+		newDivInpPosX.setAttribute('class', 'control');
+		newDivInpPosX.appendChild(newInpX);
+		currentDiv.appendChild(newDivInpPosX);
+
+		var newLabY = document.createElement('LABEL');
+		newLabY.innerHTML = 'Y:';
+		var newDivPosY = document.createElement('div');
+		newDivPosY.setAttribute('class', 'control-label');
+		newDivPosY.appendChild(newLabY);
+		currentDiv.appendChild(newDivPosY);
+
+		var newInpY = document.createElement('INPUT');
+		newInpY.setAttribute('type', 'text');
+		newInpY.setAttribute('name', 'fixY' + i);
+		newInpY.setAttribute('id', 'input_edit_fixY' + i);
+		newInpY.setAttribute('class', 'input is-small');
+		newInpY.value = array_fixPosition[i].y;
+		var newDivInpPosY = document.createElement('div');
+		newDivInpPosY.setAttribute('class', 'control');
+		newDivInpPosY.appendChild(newInpY);
+		currentDiv.appendChild(newDivInpPosY);
+
+		var newLabZ = document.createElement('LABEL');
+		newLabZ.innerHTML = 'Z:';
+		var newDivPosZ = document.createElement('div');
+		newDivPosZ.setAttribute('class', 'control-label');
+		newDivPosZ.appendChild(newLabZ);
+		currentDiv.appendChild(newDivPosZ);
+
+		var newInpZ = document.createElement('INPUT');
+		newInpZ.setAttribute('type', 'text');
+		newInpZ.setAttribute('name', 'fixZ' + i);
+		newInpZ.setAttribute('id', 'input_edit_fixZ' + i);
+		newInpZ.setAttribute('class', 'input is-small');
+		newInpZ.value = array_fixPosition[i].z;
+		var newDivInpPosZ = document.createElement('div');
+		newDivInpPosZ.setAttribute('class', 'control');
+		newDivInpPosZ.appendChild(newInpZ);
+		currentDiv.appendChild(newDivInpPosZ);
+	}
 	wall = wallObject;
 }
 
