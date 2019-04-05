@@ -80,6 +80,12 @@ function getCSharpModelsList(cSharpList) {
 function mouseSelectAction(wallObject) {
 	console.log(wallObject);
 	wallObject = JSON.parse(wallObject);
+	var butCreate = document.getElementById('butCreateWall');
+	var butSelect = document.getElementById('butSelectWall');
+	var butFixations = document.getElementById('FixationsDisplayer');
+	butCreate.setAttribute('style', 'display: none;');
+	butSelect.setAttribute('style', 'display: inline-block;');
+	butFixations.setAttribute('style', 'display: inline-block;');
 	let length = document.getElementById('input_edit_length');
 	let height = document.getElementById('input_edit_height');
 	let width = document.getElementById('input_edit_width');

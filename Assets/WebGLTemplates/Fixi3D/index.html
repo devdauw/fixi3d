@@ -26,7 +26,7 @@
 
 <div id="sideBar" class="sidebar">
 
-  <button class="clickableCollapse">Create Wall</button>
+  <button class="clickableCollapse" id="butCreateWall" style="display: inline-block;">Create Wall</button>
   <div id="createSideBar" class="sidebarContent">
     <div class="control is-horizontal">
       <div class="control-label">
@@ -47,11 +47,11 @@
       <div class="control">
         <input type="text" name="objectWidth" id="input_width" class="input is-small" value="40" /> <br>
       </div>
+      <button id="createWall" onclick="createWall()">Create Wall</button>
     </div>
-    <button id="createWall" onclick="createWall()">Create Wall</button>
   </div>
 
-  <button class="clickableCollapse">Selected Wall</button>
+  <button class="clickableCollapse" id="butSelectWall" style="display: none;">Selected Wall</button>
   <div id="selectSideBar" class="sidebarContent">
     <div class="control is-horizontal">
       <div class="control-label">
@@ -100,11 +100,10 @@
     <button id="editWall" onclick="editWall()">Edit Wall</button>
     <button id="removeWall" onclick="removeWall()">Remove Wall</button>
     <button id="CopyPaste" onclick="copyWall()">Copy Paste</button>
-    <button id="FixationsDisplayer" class="clickableCollapse">Fixations</button>
-    <div id="fixationsSideBar" class="sidebarContent">
-      <div id="fixControl" class="control is-horizontal">
-      </div>
-    </div>
+  </div>
+  <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Fixations</button> 
+  <div id="fixationsSideBar" class="sidebarContent">
+      <div id="fixControl" class="control is-horizontal"></div>
   </div>
 </div>
 
