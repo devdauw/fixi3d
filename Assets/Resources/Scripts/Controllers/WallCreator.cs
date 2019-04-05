@@ -102,7 +102,7 @@ public class WallCreator : MonoBehaviour
         var walls = modelSList.Where(x => x.Name == model.modelName).ToList();
         selector.SendMessage("ClearSelection");
         var copyWall = new Model3D();
-        copyWall.CreateModel(walls.First().Position.x + walls.First().Size.x, walls.First().Position.y, walls.First().Position.z,
+        copyWall.CreateModel(walls.First().Model.transform.position.x + walls.First().Size.x + GetFloatValueFromInput("input_edit_distance"), walls.First().Model.transform.position.y, walls.First().Model.transform.position.z,
             walls.First().Size.x, walls.First().Size.y, walls.First().Size.z, "Wall" + _wallNum, "Green");
         _wallNum++;
         copyWall.Model.gameObject.tag = "FixiWalls";
@@ -158,6 +158,7 @@ public class WallCreator : MonoBehaviour
             {
                 modelName = item.Name,
                 modelSize = item.Size,
+                modelPosition = item.Model.transform.position,
                 modelFixationsName = new string[item.Model.transform.childCount],
                 modelFixationsPosition = new Vector3[item.Model.transform.childCount]
             };
