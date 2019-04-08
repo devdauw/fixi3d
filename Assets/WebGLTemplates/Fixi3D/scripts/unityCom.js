@@ -113,6 +113,13 @@ function mouseSelectAction(wallObject) {
 		newDiV.appendChild(newName);
 		currentDiv.appendChild(newDiV);
 
+		var newRendement = document.createElement('LABEL');
+		newRendement.innerText = 'Rendement 80%';
+		var newDiVRend = document.createElement('div');
+		newDiVRend.setAttribute('class', 'control-label');
+		newDiVRend.appendChild(newRendement);
+		currentDiv.appendChild(newDiVRend);
+
 		var newLabX = document.createElement('LABEL');
 		newLabX.innerHTML = 'X:';
 		var newDivPosX = document.createElement('div');
