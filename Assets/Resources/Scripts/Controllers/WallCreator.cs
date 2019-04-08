@@ -22,6 +22,7 @@ public class WallCreator : MonoBehaviour
     private bool _draggingMouse = false;
     #endregion
 
+    public float grid = 0.1f;
     public List<Model3D> modelSList = new List<Model3D>();
     private static int _wallNum = 0;
 
@@ -46,9 +47,9 @@ public class WallCreator : MonoBehaviour
         _draggingMouse = false;
             
         //On transform les donnees de notre souris pour les faire correspondre aux coordonnees de notre monde
-        var beginPos = Camera.main.ScreenToWorldPoint(_mousePositions[0]);
+        var beginPos = GetWorldPointSnappedMousePosition(Camera.main.ScreenToWorldPoint(_mousePositions[0]));
         _mousePositions[1] = Input.mousePosition;
-        var endPos = Camera.main.ScreenToWorldPoint(_mousePositions[1]);
+        var endPos = GetWorldPointSnappedMousePosition(Camera.main.ScreenToWorldPoint(_mousePositions[1]));
 
         if (!(Math.Abs(beginPos.x - endPos.x) > 1)) return;
         var topCorner = Math.Min(beginPos.x, endPos.x);
@@ -63,9 +64,26 @@ public class WallCreator : MonoBehaviour
     void OnGUI()
     {
         if (!_draggingMouse) return;
-        var rect = Utils.GetMousePositions(_mousePositions[0], Input.mousePosition);
+        var beginPos = GetWorldPointSnappedMousePosition(Camera.main.ScreenToWorldPoint(_mousePositions[0]));
+        beginPos = Camera.main.WorldToScreenPoint(beginPos);
+        var endPos = GetWorldPointSnappedMousePosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        endPos = Camera.main.WorldToScreenPoint(endPos);
+        var rect = Utils.GetMousePositions(beginPos, endPos);
         Utils.DrawMouseRect(rect, new Color( 0.8f, 0.8f, 0.95f, 0.25f ));
         Utils.DrawMouseRectBorder( rect, 2, new Color( 0.8f, 0.8f, 0.95f ) );
+    }
+
+    
+
+    private Vector3 GetWorldPointSnappedMousePosition(Vector3 mousePos)
+    {
+        float x = 0f, y = 0f, z = mousePos.z;
+        //5f == 0.1 to the screen
+        var reciprocalGrid = 12.5f / grid;
+        x = (float)Math.Round(mousePos.x / reciprocalGrid, 2) * reciprocalGrid;
+        y = (float)Math.Round(mousePos.y / reciprocalGrid, 2) * reciprocalGrid;
+        mousePos = new Vector3(x, y, z);
+        return mousePos;
     }
    
     //Create a wall using our page input fields
