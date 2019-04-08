@@ -8,6 +8,8 @@ namespace Resources.Scripts.Controllers
     { 
         [DllImport("__Internal")]
         private static extern void SendClickedWallToPage(string wallObject);
+        [DllImport("__Internal")]
+        private static extern void SendClear();
 
         private List<GameObject> _inactiveObjects = new List<GameObject>();
         public GameObject selectedObject;
@@ -58,6 +60,9 @@ namespace Resources.Scripts.Controllers
                 gameObject.SetActive(true);
             var cameraRotator = GameObject.Find("Camera Rotator");
             cameraRotator.transform.position = new Vector3(0,0,0);
+            #if !UNITY_EDITOR && UNITY_WEBGL
+                SendClear();
+            #endif
         }
 
         public void SendClickedWallToPage()

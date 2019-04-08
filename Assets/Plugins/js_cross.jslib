@@ -15,4 +15,7 @@ mergeInto (LibraryManager.library, {
 		return getFloatValueFromInput(input_name);
 	},
 
+	SendClear : function(){
+		clearSelection();
+	},
 });

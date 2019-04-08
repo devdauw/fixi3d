@@ -15,3 +15,9 @@ public class SzModel
     public string[] modelFixationsName;
     public Vector3[] modelFixationsPosition;
 }
+
+[Serializable]
+public class SzClear
+{
+    public string modelclear;
+}

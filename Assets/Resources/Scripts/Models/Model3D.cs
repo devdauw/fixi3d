@@ -71,6 +71,7 @@ public class Model3D
         var fixBottomPosY = fixPosY + 0.25f;
         var fixPosZ = Model.gameObject.transform.position.z - 0.23f;
 
+        /* Preparation Distanceur
         //Dist Top Left
         var distTopLeftX = fixPosX + 0.15f;
         var distTopLeftY = fixPosY + 0.2f;
@@ -96,7 +97,7 @@ public class Model3D
         var distBottomRightX = fixPosX + (sizeX * 0.8f) + 0.2f;
         if ((fixPosX + sizeX) - distBottomRightX < 15)
             distBottomRightX = fixPosX + sizeX - 0.15f;
-        var distBottomRightY = fixPosY + 0.15f;
+        var distBottomRightY = fixPosY + 0.15f;*/
 
         //Top Left Fixation
         var Suspente_TopLeft = (GameObject)Object.Instantiate(_suspente);

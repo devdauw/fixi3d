@@ -79,8 +79,10 @@ function getCSharpModelsList(cSharpList) {
 
 function mouseSelectAction(wallObject) {
 	console.log(wallObject);
+	var event = new MouseEvent('click');
 	wallObject = JSON.parse(wallObject);
 	var butCreate = document.getElementById('butCreateWall');
+	if (butCreate.getAttribute('class') == 'clickableCollapse active') butCreate.dispatchEvent(event);
 	var butSelect = document.getElementById('butSelectWall');
 	var butFixations = document.getElementById('FixationsDisplayer');
 	butCreate.setAttribute('style', 'display: none;');
@@ -256,6 +258,18 @@ function handleKeyUp(event) {
 function handleWheel() {
 	const delta = Math.sign(event.deltaY);
 	gameInstance.SendMessage('MainCamera', 'ZoomCamera', delta);
+}
+
+function clearSelection() {
+	var event = new MouseEvent('click');
+	var butCreate = document.getElementById('butCreateWall');
+	var butSelect = document.getElementById('butSelectWall');
+	if (butSelect.getAttribute('class') == 'clickableCollapse active') butSelect.dispatchEvent(event);
+	var butFixations = document.getElementById('FixationsDisplayer');
+	if (butFixations.getAttribute('class') == 'clickableCollapse active') butFixations.dispatchEvent(event);
+	butCreate.setAttribute('style', 'display: inline-block;');
+	butSelect.setAttribute('style', 'display: none;');
+	butFixations.setAttribute('style', 'display: none;');
 }
 
 document.addEventListener('click', function(event) {
