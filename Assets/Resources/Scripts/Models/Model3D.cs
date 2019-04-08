@@ -71,6 +71,33 @@ public class Model3D
         var fixBottomPosY = fixPosY + 0.25f;
         var fixPosZ = Model.gameObject.transform.position.z - 0.23f;
 
+        //Dist Top Left
+        var distTopLeftX = fixPosX + 0.15f;
+        var distTopLeftY = fixPosY + 0.2f;
+        //Susp Left
+        var suspLeftX = fixPosX + (sizeX * 0.2f);
+        if (suspLeftX - distTopLeftX < 15 || suspLeftX - distTopLeftX > 20)
+            suspLeftX = distTopLeftX + 0.15f;
+        var suspLeftY = fixPosY + sizeY - 0.25f;
+        //Dist Top Right
+        var distTopRightX = fixPosX + sizeX - 0.15f;
+        var distTopRightY = fixPosY + sizeY - 0.2f;
+        //Susp Right
+        var suspRightX = fixPosX + (sizeX * 0.8f);
+        if (suspRightX - distTopLeftX < 15 || suspRightX - distTopLeftX > 20)
+            suspRightX = distTopRightX - 0.15f;
+        var suspRightY = fixPosY + sizeY - 0.25f;
+        //Dist Bottom Left
+        var distBottomLeftX = fixPosX + (sizeX * 0.2f) - 0.2f;
+        if (distBottomLeftX - fixPosX < 15)
+            distBottomLeftX = fixPosX + 0.15f;
+        var distBottomLeftY = fixPosY + 0.15f;
+        //Dist Bottom Right
+        var distBottomRightX = fixPosX + (sizeX * 0.8f) + 0.2f;
+        if ((fixPosX + sizeX) - distBottomRightX < 15)
+            distBottomRightX = fixPosX + sizeX - 0.15f;
+        var distBottomRightY = fixPosY + 0.15f;
+
         //Top Left Fixation
         var Suspente_TopLeft = (GameObject)Object.Instantiate(_suspente);
         Suspente_TopLeft.transform.position = new Vector3(fixLeftPosX, fixTopPosY, fixPosZ);
