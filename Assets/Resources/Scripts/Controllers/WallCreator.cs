@@ -73,8 +73,6 @@ public class WallCreator : MonoBehaviour
         Utils.DrawMouseRectBorder( rect, 2, new Color( 0.8f, 0.8f, 0.95f ) );
     }
 
-    
-
     private Vector3 GetWorldPointSnappedMousePosition(Vector3 mousePos)
     {
         float x = 0f, y = 0f, z = mousePos.z;
