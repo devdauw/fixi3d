@@ -15,6 +15,16 @@ mergeInto (LibraryManager.library, {
 		return getFloatValueFromInput(input_name);
 	},
 
+	GetStringValueFromInput : function(input_name){
+		input_name = Pointer_stringify(input_name);
+		console.log("Before get it");
+		var value = getStringValueFromInput(input_name) + '';
+		console.log("After getting it");
+		console.log(value);
+		console.log(typeof value);
+		return value;
+	},
+
 	SendClear : function(){
 		clearSelection();
 	},

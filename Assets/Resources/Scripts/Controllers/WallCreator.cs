@@ -11,6 +11,8 @@ public class WallCreator : MonoBehaviour
     //We import our methods from js_cross. Somes are pure js calls to grab data from the page. Others are calls sent from our C# to get data back in our page
     [DllImport("__Internal")]
     private static extern float GetFloatValueFromInput(string input_name);
+    [DllImport("__Internal")]
+    private static extern string GetStringValueFromInput(string input_name);
     //This method is used to get data back in our page, in this case we pass back the list of objects we created
     [DllImport("__Internal")]
     private static extern void SendWallsToPage(string cSharpList);
@@ -25,6 +27,7 @@ public class WallCreator : MonoBehaviour
     public float grid = 0.1f;
     public List<Model3D> modelSList = new List<Model3D>();
     private static int _wallNum = 0;
+    public SzProject[] save = new SzProject[1];
 
     private void Start() {
         //We disable the capture keyboard function from the WebGL plugin, otherwise we would not be able to communicate with our webpage using JS (our inputs would not take keyboard)
@@ -85,12 +88,29 @@ public class WallCreator : MonoBehaviour
         mousePos = new Vector3(x, y, z);
         return mousePos;
     }
-   
+
+    public void SaveProject()
+    {
+        Debug.Log(GetStringValueFromInput("input_name").GetType());
+        Debug.Log(GetStringValueFromInput("input_name"));
+        /*save[0].projectName = GetFloatValueFromInput("input_name");
+        save[0].projectNum = Convert.ToInt32(GetFloatValueFromInput("input_num"));
+        save[0].customerName = GetFloatValueFromInput("input_customer");
+        save[0].userName = GetFloatValueFromInput("input_user");*/
+    }
+    
     //Create a wall using our page input fields
     private void CreateWall()
     {
         var model = new Model3D();
-        model.CreateModel(0, 0, 0, GetFloatValueFromInput("input_length"), GetFloatValueFromInput("input_height"), GetFloatValueFromInput("input_width"), "Wall" + _wallNum, "Green");
+        try
+        {
+            model.CreateModel(0, 0, 0, GetFloatValueFromInput("input_length"), GetFloatValueFromInput("input_height"), GetFloatValueFromInput("input_width"), "Wall" + _wallNum, "Green");
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
         model.Model.gameObject.tag = "FixiWalls";
         modelSList.Add(model);
         _wallNum++;
@@ -170,6 +190,7 @@ public class WallCreator : MonoBehaviour
     {
         //We need to have a simple serializable object
         var szModelList = new List<SzModel>();
+        var project = new SzProject();
         foreach (var item in modelSList)
         {
             var newWall = new SzModel
@@ -188,7 +209,14 @@ public class WallCreator : MonoBehaviour
             szModelList.Add(newWall);
         }
 
+        project.projectName = save[0].projectName;
+        project.projectNum = save[0].projectNum;
+        project.customerName = save[0].customerName;
+        project.userName = save[0].userName;
+        project.wallList = szModelList;
+
         //We serialize our list of simple objects and pass it back to our html
-        SendWallsToPage(JsonHelper.ToJson(szModelList.ToArray()));
+        SendWallsToPage(JsonUtility.ToJson(project));
     }
+
 }

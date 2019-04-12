@@ -43,6 +43,15 @@ function getFloatValueFromInput(input_name) {
 	return parseFloat(size);
 }
 
+function getStringValueFromInput(input_name) {
+	var value = document.getElementById(input_name).value + '';
+	return value;
+}
+
+function saveProject() {
+	gameInstance.SendMessage('WallCreator', 'SaveProject');
+}
+
 function createWall() {
 	gameInstance.SendMessage('WallCreator', 'CreateWall');
 }

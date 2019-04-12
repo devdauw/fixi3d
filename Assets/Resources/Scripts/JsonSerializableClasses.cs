@@ -17,7 +17,11 @@ public class SzModel
 }
 
 [Serializable]
-public class SzClear
+public class SzProject
 {
-    public string modelclear;
+    public string projectName;
+    public int projectNum;
+    public string customerName;
+    public string userName;
+    public List<SzModel> wallList;
 }

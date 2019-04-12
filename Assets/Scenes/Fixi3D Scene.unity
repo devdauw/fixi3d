@@ -831,6 +831,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f54890d1a5ec2458fb23cfdc140d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: 0.5
+  save:
+  - projectName: 
+    projectNum: 0
+    customerName: 
+    userName: 
 --- !u!4 &1994352374
 Transform:
   m_ObjectHideFlags: 0
