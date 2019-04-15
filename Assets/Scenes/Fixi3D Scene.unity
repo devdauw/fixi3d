@@ -837,6 +837,7 @@ MonoBehaviour:
     projectNum: 0
     customerName: 
     userName: 
+    wallList: []
 --- !u!4 &1994352374
 Transform:
   m_ObjectHideFlags: 0
