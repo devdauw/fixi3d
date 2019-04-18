@@ -15,17 +15,17 @@ mergeInto (LibraryManager.library, {
 		return getFloatValueFromInput(input_name);
 	},
 
-	GetStringValueFromInput : function(input_name){
-		input_name = Pointer_stringify(input_name);
-		console.log("Before get it");
-		var value = getStringValueFromInput(input_name) + '';
-		console.log("After getting it");
-		console.log(value);
-		console.log(typeof value);
-		return value;
+	Download : function(json){
+		json = Pointer_stringify(json);
+		DownloadJson(json);
 	},
 
 	SendClear : function(){
 		clearSelection();
 	},
+
+	SendProjectInfo : function(project){
+		project = Pointer_stringify(project);
+		SendProject(project);
+	}
 });

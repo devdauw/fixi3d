@@ -10,6 +10,7 @@ public class Model3D
     private Material _material;
     private readonly GameObject _suspente = (GameObject)UnityEngine.Resources.Load("Fixations/Suspente");
     private readonly GameObject _distM20 = (GameObject)UnityEngine.Resources.Load("Fixations/DistanceurM20");
+    private bool first = true;
 
     public Vector3 Position { get; set; }
     public Vector3 Size { get; set; }
@@ -77,6 +78,9 @@ public class Model3D
         //Dist Top Left
         var distTopLeftX = suspLeftX - 0.15f - suspXLenght;
         var distTopLeftY = fixPosY + sizeY - 0.2f - (distXLenght / 2);
+        InstantiateFixation("DistM20", "TopLeft Distanceur Rot", distTopLeftX, distTopLeftY, fixPosZ);
+
+        //Dist Top Left
         InstantiateFixation("DistM20", "TopLeft Distanceur", distTopLeftX, distTopLeftY, fixPosZ);
 
         //Susp Right
@@ -111,10 +115,19 @@ public class Model3D
         {
             case "DistM20":
                 fixation = (GameObject) Object.Instantiate(_distM20);
-                //fixation.transform.rotation = new Quaternion(-119, -90, 90, fixation.transform.rotation.w);
-                //fixation.transform.rotation = new Quaternion(-118.9f, 87.51199f, -268.583f, fixation.transform.rotation.w);
-                fixation.transform.Rotate(-118.9f, 87.51199f, -268.583f);
-                fixation.transform.position = new Vector3(x + 0.02f, y - 0.03f, z - 0.287f);
+                //fixation.transform.Rotate(-118.9f, 87.51199f, -268.583f);
+                //fixation.transform.position = new Vector3(x + 0.02f, y - 0.03f, z - 0.287f);
+                if (first)
+                {
+                    fixation.transform.Rotate(-60.69f, 91.186f, -92.762f);
+                    fixation.transform.position = new Vector3(x + 0.046f, y + 0.0014f - 0.03f, z + 0.086f);
+                    first = false;
+                }
+                else
+                {
+                    fixation.transform.Rotate(-118.9f, 87.51199f, -268.583f);
+                    fixation.transform.position = new Vector3(x + 0.02f, y - 0.03f, z - 0.287f);
+                }  
                 break;
             case "Susp":
                 fixation = (GameObject) Object.Instantiate(_suspente);
