@@ -49,5 +49,10 @@ namespace Resources.Scripts
 
             return Rect.MinMaxRect(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
         }
+        
+        public static Vector3[] ToVector3(this Vector2[] vectors)
+        {
+            return System.Array.ConvertAll<Vector2, Vector3>(vectors, v => v);
+        }
     }
 }
