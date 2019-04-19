@@ -35,7 +35,7 @@ public class WallCreator : MonoBehaviour
     public SzProject[] save = new SzProject[1];
 
     private void Start() {
-        //We disable the capture keyboard function from the WebGL plugin, otherwise we would not be able to communicate with our webpage using JS (our inputs would not take keyboard)
+        //We disable the capture keyboard function from the WebGL plugin, otherwise we would not be able to communicate with our webpage using JS (our inputs would not take keyboard)    
         #if !UNITY_EDITOR && UNITY_WEBGL
             UnityEngine.WebGLInput.captureAllKeyboardInput = false;
         #endif
