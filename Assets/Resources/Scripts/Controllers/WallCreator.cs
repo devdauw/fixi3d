@@ -155,6 +155,8 @@ public class WallCreator : Singleton<WallCreator>
         model.Model.gameObject.tag = "FixiWalls";
         model.Model.layer = Settings.Instance.wallLayer;
 
+        model.Model.AddComponent<Ruler>();
+
         modelSList.Add(model);
         _wallNum++;
         #if !UNITY_EDITOR && UNITY_WEBGL
@@ -189,6 +191,11 @@ public class WallCreator : Singleton<WallCreator>
         #if !UNITY_EDITOR && UNITY_WEBGL
             SendWallsList();
         #endif
+    }
+
+    public Model3D GetWall(string name)
+    {
+        return modelSList.FirstOrDefault(wall => wall.Name == name);
     }
 
     //Copy Paste function
@@ -254,6 +261,18 @@ public class WallCreator : Singleton<WallCreator>
         foreach (var t in modelSList)
             Destroy(t.Model);
         modelSList.Clear();
+    }
+
+    public void UpdateWallBounds(string name)
+    {
+        var wallToUpdate = modelSList.FirstOrDefault(wall => wall.Name == name);
+        if (wallToUpdate == null)
+            return;
+
+        var bounds = wallToUpdate.Model.GetComponent<MeshFilter>().sharedMesh.bounds;
+        wallToUpdate.BackLeftBottom = new Vector3(bounds.min.x, bounds.min.y, bounds.max.z);
+        //TODO
+
     }
 
     //Method that takes our C# walls list and send it back to our webpage using pointers to the address of the list

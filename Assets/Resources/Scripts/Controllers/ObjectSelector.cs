@@ -31,6 +31,10 @@ namespace Resources.Scripts.Controllers
 
         private void SelectObject(GameObject obj)
         {
+            var ruler = obj.GetComponent<Ruler>();
+            if (ruler != null)
+                ruler.ShowRuler();
+
             if(selectedObject != null) {
                 if(obj == selectedObject) return;
                 ClearSelection();

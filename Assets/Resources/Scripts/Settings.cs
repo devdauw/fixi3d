@@ -9,6 +9,7 @@ public class Settings : Singleton<Settings>
 {
     public int wallLayer;
     public int holeLayer;
+    public LineRenderer lineRendererPrefab;
     //public LineRenderer lineRendererPrefab;
 
 
