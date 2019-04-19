@@ -140,6 +140,7 @@ public class WallCreator : Singleton<WallCreator>
             Debug.Log(e);
         }
         model.Model.gameObject.tag = "FixiWalls";
+        model.Model.layer = Settings.Instance.wallLayer;
         modelSList.Add(model);
         _wallNum++;
         #if !UNITY_EDITOR && UNITY_WEBGL
@@ -184,6 +185,7 @@ public class WallCreator : Singleton<WallCreator>
         model.Model.GetComponent<MeshFilter>().sharedMesh = mesh;
 
         model.Model.gameObject.tag = "FixiWalls";
+        model.Model.layer = Settings.Instance.wallLayer;
         modelSList.Add(model);
         _wallNum++;
         #if !UNITY_EDITOR && UNITY_WEBGL
