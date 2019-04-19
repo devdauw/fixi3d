@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using Resources.Scripts;
 using UnityEngine;
 
@@ -12,10 +14,13 @@ public class WallCreator : MonoBehaviour
     [DllImport("__Internal")]
     private static extern float GetFloatValueFromInput(string input_name);
     [DllImport("__Internal")]
-    private static extern string GetStringValueFromInput(string input_name);
+    private static extern string Download(string json);
     //This method is used to get data back in our page, in this case we pass back the list of objects we created
     [DllImport("__Internal")]
     private static extern void SendWallsToPage(string cSharpList);
+    //This method is used for sedding the project info to the Project Button
+    [DllImport("__Internal")]
+    private static extern void SendProjectInfo(string project);
     #endregion
     
     #region MouseCreation
@@ -76,8 +81,6 @@ public class WallCreator : MonoBehaviour
         Utils.DrawMouseRectBorder( rect, 2, new Color( 0.8f, 0.8f, 0.95f ) );
     }
 
-    
-
     private Vector3 GetWorldPointSnappedMousePosition(Vector3 mousePos)
     {
         float x = 0f, y = 0f, z = mousePos.z;
@@ -89,16 +92,34 @@ public class WallCreator : MonoBehaviour
         return mousePos;
     }
 
-    public void SaveProject()
+    public void SaveProject(string val)
     {
-        Debug.Log(GetStringValueFromInput("input_name").GetType());
-        Debug.Log(GetStringValueFromInput("input_name"));
-        /*save[0].projectName = GetFloatValueFromInput("input_name");
-        save[0].projectNum = Convert.ToInt32(GetFloatValueFromInput("input_num"));
-        save[0].customerName = GetFloatValueFromInput("input_customer");
-        save[0].userName = GetFloatValueFromInput("input_user");*/
+        var json = JsonUtility.FromJson<SzProject>(val);
+        save[0].projectName = json.projectName;
+        save[0].projectNum = json.projectNum;
+        save[0].customerName = json.customerName;
+        save[0].userName = json.userName;
+        Download(ProjectToJson());
     }
-    
+
+    public void LoadProject(string val)
+    {
+        RemoveWalls();
+        _wallNum = 0;
+        var json = JsonUtility.FromJson<SzProject>(val);
+        save[0].projectName = json.projectName;
+        save[0].projectNum = json.projectNum;
+        save[0].customerName = json.customerName;
+        save[0].userName = json.userName;
+        foreach (var item in json.wallList)
+            CreateWall(item.modelName, item.modelSize, item.modelPosition, item.modelFixationsName,
+                item.modelFixationsPosition);
+        #if !UNITY_EDITOR && UNITY_WEBGL
+            SendWallsList();
+        #endif
+        SendProjectInfo(val);
+    }
+
     //Create a wall using our page input fields
     private void CreateWall()
     {
@@ -124,6 +145,18 @@ public class WallCreator : MonoBehaviour
     {
         var model = new Model3D();
         model.CreateModel(topCornerPos, bottomCornerPos, PosZ, width, height, 2, "Wall" + _wallNum, "Green");
+        model.Model.gameObject.tag = "FixiWalls";
+        modelSList.Add(model);
+        _wallNum++;
+        #if !UNITY_EDITOR && UNITY_WEBGL
+            SendWallsList();
+        #endif
+    }
+
+    private void CreateWall(string name, Vector3 size, Vector3 position, string[] fixName, Vector3[] fixPos)
+    {
+        var model = new Model3D();
+        model.CreateModel(position.x, position.y, position.z, size.x, size.y, size.z, name, "Green");
         model.Model.gameObject.tag = "FixiWalls";
         modelSList.Add(model);
         _wallNum++;
@@ -185,8 +218,20 @@ public class WallCreator : MonoBehaviour
         #endif
     }
 
+    private void RemoveWalls()
+    {
+        foreach (var t in modelSList)
+            Destroy(t.Model);
+        modelSList.Clear();
+    }
+
     //Method that takes our C# walls list and send it back to our webpage using pointers to the address of the list
     public void SendWallsList()
+    {
+        SendWallsToPage(ProjectToJson());
+    }
+
+    public string ProjectToJson()
     {
         //We need to have a simple serializable object
         var szModelList = new List<SzModel>();
@@ -216,7 +261,7 @@ public class WallCreator : MonoBehaviour
         project.wallList = szModelList;
 
         //We serialize our list of simple objects and pass it back to our html
-        SendWallsToPage(JsonUtility.ToJson(project));
+        var json = JsonUtility.ToJson(project);
+        return json;
     }
-
 }

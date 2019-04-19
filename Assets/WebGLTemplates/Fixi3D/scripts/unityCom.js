@@ -34,6 +34,14 @@ document.addEventListener(
 	false
 );
 
+function SendProject(project) {
+	var json = JSON.parse(project);
+	document.getElementById('input_name').value = json.projectName;
+	document.getElementById('input_num').value = json.projectNum;
+	document.getElementById('input_customer').value = json.customerName;
+	document.getElementById('input_user').value = json.userName;
+}
+
 function getFloatValueFromInput(input_name) {
 	var size = document.getElementById(input_name).value;
 	//Check if our float value has a comma in it, if so transform it to a dot
@@ -43,13 +51,37 @@ function getFloatValueFromInput(input_name) {
 	return parseFloat(size);
 }
 
-function getStringValueFromInput(input_name) {
-	var value = document.getElementById(input_name).value + '';
-	return value;
+function saveProject() {
+	var json = JSON.stringify({
+		projectName: document.getElementById('input_name').value,
+		projectNum: document.getElementById('input_num').value,
+		customerName: document.getElementById('input_customer').value,
+		userName: document.getElementById('input_user').value
+	});
+	gameInstance.SendMessage('WallCreator', 'SaveProject', json);
 }
 
-function saveProject() {
-	gameInstance.SendMessage('WallCreator', 'SaveProject');
+function DownloadJson(json) {
+	var filename = document.getElementById('input_name').value + '.json';
+	var type = 'application/json';
+	var file = new Blob([ json ], { type: type });
+	if (
+		window.navigator.msSaveOrOpenBlob // IE10+
+	)
+		window.navigator.msSaveOrOpenBlob(file, filename);
+	else {
+		// Others
+		var a = document.createElement('a'),
+			url = URL.createObjectURL(file);
+		a.href = url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		setTimeout(function() {
+			document.body.removeChild(a);
+			window.URL.revokeObjectURL(url);
+		}, 0);
+	}
 }
 
 function createWall() {
@@ -301,3 +333,22 @@ document.addEventListener('click', function(event) {
 		document.removeEventListener('wheel', handleWheel);
 	}
 });
+
+(function() {
+	function onChange(event) {
+		var reader = new FileReader();
+		reader.onload = onReaderLoad;
+		reader.readAsText(event.target.files[0]);
+	}
+
+	function onReaderLoad(event) {
+		console.log(event.target.result);
+		var json = event.target.result;
+		gameInstance.SendMessage('WallCreator', 'LoadProject', json);
+		console.log('Sent');
+		//var obj = JSON.parse(event.target.result);
+		//console.log(obj);
+	}
+
+	document.getElementById('pathLoader').addEventListener('change', onChange);
+})();

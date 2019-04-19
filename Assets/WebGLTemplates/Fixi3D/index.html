@@ -26,7 +26,7 @@
 
 <div id="sideBar" class="sidebar">
 
-  <buttton class="clickableCollapse" id="butProjet" style="display: inline-block;">Projet</buttton>
+  <button class="clickableCollapse" id="butProjet" style="display: inline-block;">Projet</button>
   <div id="projectSideBar" class="sidebarContent">
     <div class="control is-horizontal">
         <div class="control-label">
@@ -53,7 +53,14 @@
         <div class="control">
           <input type="text" name="objectLength" id="input_user" class="input is-small" value="" />
         </div>
-        <button id="butSaveProject" onclick="saveProject()">Sauvegarder</button>
+        <div>
+            <label for="butSaveProject">Sauvegarder Projet</label>
+            <button id="butSaveProject" onclick="saveProject()">Save</button>
+        </div>
+        <div>
+            <label for="pathLoader">Charger Projet</label>
+            <input type="file" id="pathLoader" accept="application/json"/>
+        </div>
     </div>
   </div>
   <button class="clickableCollapse" id="butCreateWall" style="display: inline-block;">Create Wall</button>
