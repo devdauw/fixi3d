@@ -4,11 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using Fixi3d.Utilities;
 using Resources.Scripts;
 using UnityEngine;
 
-public class WallCreator : MonoBehaviour
+public class WallCreator : Singleton<WallCreator>
 {
+    public bool substract;
+
     #region UnityWebGLCom
     //We import our methods from js_cross. Somes are pure js calls to grab data from the page. Others are calls sent from our C# to get data back in our page
     [DllImport("__Internal")]
@@ -65,8 +68,11 @@ public class WallCreator : MonoBehaviour
         var bottomCorner = Math.Min(beginPos.y, endPos.y);
         var width = Math.Max(beginPos.x, endPos.x) - topCorner;
         var height = Math.Max(beginPos.y, endPos.y) - bottomCorner;
-            
-        CreateWall(width, height, topCorner, bottomCorner);
+
+        if (substract)
+            CreateHole(width, height, topCorner, bottomCorner);
+        else
+            CreateWall(width, height, topCorner, bottomCorner);
     }
 
     //Nous permet de tracer un rectangle de selection par dessus notre canvas pour voir ce que l'on trace
@@ -79,7 +85,7 @@ public class WallCreator : MonoBehaviour
         endPos = Camera.main.WorldToScreenPoint(endPos);
         var rect = Utils.GetMousePositions(beginPos, endPos);
         Utils.DrawMouseRect(rect, new Color( 0.8f, 0.8f, 0.95f, 0.25f ));
-        Utils.DrawMouseRectBorder( rect, 2, new Color( 0.8f, 0.8f, 0.95f ) );
+        Utils.DrawMouseRectBorder( rect, 2, new Color( 0.8f, 0.8f, 0.95f ));
     }
 
     private Vector3 GetWorldPointSnappedMousePosition(Vector3 mousePos)
@@ -114,7 +120,7 @@ public class WallCreator : MonoBehaviour
         save[0].userName = json.userName;
         foreach (var item in json.wallList)
             CreateWall(item.modelName, item.modelSize, item.modelPosition, item.modelFixationsName,
-                item.modelFixationsPosition);
+                item.modelFixationsPosition, item.vertices, item.triangles);
         #if !UNITY_EDITOR && UNITY_WEBGL
             SendWallsList();
         #endif
@@ -147,6 +153,8 @@ public class WallCreator : MonoBehaviour
         var model = new Model3D();
         model.CreateModel(topCornerPos, bottomCornerPos, PosZ, width, height, 2, "Wall" + _wallNum, "Green");
         model.Model.gameObject.tag = "FixiWalls";
+        model.Model.layer = Settings.Instance.wallLayer;
+
         modelSList.Add(model);
         _wallNum++;
         #if !UNITY_EDITOR && UNITY_WEBGL
@@ -154,10 +162,27 @@ public class WallCreator : MonoBehaviour
         #endif
     }
 
-    private void CreateWall(string name, Vector3 size, Vector3 position, string[] fixName, Vector3[] fixPos)
+    private void CreateHole(float width, float height, float topCornerPos, float bottomCornerPos)
     {
         var model = new Model3D();
+        model.CreateModel(topCornerPos, bottomCornerPos, PosZ, width, height, 2, "Wall" + _wallNum, "Green");
+        model.Model.AddComponent<HoleMaker>().Init();
+    }
+
+    private void CreateWall(string name, Vector3 size, Vector3 position, string[] fixName, Vector3[] fixPos, Vector3[] vertices, int[] triangles)
+    {
+        var model = new Model3D();
+
         model.CreateModel(position.x, position.y, position.z, size.x, size.y, size.z, name, "Green", fixName, fixPos);
+
+        var mesh = new Mesh();
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+
+        model.Model.GetComponent<MeshFilter>().sharedMesh = mesh;
+
         model.Model.gameObject.tag = "FixiWalls";
         modelSList.Add(model);
         _wallNum++;
@@ -204,19 +229,24 @@ public class WallCreator : MonoBehaviour
     }
  
     //Destroy the Wall selected
-    private void RemoveWall(string selectedWall)
+    public void RemoveWall(string selectedWall)
     {
         var model = JsonUtility.FromJson<SzModel>(selectedWall);
+        RemoveWallWithName(model.modelName);
+    }
+
+    public void RemoveWallWithName(string wallName)
+    {
         var selector = GameObject.Find("MouseManager");
-        var walls = modelSList.Where(x => x.Name == model.modelName).ToList();
+        var walls = modelSList.Where(x => x.Name == wallName).ToList();
         selector.SendMessage("ClearSelection");
         var hiddenWall = walls.First().Model;
-        hiddenWall.SetActive(false);
-        hiddenWall.tag = "Untagged";
+        Destroy(hiddenWall);
         modelSList.Remove(walls.First());
-        #if !UNITY_EDITOR && UNITY_WEBGL
-            SendWallsList();
-        #endif
+
+#if !UNITY_EDITOR && UNITY_WEBGL
+        SendWallsList();
+#endif
     }
 
     private void RemoveWalls()
@@ -239,13 +269,16 @@ public class WallCreator : MonoBehaviour
         var project = new SzProject();
         foreach (var item in modelSList)
         {
+            var mesh = item.Model.GetComponent<MeshFilter>().mesh;
             var newWall = new SzModel
             {
                 modelName = item.Name,
                 modelSize = item.Size,
                 modelPosition = item.Model.transform.position,
                 modelFixationsName = new string[item.Model.transform.childCount],
-                modelFixationsPosition = new Vector3[item.Model.transform.childCount]
+                modelFixationsPosition = new Vector3[item.Model.transform.childCount],
+                vertices = mesh.vertices,
+                triangles = mesh.triangles
             };
             for (var i = 0; i < item.Model.transform.childCount; i++)
             {
