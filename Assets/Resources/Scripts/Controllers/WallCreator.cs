@@ -261,6 +261,7 @@ public class WallCreator : MonoBehaviour
         project.userName = save[0].userName;
         project.wallList = szModelList;
 
+
         //We serialize our list of simple objects and pass it back to our html
         var json = JsonUtility.ToJson(project);
         return json;
