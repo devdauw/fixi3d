@@ -180,6 +180,17 @@ public class CameraController : MonoBehaviour
             MoveCamera("Top");
         if (Input.GetKey(KeyCode.RightArrow))
             MoveCamera("Right");
+
+        if(Input.mouseScrollDelta.y > 0)
+        {
+            Debug.Log("SCrolling");
+            ZoomCamera(-1);
+        }
+        if(Input.mouseScrollDelta.y < 0)
+        {
+            ZoomCamera(1);
+        }
+
 #endif
     }
 }
