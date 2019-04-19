@@ -6,6 +6,16 @@ public class JsonSerializableClasses : MonoBehaviour
 {
 }
 
+public class SzFixations
+{
+    public string name;
+    public Vector3 position;
+    public Vector3 rotation;
+
+    [NonSerialized]
+    public GameObject gameObject;
+}
+
 [Serializable]
 public class SzModel
 {
@@ -14,6 +24,8 @@ public class SzModel
     public Vector3 modelPosition;
     public string[] modelFixationsName;
     public Vector3[] modelFixationsPosition;
+    public Vector3[] vertices;
+    public int[] triangles;
 }
 
 [Serializable]
