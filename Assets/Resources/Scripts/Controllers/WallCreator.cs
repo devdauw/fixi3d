@@ -39,6 +39,7 @@ public class WallCreator : MonoBehaviour
         #if !UNITY_EDITOR && UNITY_WEBGL
             UnityEngine.WebGLInput.captureAllKeyboardInput = false;
         #endif
+        Application.targetFrameRate = 60;
     }
 
     void Update()
