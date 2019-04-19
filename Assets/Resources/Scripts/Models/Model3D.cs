@@ -55,6 +55,7 @@ public class Model3D
         mesh.RecalculateBounds();
 
         Model = new GameObject(Name, typeof(MeshFilter), typeof(MeshRenderer));
+        Model.layer = Settings.Instance.wallLayer;
         Model.GetComponent<MeshRenderer>().material = Material;
         Model.GetComponent<MeshFilter>().mesh = mesh;
         //Using a BoxCollider give us the option to select our object later

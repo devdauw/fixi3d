@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Hakobio.Utility;
 
 namespace Fixi3d.Utilities
 {
