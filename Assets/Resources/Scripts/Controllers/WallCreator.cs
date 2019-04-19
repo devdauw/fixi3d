@@ -156,7 +156,7 @@ public class WallCreator : MonoBehaviour
     private void CreateWall(string name, Vector3 size, Vector3 position, string[] fixName, Vector3[] fixPos)
     {
         var model = new Model3D();
-        model.CreateModel(position.x, position.y, position.z, size.x, size.y, size.z, name, "Green");
+        model.CreateModel(position.x, position.y, position.z, size.x, size.y, size.z, name, "Green", fixName, fixPos);
         model.Model.gameObject.tag = "FixiWalls";
         modelSList.Add(model);
         _wallNum++;

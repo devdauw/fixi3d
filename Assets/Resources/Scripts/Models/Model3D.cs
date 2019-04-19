@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.Tilemaps;
+using Object = UnityEngine.Object;
 
 public class Model3D
 {
@@ -78,9 +81,6 @@ public class Model3D
         //Dist Top Left
         var distTopLeftX = suspLeftX - 0.15f - suspXLenght;
         var distTopLeftY = fixPosY + sizeY - 0.2f - (distXLenght / 2);
-        InstantiateFixation("DistM20", "TopLeft Distanceur Rot", distTopLeftX, distTopLeftY, fixPosZ);
-
-        //Dist Top Left
         InstantiateFixation("DistM20", "TopLeft Distanceur", distTopLeftX, distTopLeftY, fixPosZ);
 
         //Susp Right
@@ -106,6 +106,60 @@ public class Model3D
             distBottomRightX = fixPosX + sizeX - 0.15f - distXLenght;
         var distBottomRightY = fixPosY + 0.15f;
         InstantiateFixation("DistM20", "BottomRight Distanceur", distBottomRightX, distBottomRightY, 0f);
+    }
+
+    public void CreateModel(float posX, float posY, float posZ, float sizeX, float sizeY, float sizeZ, string name, string materialName, string[] fixName, Vector3[] fixPos)
+    {
+        Position = new Vector3(posX, posY, posZ);
+        Size = new Vector3(sizeX, sizeY, sizeZ);
+        Name = name;
+        Material = UnityEngine.Resources.Load<Material>("Materials/" + materialName);
+        FrontLeftBottom = new Vector3(0, 0, 0);
+        FrontLeftTop = new Vector3(0, Size.y, 0);
+        FrontRightTop = new Vector3(Size.x, Size.y, 0);
+        FrontRightBottom = new Vector3(Size.x, 0, 0);
+        BackRightBottom = new Vector3(0, 0, Size.z);
+        BackLeftBottom = new Vector3(Size.x, 0, Size.z);
+        BackLeftTop = new Vector3(Size.x, Size.y, Size.z);
+        BackRightTop = new Vector3(0, Size.y, Size.z);
+
+        var vertices = GetVertices();
+        var triangles = GetTriangles();
+        var uvs = new Vector2[vertices.Length];
+        for (var i = 0; i < uvs.Length; i++)
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        var mesh = new Mesh { vertices = vertices, triangles = triangles, uv = uvs };
+
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+
+        Model = new GameObject(Name, typeof(MeshFilter), typeof(MeshRenderer));
+        Model.GetComponent<MeshRenderer>().material = Material;
+        Model.GetComponent<MeshFilter>().mesh = mesh;
+        //Using a BoxCollider give us the option to select our object later
+        Model.AddComponent<BoxCollider>();
+        Model.transform.position = Position;
+
+        var suspXLenght = 0.60299994f;
+        var suspYLenght = 0.88800513f;
+        var distXLenght = 0.08148051f;
+        var distYLenght = 0.28499997f;
+
+        for (var i = 0; i < fixName.Length; i++)
+        {
+            var type = fixName[i].Split(' ');
+            switch (type[1])
+            {
+                case "Suspente":
+                    //Trouver pourquoi l'axe Z n'est pas OK
+                    Debug.Log(fixPos[i].z);
+                    InstantiateFixation("Susp", fixName[i], fixPos[i].x, fixPos[i].y, fixPos[i].z);
+                    break;
+                case "Distanceur":
+                    InstantiateFixation("DistM20", fixName[i], fixPos[i].x, fixPos[i].y, fixPos[i].z);
+                    break;
+            }
+        }
     }
 
     private void InstantiateFixation(string fixType, string name, float x , float y, float z)
