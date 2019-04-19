@@ -151,12 +151,10 @@ public class Model3D
             switch (type[1])
             {
                 case "Suspente":
-                    //Trouver pourquoi l'axe Z n'est pas OK
-                    Debug.Log(fixPos[i].z);
-                    InstantiateFixation("Susp", fixName[i], fixPos[i].x, fixPos[i].y, fixPos[i].z);
+                    InstantiateFixation("Susp", fixName[i], fixPos[i].x, fixPos[i].y, fixPos[i].z + 0.23f);
                     break;
                 case "Distanceur":
-                    InstantiateFixation("DistM20", fixName[i], fixPos[i].x, fixPos[i].y, fixPos[i].z);
+                    InstantiateFixation("DistM20", fixName[i], fixPos[i].x - 0.046f, fixPos[i].y - 0.0014f + 0.03f, fixPos[i].z - 0.086f);
                     break;
             }
         }
@@ -169,19 +167,8 @@ public class Model3D
         {
             case "DistM20":
                 fixation = (GameObject) Object.Instantiate(_distM20);
-                //fixation.transform.Rotate(-118.9f, 87.51199f, -268.583f);
-                //fixation.transform.position = new Vector3(x + 0.02f, y - 0.03f, z - 0.287f);
-                if (first)
-                {
-                    fixation.transform.Rotate(-60.69f, 91.186f, -92.762f);
-                    fixation.transform.position = new Vector3(x + 0.046f, y + 0.0014f - 0.03f, z + 0.086f);
-                    first = false;
-                }
-                else
-                {
-                    fixation.transform.Rotate(-118.9f, 87.51199f, -268.583f);
-                    fixation.transform.position = new Vector3(x + 0.02f, y - 0.03f, z - 0.287f);
-                }  
+                fixation.transform.Rotate(-60.69f, 91.186f, -92.762f);
+                fixation.transform.position = new Vector3(x + 0.046f, y + 0.0014f - 0.03f, z + 0.086f); 
                 break;
             case "Susp":
                 fixation = (GameObject) Object.Instantiate(_suspente);
