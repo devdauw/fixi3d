@@ -63,6 +63,7 @@
         </div>
     </div>
   </div>
+
   <button class="clickableCollapse" id="butCreateWall" style="display: inline-block;">Create Wall</button>
   <div id="createSideBar" class="sidebarContent">
     <div class="control is-horizontal">
@@ -86,6 +87,16 @@
       </div>
       <button id="createWall" onclick="createWall()">Create Wall</button>
     </div>
+  </div>
+
+  <button id="ActionController" class="clickableCollapse" style="display: inline-block;">Actions</button> 
+  <div id="actionSideBar" class="sidebarContent">
+      <div id="actionControl" class="control is-horizontal">
+          <div>
+              <label for="substract">Soustraire</label>
+              <input type="checkbox" id="substract" value="false" onclick="sub()">
+          </div>
+      </div>
   </div>
 
   <button class="clickableCollapse" id="butSelectWall" style="display: none;">Selected Wall</button>
@@ -138,7 +149,13 @@
     <button id="removeWall" onclick="removeWall()">Remove Wall</button>
     <button id="CopyPaste" onclick="copyWall()">Copy Paste</button>
   </div>
+
   <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Fixations</button> 
+  <div id="fixationsSideBar" class="sidebarContent">
+      <div id="fixControl" class="control is-horizontal"></div>
+  </div>
+
+  <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Controle</button> 
   <div id="fixationsSideBar" class="sidebarContent">
       <div id="fixControl" class="control is-horizontal"></div>
   </div>

@@ -218,6 +218,16 @@ function mouseSelectAction(wallObject) {
 	wall = wallObject;
 }
 
+function sub() {
+	var value = 'false';
+	if (document.getElementById('substract').checked) {
+		value = 'true';
+		gameInstance.SendMessage('WallCreator', 'Substract', value);
+	} else {
+		gameInstance.SendMessage('WallCreator', 'Substract', value);
+	}
+}
+
 //Function to handlekey press, to use with an eventHandler
 function handleKeyDown(event) {
 	event.preventDefault();
@@ -322,12 +332,10 @@ function clearSelection() {
 
 document.addEventListener('click', function(event) {
 	if (event.target.id == '#canvas') {
-		//console.log("Clicked on our div with WebGL content, starting eventHandler to capture keypresses and mousewheel");
 		document.addEventListener('keydown', handleKeyDown);
 		document.addEventListener('keyup', handleKeyUp);
 		document.addEventListener('wheel', handleWheel);
 	} else {
-		//console.log("Clicked on another div, removing event and restoring normal keys function");
 		document.removeEventListener('keydown', handleKeyDown);
 		document.removeEventListener('keyup', handleKeyUp);
 		document.removeEventListener('wheel', handleWheel);
@@ -342,12 +350,8 @@ document.addEventListener('click', function(event) {
 	}
 
 	function onReaderLoad(event) {
-		console.log(event.target.result);
 		var json = event.target.result;
 		gameInstance.SendMessage('WallCreator', 'LoadProject', json);
-		console.log('Sent');
-		//var obj = JSON.parse(event.target.result);
-		//console.log(obj);
 	}
 
 	document.getElementById('pathLoader').addEventListener('change', onChange);

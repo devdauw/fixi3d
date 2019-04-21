@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using cakeslice;
 using UnityEngine.Tilemaps;
 using Object = UnityEngine.Object;
 
@@ -62,6 +63,9 @@ public class Model3D
         Model.GetComponent<MeshFilter>().mesh = mesh;
         //Using a BoxCollider give us the option to select our object later
         Model.AddComponent<BoxCollider>();
+        var outline = Model.AddComponent<Outline>();
+        outline.enabled = false;
+
         Model.transform.position = Position;
 
         var fixPosX = Model.gameObject.transform.position.x;
@@ -138,6 +142,7 @@ public class Model3D
         Model.GetComponent<MeshFilter>().mesh = mesh;
         //Using a BoxCollider give us the option to select our object later
         Model.AddComponent<BoxCollider>();
+        Model.AddComponent<Outline>();
         Model.transform.position = Position;
 
         var suspXLenght = 0.60299994f;

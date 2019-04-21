@@ -31,34 +31,22 @@ namespace Resources.Scripts.Controllers
 
         private void SelectObject(GameObject obj)
         {
-            var ruler = obj.GetComponent<Ruler>();
+            var ruler = obj.GetComponent<WallSelector>();
             if (ruler != null)
-                ruler.ShowRuler();
+                ruler.Select();
 
             if(selectedObject != null) {
                 if(obj == selectedObject) return;
                 ClearSelection();
             }
             selectedObject = obj;
-            var rs = selectedObject.GetComponentsInChildren<Renderer>();
-            foreach(var r in rs) {
-                var m = r.material;
-                startingColor = m.color;
-                m.color = Color.magenta;
-                r.material = m;
-            }
             SendClickedWallToPage();
         }
         
         private void ClearSelection()
         {
             if(selectedObject == null) return;
-            var rs = selectedObject.GetComponentsInChildren<Renderer>();
-            foreach(var r in rs) {
-                var m = r.material;
-                m.color = startingColor;
-                r.material = m;
-            }
+            selectedObject.GetComponent<WallSelector>().unSelect();
             selectedObject = null;
             foreach (var gameObject in _inactiveObjects)
                 gameObject.SetActive(true);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using Fixi3d.Utilities;
 using Resources.Scripts;
 using UnityEngine;
@@ -75,7 +74,7 @@ public class WallCreator : Singleton<WallCreator>
             CreateWall(width, height, topCorner, bottomCorner);
     }
 
-    //Nous permet de tracer un rectangle de selection par dessus notre canvas pour voir ce que l'on trace
+    //Allow us to draw a selection square above our canvas
     void OnGUI()
     {
         if (!_draggingMouse) return;
@@ -141,6 +140,7 @@ public class WallCreator : Singleton<WallCreator>
         }
         model.Model.gameObject.tag = "FixiWalls";
         model.Model.layer = Settings.Instance.wallLayer;
+        model.Model.AddComponent<WallSelector>();
         modelSList.Add(model);
         _wallNum++;
         #if !UNITY_EDITOR && UNITY_WEBGL
@@ -156,7 +156,7 @@ public class WallCreator : Singleton<WallCreator>
         model.Model.gameObject.tag = "FixiWalls";
         model.Model.layer = Settings.Instance.wallLayer;
 
-        model.Model.AddComponent<Ruler>();
+        model.Model.AddComponent<WallSelector>();
 
         modelSList.Add(model);
         _wallNum++;
@@ -188,6 +188,7 @@ public class WallCreator : Singleton<WallCreator>
 
         model.Model.gameObject.tag = "FixiWalls";
         model.Model.layer = Settings.Instance.wallLayer;
+        model.Model.AddComponent<WallSelector>();
         modelSList.Add(model);
         _wallNum++;
         #if !UNITY_EDITOR && UNITY_WEBGL
@@ -195,6 +196,11 @@ public class WallCreator : Singleton<WallCreator>
         #endif
     }
 
+    public void Substract(string value)
+    {
+
+        substract = Boolean.Parse(value);
+    }
     public Model3D GetWall(string name)
     {
         return modelSList.FirstOrDefault(wall => wall.Name == name);
