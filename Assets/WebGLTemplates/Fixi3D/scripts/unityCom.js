@@ -228,6 +228,16 @@ function sub() {
 	}
 }
 
+function showLineRenderer() {
+	var value = 'true';
+	if (document.getElementById('lineRenderer').checked) {
+		gameInstance.SendMessage('MouseManager', 'EnableLineRenderer', value);
+	} else {
+		value = 'false';
+		gameInstance.SendMessage('MouseManager', 'EnableLineRenderer', value);
+	}
+}
+
 //Function to handlekey press, to use with an eventHandler
 function handleKeyDown(event) {
 	event.preventDefault();

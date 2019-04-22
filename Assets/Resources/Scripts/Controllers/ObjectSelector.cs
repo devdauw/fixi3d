@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -96,6 +97,12 @@ namespace Resources.Scripts.Controllers
             var centerY = selectedObject.transform.position.y + (size.y / 2);
             var centerZ = selectedObject.transform.position.z + (size.z / 2);
             cameraRotator.transform.position = new Vector3(centerX, centerY, centerZ);
+        }
+
+        public void EnableLineRenderer(string val)
+        {
+            if (selectedObject != null)
+                selectedObject.GetComponent<WallSelector>().ShowLineRenderer(Boolean.Parse(val));
         }
     }
 }

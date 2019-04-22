@@ -94,7 +94,7 @@
       <div id="actionControl" class="control is-horizontal">
           <div>
               <label for="substract">Soustraire</label>
-              <input type="checkbox" id="substract" value="false" onclick="sub()">
+              <input type="checkbox" id="substract" onclick="sub()">
           </div>
       </div>
   </div>
@@ -148,6 +148,10 @@
     <button id="editWall" onclick="editWall()">Edit Wall</button>
     <button id="removeWall" onclick="removeWall()">Remove Wall</button>
     <button id="CopyPaste" onclick="copyWall()">Copy Paste</button>
+    <div>
+        <label for="substract">Afficher les quotes</label>
+        <input type="checkbox" id="lineRenderer" checked onclick="showLineRenderer()">
+    </div>
   </div>
 
   <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Fixations</button> 

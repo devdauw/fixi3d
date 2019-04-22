@@ -38,11 +38,18 @@ public class WallSelector : MonoBehaviour
     public void unSelect()
     {
         GetComponent<Outline>().enabled = false;
-        foreach (var item in lineRenderers)
-        {
-            Destroy(item);
-        }
+        foreach (var item in lineRenderers) Destroy(item);
 
         lineRenderers = new List<GameObject>();
+    }
+
+    public void ShowLineRenderer(bool val)
+    {
+        if (val)
+            foreach (var item in lineRenderers)
+                item.SetActive(true);
+        else if (!val)
+            foreach (var item in lineRenderers)
+                item.SetActive(false);
     }
 }
