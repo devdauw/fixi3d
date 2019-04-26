@@ -1,6 +1,4 @@
 ﻿using Fixi3d.Utilities;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -16,8 +14,8 @@ public class EditorTester : Singleton<EditorTester>
         if(loadProject)
         {
             loadProject = false;
-            TextAsset text = UnityEngine.Resources.Load(projectToLoad) as TextAsset;
-            string json = text.text;
+            var text = UnityEngine.Resources.Load(projectToLoad) as TextAsset;
+            var json = text.text;
             WallCreator.Instance.LoadProject(json);
         }
 

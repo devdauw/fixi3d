@@ -1,9 +1,6 @@
-﻿using System;
-using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
+﻿using UnityEngine;
+using System.ComponentModel;
 using cakeslice;
-using UnityEngine.Tilemaps;
 using Object = UnityEngine.Object;
 
 public class Model3D
@@ -15,6 +12,13 @@ public class Model3D
     private readonly GameObject _suspente = (GameObject)UnityEngine.Resources.Load("Fixations/Suspente");
     private readonly GameObject _distM20 = (GameObject)UnityEngine.Resources.Load("Fixations/DistanceurM20");
     private bool first = true;
+
+    private enum FixationType
+    {
+        [Description("Suspente")]
+        Suspente,
+        DistanceurM20
+    }
 
     public Vector3 Position { get; set; }
     public Vector3 Size { get; set; }
@@ -156,8 +160,11 @@ public class Model3D
             switch (type[1])
             {
                 case "Suspente":
+                {
                     InstantiateFixation("Susp", fixName[i], fixPos[i].x, fixPos[i].y, fixPos[i].z + 0.23f);
                     break;
+                }
+                    
                 case "Distanceur":
                     InstantiateFixation("DistM20", fixName[i], fixPos[i].x - 0.046f, fixPos[i].y - 0.0014f + 0.03f, fixPos[i].z - 0.086f);
                     break;
