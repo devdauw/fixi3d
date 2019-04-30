@@ -10,6 +10,7 @@ using UnityEngine;
 public class WallCreator : Singleton<WallCreator>
 {
     public bool substract;
+    public bool renfort;
 
     #region UnityWebGLCom
     //We import our methods from js_cross. Somes are pure js calls to grab data from the page. Others are calls sent from our C# to get data back in our page
@@ -70,6 +71,10 @@ public class WallCreator : Singleton<WallCreator>
 
         if (substract)
             CreateHole(width, height, topCorner, bottomCorner);
+        if (renfort)
+        {
+            CreateRenfort(width, height, topCorner, bottomCorner);
+        }
         else
             CreateWall(width, height, topCorner, bottomCorner);
     }
@@ -165,6 +170,13 @@ public class WallCreator : Singleton<WallCreator>
         #endif
     }
 
+    private void CreateRenfort(float width, float height, float topCornerPos, float bottomCornerPos)
+    {
+        var model = new Model3D();
+        model.CreateModel(topCornerPos, bottomCornerPos, PosZ, width, height, 2, "Wall" + _wallNum, "Green");
+        model.Model.AddComponent<RenfortMaker>().Init();
+    }
+    
     private void CreateHole(float width, float height, float topCornerPos, float bottomCornerPos)
     {
         var model = new Model3D();

@@ -61,8 +61,9 @@ public class Model3D
         Model = new GameObject(Name, typeof(MeshFilter), typeof(MeshRenderer));
         Model.GetComponent<MeshRenderer>().material = Material;
         Model.GetComponent<MeshFilter>().mesh = mesh;
-        //Using a BoxCollider give us the option to select our object later
-        Model.AddComponent<BoxCollider>();
+        //Using a MeshCollider give us the option to select our object later
+        Model.AddComponent<MeshCollider>();
+        Model.GetComponent<MeshCollider>().convex = true;
         var outline = Model.AddComponent<Outline>();
         outline.enabled = false;
 
@@ -141,7 +142,8 @@ public class Model3D
         Model.GetComponent<MeshRenderer>().material = Material;
         Model.GetComponent<MeshFilter>().mesh = mesh;
         //Using a BoxCollider give us the option to select our object later
-        Model.AddComponent<BoxCollider>();
+        Model.AddComponent<MeshCollider>();
+        Model.GetComponent<MeshCollider>().convex = true;
         Model.AddComponent<Outline>();
         Model.transform.position = Position;
 

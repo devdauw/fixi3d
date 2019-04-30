@@ -13,7 +13,7 @@ public class HoleMaker : MonoBehaviour
         var rb = gameObject.AddComponent<Rigidbody>();
         rb.isKinematic = true;
         
-        var collider = gameObject.GetComponent<BoxCollider>();
+        var collider = gameObject.GetComponent<MeshCollider>();
         collider.isTrigger = true;
 
         collider.enabled = false;
@@ -37,7 +37,7 @@ public class HoleMaker : MonoBehaviour
 
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
-        toSubstract.GetComponent<MeshFilter>().mesh = mesh;
+        toSubstract.GetComponent<MeshFilter>().sharedMesh = mesh;
     }
 
     private void Update()
