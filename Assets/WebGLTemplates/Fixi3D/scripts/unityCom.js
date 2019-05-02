@@ -230,7 +230,7 @@ function sub() {
 
 function addRenfort() {
 	var value = 'false';
-	if (document.getElementById('renfort').checked) {
+	if (document.getElementById('addRenfort').checked) {
 		value = 'true';
 		gameInstance.SendMessage('WallCreator', 'AddRenfort', value);
 	} else {
