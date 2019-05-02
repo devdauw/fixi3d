@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Fixi3d.Utilities;
 using Resources.Scripts;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WallCreator : Singleton<WallCreator>
 {
     public bool substract;
     public bool renfort;
+
+    #region Enum
+    public enum MatColor
+    {
+       Green,
+       Pink,
+       Red
+    }
+    #endregion
 
     #region UnityWebGLCom
     //We import our methods from js_cross. Somes are pure js calls to grab data from the page. Others are calls sent from our C# to get data back in our page
@@ -157,7 +166,7 @@ public class WallCreator : Singleton<WallCreator>
     private void CreateWall(float width, float height, float topCornerPos, float bottomCornerPos)
     {
         var model = new Model3D();
-        model.CreateModel(topCornerPos, bottomCornerPos, PosZ, width, height, 2, "Wall" + _wallNum, "Green");
+        model.CreateModel(topCornerPos, bottomCornerPos, PosZ, width, height, 2, "Wall" + _wallNum, MatColor.Green.ToString());
         model.Model.gameObject.tag = "FixiWalls";
         model.Model.layer = Settings.Instance.wallLayer;
 
@@ -180,15 +189,21 @@ public class WallCreator : Singleton<WallCreator>
     private void CreateHole(float width, float height, float topCornerPos, float bottomCornerPos)
     {
         var model = new Model3D();
-        model.CreateModel(topCornerPos, bottomCornerPos, PosZ, width, height, 2, "Wall" + _wallNum, "Green");
+        var wallName = "Wall" + _wallNum;
+        model.CreateModel(topCornerPos, bottomCornerPos, PosZ, width, height, 2, wallName, MatColor.Green.ToString());
         model.Model.AddComponent<HoleMaker>().Init();
+        var newHole = modelSList.Where(x => x.Name == wallName);
+        newHole.First().Model = model.Model;
+        #if !UNITY_EDITOR && UNITY_WEBGL
+            SendWallsList();
+        #endif
     }
 
     private void CreateWall(string name, Vector3 size, Vector3 position, string[] fixName, Vector3[] fixPos, Vector3[] vertices, int[] triangles)
     {
         var model = new Model3D();
 
-        model.CreateModel(position.x, position.y, position.z, size.x, size.y, size.z, name, "Green", fixName, fixPos);
+        model.CreateModel(position.x, position.y, position.z, size.x, size.y, size.z, name, MatColor.Green.ToString(), fixName, fixPos);
 
         var mesh = new Mesh();
         mesh.vertices = vertices;
@@ -210,9 +225,9 @@ public class WallCreator : Singleton<WallCreator>
 
     public void Substract(string value)
     {
-
         substract = Boolean.Parse(value);
     }
+
     public Model3D GetWall(string name)
     {
         return modelSList.FirstOrDefault(wall => wall.Name == name);
@@ -223,17 +238,19 @@ public class WallCreator : Singleton<WallCreator>
     {
         var model = JsonUtility.FromJson<SzModel>(selectedWall);
         var selector = GameObject.Find("MouseManager");
-        var walls = modelSList.Where(x => x.Name == model.modelName).ToList();
         selector.SendMessage("ClearSelection");
-        var copyWall = new Model3D();
-        copyWall.CreateModel(walls.First().Model.transform.position.x + walls.First().Size.x + GetFloatValueFromInput("input_edit_distance"), walls.First().Model.transform.position.y, walls.First().Model.transform.position.z,
-            walls.First().Size.x, walls.First().Size.y, walls.First().Size.z, "Wall" + _wallNum, "Green");
-        _wallNum++;
-        copyWall.Model.gameObject.tag = "FixiWalls";
-        modelSList.Add(copyWall);
-        #if !UNITY_EDITOR && UNITY_WEBGL
-            SendWallsList();
-        #endif
+        var newPos = model.modelPosition;
+        newPos.x = newPos.x + model.modelSize.x + GetFloatValueFromInput("input_edit_distance");
+        var newFixPos = model.modelFixationsPosition;
+        for (var i = 0; i < model.modelFixationsPosition.Length; i++)
+        {
+            model.modelFixationsPosition[i].x =  model.modelFixationsPosition[i].x + model.modelSize.x + GetFloatValueFromInput("input_edit_distance");
+        }
+        var wallName = "Wall" + _wallNum;
+        CreateWall(wallName, model.modelSize, newPos, model.modelFixationsName, model.modelFixationsPosition, model.vertices, model.triangles);
+        var newWall = modelSList.Where(x => x.Name == wallName).ToList();
+        selector.SendMessage("SelectObject", newWall.First().Model);
+        selector.SendMessage("ClearSelection");
     }
 
     private void EditWall(string selectedWall)
@@ -247,19 +264,34 @@ public class WallCreator : Singleton<WallCreator>
         rescale.y = newSize.y * rescale.y / size.y;
         rescale.z = newSize.z * rescale.z / size.z;
         var newPosition = new Vector3(GetFloatValueFromInput("input_edit_posX"), GetFloatValueFromInput("input_edit_posY"), GetFloatValueFromInput("input_edit_posZ"));
-        walls.First().Model.transform.localScale = rescale;
-        walls.First().Size = newSize;
         walls.First().Model.transform.position = newPosition;
+        var baseVertices = walls.First().Model.GetComponent<MeshFilter>().sharedMesh.vertices;
+        var vertices = new Vector3[baseVertices.Length];
+        for (var i = 0; i < vertices.Length; i++)
+        {
+            var vertex = baseVertices[i];
+            vertex.x = vertex.x * rescale.x;
+            vertex.y = vertex.y * rescale.y;
+            vertex.z = vertex.z * rescale.z;
+            vertices[i] = vertex;
+        }
+        walls.First().Model.GetComponent<MeshFilter>().sharedMesh.vertices = vertices;
+        walls.First().Model.GetComponent<MeshFilter>().sharedMesh.RecalculateNormals();
+        walls.First().Model.GetComponent<MeshFilter>().sharedMesh.RecalculateBounds();
+        walls.First().Size = newSize;    
+        walls.First().Model.GetComponent<WallSelector>().unSelect();
+        walls.First().Model.GetComponent<WallSelector>().Select();
         #if !UNITY_EDITOR && UNITY_WEBGL
             SendWallsList();
         #endif
     }
- 
+
     //Destroy the Wall selected
     public void RemoveWall(string selectedWall)
     {
         var model = JsonUtility.FromJson<SzModel>(selectedWall);
         RemoveWallWithName(model.modelName);
+        Debug.Log("Removed");
     }
 
     public void RemoveWallWithName(string wallName)
@@ -270,10 +302,9 @@ public class WallCreator : Singleton<WallCreator>
         var hiddenWall = walls.First().Model;
         Destroy(hiddenWall);
         modelSList.Remove(walls.First());
-
-#if !UNITY_EDITOR && UNITY_WEBGL
-        SendWallsList();
-#endif
+        #if !UNITY_EDITOR && UNITY_WEBGL
+            SendWallsList();
+        #endif
     }
 
     private void RemoveWalls()
@@ -291,8 +322,6 @@ public class WallCreator : Singleton<WallCreator>
 
         var bounds = wallToUpdate.Model.GetComponent<MeshFilter>().sharedMesh.bounds;
         wallToUpdate.BackLeftBottom = new Vector3(bounds.min.x, bounds.min.y, bounds.max.z);
-        //TODO
-
     }
 
     //Method that takes our C# walls list and send it back to our webpage using pointers to the address of the list
@@ -308,6 +337,7 @@ public class WallCreator : Singleton<WallCreator>
         var project = new SzProject();
         foreach (var item in modelSList)
         {
+            Debug.Log(item.Name);
             var mesh = item.Model.GetComponent<MeshFilter>().mesh;
             var newWall = new SzModel
             {
@@ -336,6 +366,8 @@ public class WallCreator : Singleton<WallCreator>
 
         //We serialize our list of simple objects and pass it back to our html
         var json = JsonUtility.ToJson(project);
+        Debug.Log("json");
+        Debug.Log(json);
         return json;
     }
 }

@@ -13,8 +13,10 @@ namespace Resources.Scripts.Controllers
         private static extern void SendClear();
 
         private List<GameObject> _inactiveObjects = new List<GameObject>();
+        private bool lineRendererCreated = false;
         public GameObject selectedObject;
         public Color startingColor;
+
         private void Update()
         {
             if (Camera.main == null) return;
@@ -32,9 +34,12 @@ namespace Resources.Scripts.Controllers
 
         private void SelectObject(GameObject obj)
         {
+            if (lineRendererCreated)
+                return;
             var ruler = obj.GetComponent<WallSelector>();
             if (ruler != null)
                 ruler.Select();
+            lineRendererCreated = true;
 
             if(selectedObject != null) {
                 if(obj == selectedObject) return;
@@ -53,6 +58,7 @@ namespace Resources.Scripts.Controllers
                 gameObject.SetActive(true);
             var cameraRotator = GameObject.Find("Camera Rotator");
             cameraRotator.transform.position = new Vector3(0,0,0);
+            lineRendererCreated = false;
             #if !UNITY_EDITOR && UNITY_WEBGL
                 SendClear();
             #endif
@@ -66,7 +72,9 @@ namespace Resources.Scripts.Controllers
                 modelSize = selectedObject.GetComponent<Renderer>().bounds.size,
                 modelPosition = selectedObject.GetComponent<Renderer>().transform.position,
                 modelFixationsName = new string[selectedObject.transform.childCount],
-                modelFixationsPosition = new Vector3[selectedObject.transform.childCount]
+                modelFixationsPosition = new Vector3[selectedObject.transform.childCount],
+                triangles = selectedObject.GetComponent<MeshFilter>().sharedMesh.triangles,
+                vertices = selectedObject.GetComponent<MeshFilter>().sharedMesh.vertices
             };
             for (var i = 0; i < selectedObject.transform.childCount; i++)
             {

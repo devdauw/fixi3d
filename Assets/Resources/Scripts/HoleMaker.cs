@@ -1,6 +1,7 @@
 ﻿using MeshMakerNamespace;
 using System.Collections;
 using System.Collections.Generic;
+using Resources.Scripts.Controllers;
 using UnityEngine;
 
 public class HoleMaker : MonoBehaviour
@@ -22,7 +23,6 @@ public class HoleMaker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter");
         Substract(other.gameObject);
     }
 
