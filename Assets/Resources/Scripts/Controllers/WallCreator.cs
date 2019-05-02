@@ -228,6 +228,11 @@ public class WallCreator : Singleton<WallCreator>
         substract = Boolean.Parse(value);
     }
 
+    public void AddRenfort(string value)
+    {
+        renfort = Boolean.Parse(value);
+    }
+
     public Model3D GetWall(string name)
     {
         return modelSList.FirstOrDefault(wall => wall.Name == name);
