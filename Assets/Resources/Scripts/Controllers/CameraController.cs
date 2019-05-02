@@ -162,7 +162,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if(_moveLeft)
+        if (_moveLeft)
             _cameraRotator.transform.Rotate(0, MoveSpeedR * Time.deltaTime, 0);
         else if (_moveTop)
             _cameraRotator.transform.Rotate(MoveSpeedR * Time.deltaTime, 0, 0);
@@ -170,5 +170,27 @@ public class CameraController : MonoBehaviour
             _cameraRotator.transform.Rotate(0, -MoveSpeedR * Time.deltaTime, 0);
         else if(_moveBottom)
             _cameraRotator.transform.Rotate(-MoveSpeedR * Time.deltaTime, 0, 0);
+
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.DownArrow))
+            MoveCamera("Bottom");
+        if (Input.GetKey(KeyCode.LeftArrow))
+            MoveCamera("Left");
+        if (Input.GetKey(KeyCode.UpArrow))
+            MoveCamera("Top");
+        if (Input.GetKey(KeyCode.RightArrow))
+            MoveCamera("Right");
+
+        if(Input.mouseScrollDelta.y > 0)
+        {
+            Debug.Log("SCrolling");
+            ZoomCamera(-1);
+        }
+        if(Input.mouseScrollDelta.y < 0)
+        {
+            ZoomCamera(1);
+        }
+
+#endif
     }
 }

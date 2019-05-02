@@ -5,6 +5,7 @@ var firstTimeL = false;
 var firstTimeT = false;
 var firstTimeR = false;
 var firstTimeB = false;
+var wall;
 
 document.addEventListener(
 	'DOMContentLoaded',
@@ -33,6 +34,14 @@ document.addEventListener(
 	false
 );
 
+function SendProject(project) {
+	var json = JSON.parse(project);
+	document.getElementById('input_name').value = json.projectName;
+	document.getElementById('input_num').value = json.projectNum;
+	document.getElementById('input_customer').value = json.customerName;
+	document.getElementById('input_user').value = json.userName;
+}
+
 function getFloatValueFromInput(input_name) {
 	var size = document.getElementById(input_name).value;
 	//Check if our float value has a comma in it, if so transform it to a dot
@@ -42,68 +51,191 @@ function getFloatValueFromInput(input_name) {
 	return parseFloat(size);
 }
 
+function saveProject() {
+	var json = JSON.stringify({
+		projectName: document.getElementById('input_name').value,
+		projectNum: document.getElementById('input_num').value,
+		customerName: document.getElementById('input_customer').value,
+		userName: document.getElementById('input_user').value
+	});
+	gameInstance.SendMessage('WallCreator', 'SaveProject', json);
+}
+
+function DownloadJson(json) {
+	var filename = document.getElementById('input_name').value + '.json';
+	var type = 'application/json';
+	var file = new Blob([ json ], { type: type });
+	if (
+		window.navigator.msSaveOrOpenBlob // IE10+
+	)
+		window.navigator.msSaveOrOpenBlob(file, filename);
+	else {
+		// Others
+		var a = document.createElement('a'),
+			url = URL.createObjectURL(file);
+		a.href = url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		setTimeout(function() {
+			document.body.removeChild(a);
+			window.URL.revokeObjectURL(url);
+		}, 0);
+	}
+}
+
 function createWall() {
 	gameInstance.SendMessage('WallCreator', 'CreateWall');
 }
 
 function editWall() {
-	let selectedWall = getCurrentSelectedWall();
-	let jsonString = JSON.stringify(selectedWall);
+	if (wall == null) return;
+	let jsonString = JSON.stringify(wall);
 	gameInstance.SendMessage('WallCreator', 'EditWall', jsonString);
 }
 
 function removeWall() {
-	let selectedWall = getCurrentSelectedWall();
-	let jsonString = JSON.stringify(selectedWall);
+	if (wall == null) return;
+	let jsonString = JSON.stringify(wall);
 	gameInstance.SendMessage('WallCreator', 'RemoveWall', jsonString);
+	let length = document.getElementById('input_edit_length');
+	let height = document.getElementById('input_edit_height');
+	let width = document.getElementById('input_edit_width');
+	length.value = '';
+	height.value = '';
+	width.value = '';
+	wall = null;
 }
 
 function copyWall() {
-	let selectedWall = getCurrentSelectedWall();
-	let jsonString = JSON.stringify(selectedWall);
+	if (wall == null) return;
+	let jsonString = JSON.stringify(wall);
 	gameInstance.SendMessage('WallCreator', 'CopyWall', jsonString);
 }
 
 function getCSharpModelsList(cSharpList) {
 	jsonWallsList = JSON.parse(cSharpList);
-	let wallsList = document.getElementById('wallsSelect'),
-		option,
-		length = jsonWallsList.Items.length;
-	for (let item in wallsList.options) {
-		wallsList.options.remove(0);
-	}
-	for (let i = 0; i < length; i++) {
-		option = document.createElement('option');
-		option.setAttribute('value', jsonWallsList.Items[i]['modelName']);
-		option.appendChild(document.createTextNode(jsonWallsList.Items[i]['modelName']));
-		wallsList.appendChild(option);
-	}
-	return jsonWallsList;
+	console.log(jsonWallsList);
 }
 
 function mouseSelectAction(wallObject) {
-	wallObject = JSON.parse(wallObject);
 	console.log(wallObject);
-}
+	var event = new MouseEvent('click');
+	wallObject = JSON.parse(wallObject);
+	var butCreate = document.getElementById('butCreateWall');
+	if (butCreate.getAttribute('class') == 'clickableCollapse active') butCreate.dispatchEvent(event);
+	var butSelect = document.getElementById('butSelectWall');
+	var butFixations = document.getElementById('FixationsDisplayer');
+	butCreate.setAttribute('style', 'display: none;');
+	butSelect.setAttribute('style', 'display: inline-block;');
+	butFixations.setAttribute('style', 'display: inline-block;');
+	let length = document.getElementById('input_edit_length');
+	let height = document.getElementById('input_edit_height');
+	let width = document.getElementById('input_edit_width');
+	let posX = document.getElementById('input_edit_posX');
+	let posY = document.getElementById('input_edit_posY');
+	let posZ = document.getElementById('input_edit_posZ');
+	length.value = wallObject.modelSize.x;
+	height.value = wallObject.modelSize.y;
+	width.value = wallObject.modelSize.z;
+	posX.value = wallObject.modelPosition.x;
+	posY.value = wallObject.modelPosition.y;
+	posZ.value = wallObject.modelPosition.z;
+	//TODO: Implementation de toutes les fixations en arbre
+	var array_fixName = wallObject.modelFixationsName;
+	var array_fixPosition = wallObject.modelFixationsPosition;
+	var currentDiv = document.getElementById('fixControl');
+	for (var i = 0; i < array_fixName.length; i++) {
+		var newName = document.createElement('LABEL');
+		newName.setAttribute('class', 'label');
+		newName.innerHTML = array_fixName[i];
+		var newDiV = document.createElement('div');
+		newDiV.setAttribute('class', 'control-label');
+		newDiV.appendChild(newName);
+		currentDiv.appendChild(newDiV);
 
-function getCurrentSelectedWall() {
-	let ob = {};
-	let select = document.getElementById('wallsSelect');
-	let selectValue = select[select.selectedIndex].value;
-	for (let items in jsonWallsList) {
-		jsonWallsList[items].forEach((element) => {
-			if (element.modelName == selectValue) {
-				ob = element;
-			}
-		});
+		var newRendement = document.createElement('LABEL');
+		newRendement.innerText = 'Rendement 80%';
+		var newDiVRend = document.createElement('div');
+		newDiVRend.setAttribute('class', 'control-label');
+		newDiVRend.appendChild(newRendement);
+		currentDiv.appendChild(newDiVRend);
+
+		var newLabX = document.createElement('LABEL');
+		newLabX.innerHTML = 'X:';
+		var newDivPosX = document.createElement('div');
+		newDivPosX.setAttribute('class', 'control-label');
+		newDivPosX.appendChild(newLabX);
+		currentDiv.appendChild(newDivPosX);
+
+		var newInpX = document.createElement('INPUT');
+		newInpX.setAttribute('type', 'text');
+		newInpX.setAttribute('name', 'fixX' + i);
+		newInpX.setAttribute('id', 'input_edit_fixX' + i);
+		newInpX.setAttribute('class', 'input is-small');
+		newInpX.value = array_fixPosition[i].x;
+		var newDivInpPosX = document.createElement('div');
+		newDivInpPosX.setAttribute('class', 'control');
+		newDivInpPosX.appendChild(newInpX);
+		currentDiv.appendChild(newDivInpPosX);
+
+		var newLabY = document.createElement('LABEL');
+		newLabY.innerHTML = 'Y:';
+		var newDivPosY = document.createElement('div');
+		newDivPosY.setAttribute('class', 'control-label');
+		newDivPosY.appendChild(newLabY);
+		currentDiv.appendChild(newDivPosY);
+
+		var newInpY = document.createElement('INPUT');
+		newInpY.setAttribute('type', 'text');
+		newInpY.setAttribute('name', 'fixY' + i);
+		newInpY.setAttribute('id', 'input_edit_fixY' + i);
+		newInpY.setAttribute('class', 'input is-small');
+		newInpY.value = array_fixPosition[i].y;
+		var newDivInpPosY = document.createElement('div');
+		newDivInpPosY.setAttribute('class', 'control');
+		newDivInpPosY.appendChild(newInpY);
+		currentDiv.appendChild(newDivInpPosY);
+
+		var newLabZ = document.createElement('LABEL');
+		newLabZ.innerHTML = 'Z:';
+		var newDivPosZ = document.createElement('div');
+		newDivPosZ.setAttribute('class', 'control-label');
+		newDivPosZ.appendChild(newLabZ);
+		currentDiv.appendChild(newDivPosZ);
+
+		var newInpZ = document.createElement('INPUT');
+		newInpZ.setAttribute('type', 'text');
+		newInpZ.setAttribute('name', 'fixZ' + i);
+		newInpZ.setAttribute('id', 'input_edit_fixZ' + i);
+		newInpZ.setAttribute('class', 'input is-small');
+		newInpZ.value = array_fixPosition[i].z;
+		var newDivInpPosZ = document.createElement('div');
+		newDivInpPosZ.setAttribute('class', 'control');
+		newDivInpPosZ.appendChild(newInpZ);
+		currentDiv.appendChild(newDivInpPosZ);
 	}
-	return ob;
+	wall = wallObject;
 }
 
-function createFix() {
-	var selectedWall = getCurrentSelectedWall();
-	var jsonString = JSON.stringify(selectedWall);
-	gameInstance.SendMessage('WallCreator', 'PlaceFixation', jsonString);
+function sub() {
+	var value = 'false';
+	if (document.getElementById('substract').checked) {
+		value = 'true';
+		gameInstance.SendMessage('WallCreator', 'Substract', value);
+	} else {
+		gameInstance.SendMessage('WallCreator', 'Substract', value);
+	}
+}
+
+function showLineRenderer() {
+	var value = 'true';
+	if (document.getElementById('lineRenderer').checked) {
+		gameInstance.SendMessage('MouseManager', 'EnableLineRenderer', value);
+	} else {
+		value = 'false';
+		gameInstance.SendMessage('MouseManager', 'EnableLineRenderer', value);
+	}
 }
 
 //Function to handlekey press, to use with an eventHandler
@@ -196,34 +328,41 @@ function handleWheel() {
 	gameInstance.SendMessage('MainCamera', 'ZoomCamera', delta);
 }
 
+function clearSelection() {
+	var event = new MouseEvent('click');
+	var butCreate = document.getElementById('butCreateWall');
+	var butSelect = document.getElementById('butSelectWall');
+	if (butSelect.getAttribute('class') == 'clickableCollapse active') butSelect.dispatchEvent(event);
+	var butFixations = document.getElementById('FixationsDisplayer');
+	if (butFixations.getAttribute('class') == 'clickableCollapse active') butFixations.dispatchEvent(event);
+	butCreate.setAttribute('style', 'display: inline-block;');
+	butSelect.setAttribute('style', 'display: none;');
+	butFixations.setAttribute('style', 'display: none;');
+}
+
 document.addEventListener('click', function(event) {
 	if (event.target.id == '#canvas') {
-		//console.log("Clicked on our div with WebGL content, starting eventHandler to capture keypresses and mousewheel");
 		document.addEventListener('keydown', handleKeyDown);
 		document.addEventListener('keyup', handleKeyUp);
 		document.addEventListener('wheel', handleWheel);
 	} else {
-		//console.log("Clicked on another div, removing event and restoring normal keys function");
 		document.removeEventListener('keydown', handleKeyDown);
 		document.removeEventListener('keyup', handleKeyUp);
 		document.removeEventListener('wheel', handleWheel);
 	}
 });
 
-document.getElementById('wallsSelect').onchange = function(event) {
-	let length = document.getElementById('input_edit_length');
-	let height = document.getElementById('input_edit_height');
-	let width = document.getElementById('input_edit_width');
-	let select = document.getElementById('wallsSelect');
-	let selectValue = select[select.selectedIndex].value;
-	for (let item in jsonWallsList) {
-		jsonWallsList[item].forEach((element) => {
-			if (element.modelName == selectValue) {
-				let ob = element;
-				length.value = ob.modelSize.x.toFixed(3);
-				height.value = ob.modelSize.y.toFixed(3);
-				width.value = ob.modelSize.z.toFixed(3);
-			}
-		});
+(function() {
+	function onChange(event) {
+		var reader = new FileReader();
+		reader.onload = onReaderLoad;
+		reader.readAsText(event.target.files[0]);
 	}
-};
+
+	function onReaderLoad(event) {
+		var json = event.target.result;
+		gameInstance.SendMessage('WallCreator', 'LoadProject', json);
+	}
+
+	document.getElementById('pathLoader').addEventListener('change', onChange);
+})();

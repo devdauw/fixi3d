@@ -15,4 +15,17 @@ mergeInto (LibraryManager.library, {
 		return getFloatValueFromInput(input_name);
 	},
 
+	Download : function(json){
+		json = Pointer_stringify(json);
+		DownloadJson(json);
+	},
+
+	SendClear : function(){
+		clearSelection();
+	},
+
+	SendProjectInfo : function(project){
+		project = Pointer_stringify(project);
+		SendProject(project);
+	}
 });

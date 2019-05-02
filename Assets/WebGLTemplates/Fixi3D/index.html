@@ -13,7 +13,7 @@
     window.UNITY_CONSTANTS = {
       UNITY_WEBNAME: "Fixi3D",
       UNITY_WEBGL_LOADER_URL: "Build/UnityLoader.js",
-      UNITY_WEBGL_BUILD_URL: "%UNITY_WEBGL_BUILD_URL%",
+      UNITY_WEBGL_BUILD_URL: "Build/_build.json",
       UNITY_WIDTH: "960",
       UNITY_HEIGHT: "600"
     }
@@ -26,7 +26,45 @@
 
 <div id="sideBar" class="sidebar">
 
-  <button class="clickableCollapse">Create Wall</button>
+  <button class="clickableCollapse" id="butProjet" style="display: inline-block;">Projet</button>
+  <div id="projectSideBar" class="sidebarContent">
+    <div class="control is-horizontal">
+        <div class="control-label">
+          <label for="input_name" class="label">Nom: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectLength" id="input_name" class="input is-small" value="" />
+        </div>
+        <div class="control-label">
+          <label for="input_num" class="label">Numéro de projet: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectLength" id="input_num" class="input is-small" value="" />
+        </div>
+        <div class="control-label">
+          <label for="input_customer" class="label">Client: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectLength" id="input_customer" class="input is-small" value="" />
+        </div>
+        <div class="control-label">
+          <label for="input_user" class="label">Utilisateur: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectLength" id="input_user" class="input is-small" value="" />
+        </div>
+        <div>
+            <label for="butSaveProject">Sauvegarder Projet</label>
+            <button id="butSaveProject" onclick="saveProject()">Save</button>
+        </div>
+        <div>
+            <label for="pathLoader">Charger Projet</label>
+            <input type="file" id="pathLoader" accept="application/json"/>
+        </div>
+    </div>
+  </div>
+
+  <button class="clickableCollapse" id="butCreateWall" style="display: inline-block;">Create Wall</button>
   <div id="createSideBar" class="sidebarContent">
     <div class="control is-horizontal">
       <div class="control-label">
@@ -47,11 +85,21 @@
       <div class="control">
         <input type="text" name="objectWidth" id="input_width" class="input is-small" value="40" /> <br>
       </div>
+      <button id="createWall" onclick="createWall()">Create Wall</button>
     </div>
-    <button id="createWall" onclick="createWall()">Create Wall</button>
   </div>
 
-  <button class="clickableCollapse">Selected Wall</button>
+  <button id="ActionController" class="clickableCollapse" style="display: inline-block;">Actions</button> 
+  <div id="actionSideBar" class="sidebarContent">
+      <div id="actionControl" class="control is-horizontal">
+          <div>
+              <label for="substract">Soustraire</label>
+              <input type="checkbox" id="substract" onclick="sub()">
+          </div>
+      </div>
+  </div>
+
+  <button class="clickableCollapse" id="butSelectWall" style="display: none;">Selected Wall</button>
   <div id="selectSideBar" class="sidebarContent">
     <div class="control is-horizontal">
       <div class="control-label">
@@ -73,17 +121,47 @@
         <input type="text" name="objectWidth" id="input_edit_width" class="input is-small"/> <br>
       </div>
       <div class="control-label">
-        <label for="wallsSelect" class="label">Liste de murs: </label>
+        <label for="input_edit_posX" class="label">Position X: </label>
       </div>
-      <div class="select">
-        <select id="wallsSelect" class="select">
-          <option style="display: none">Choisir un mur</option>
-        </select>
+      <div class="control">
+        <input type="text" name="objectPosX" id="input_edit_posX" class="input is-small"/> <br>
       </div>
+      <div class="control-label">
+        <label for="input_edit_posY" class="label">Position Y: </label>
+      </div>
+      <div class="control">
+        <input type="text" name="objectPosY" id="input_edit_posY" class="input is-small"/> <br>
+      </div>
+      <div class="control-label">
+        <label for="input_edit_posZ" class="label">Position Z: </label>
+      </div>
+      <div class="control">
+        <input type="text" name="objectPosZ" id="input_edit_posZ" class="input is-small"/> <br>
+      </div>
+      <div class="control-label">
+          <label for="input_edit_distance" class="label">Décalage prochain mur :</label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectDistance" id="input_edit_distance" class="input is-small" value="0.02"/> <br>
+        </div>
     </div>
     <button id="editWall" onclick="editWall()">Edit Wall</button>
     <button id="removeWall" onclick="removeWall()">Remove Wall</button>
     <button id="CopyPaste" onclick="copyWall()">Copy Paste</button>
+    <div>
+        <label for="substract">Afficher les quotes</label>
+        <input type="checkbox" id="lineRenderer" checked onclick="showLineRenderer()">
+    </div>
+  </div>
+
+  <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Fixations</button> 
+  <div id="fixationsSideBar" class="sidebarContent">
+      <div id="fixControl" class="control is-horizontal"></div>
+  </div>
+
+  <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Controle</button> 
+  <div id="fixationsSideBar" class="sidebarContent">
+      <div id="fixControl" class="control is-horizontal"></div>
   </div>
 </div>
 
