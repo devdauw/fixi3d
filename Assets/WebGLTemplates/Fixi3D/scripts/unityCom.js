@@ -129,6 +129,9 @@ function mouseSelectAction(wallObject) {
 	var butAction = document.getElementById('ActionController');
 	var butSelect = document.getElementById('butSelectWall');
 	var butFixations = document.getElementById('FixationsDisplayer');
+	var editionMode = document.getElementById('substract');
+	editionMode.checked = true;
+	gameInstance.SendMessage('WallCreator', 'Substract', 'true');
 	butProject.setAttribute('style', 'display: none;');
 	butCreate.setAttribute('style', 'display: none;');
 	butAction.setAttribute('style', 'display: inline-block;');
@@ -224,22 +227,16 @@ function mouseSelectAction(wallObject) {
 }
 
 function sub() {
-	var value = 'false';
+	var sub = 'true';
+	var renfort = 'false';
 	if (document.getElementById('substract').checked) {
-		value = 'true';
-		gameInstance.SendMessage('WallCreator', 'Substract', value);
+		gameInstance.SendMessage('WallCreator', 'AddRenfort', renfort);
+		gameInstance.SendMessage('WallCreator', 'Substract', sub);
 	} else {
-		gameInstance.SendMessage('WallCreator', 'Substract', value);
-	}
-}
-
-function addRenfort() {
-	var value = 'false';
-	if (document.getElementById('addRenfort').checked) {
-		value = 'true';
-		gameInstance.SendMessage('WallCreator', 'AddRenfort', value);
-	} else {
-		gameInstance.SendMessage('WallCreator', 'AddRenfort', value);
+		sub = 'false';
+		renfort = 'true';
+		gameInstance.SendMessage('WallCreator', 'AddRenfort', renfort);
+		gameInstance.SendMessage('WallCreator', 'Substract', sub);
 	}
 }
 
@@ -358,6 +355,8 @@ function clearSelection() {
 	butAction.setAttribute('style', 'display: none;');
 	butSelect.setAttribute('style', 'display: none;');
 	butFixations.setAttribute('style', 'display: none;');
+	gameInstance.SendMessage('WallCreator', 'Substract', 'false');
+	gameInstance.SendMessage('WallCreator', 'AddRenfort', 'false');
 }
 
 document.addEventListener('click', function(event) {

@@ -95,12 +95,12 @@
     <div id="actionSideBar" class="sidebarContent">
       <div id="actionControl" class="control is-horizontal">
         <div>
-          <label for="substract">Soustraire</label>
-          <input type="checkbox" id="substract" onclick="sub()">
-        </div>
-        <div>
-          <label for="addRenfort">Renfort</label>
-          <input type="checkbox" id="addRenfort" onclick="addRenfort()">
+            <form action="">
+                <input type="radio" name="edition" id="substract" onchange="sub()"> 
+                <label for="substract">Soustraire</label> <br/>
+                <input type="radio" name="edition" id="addRenfort" onchange="sub()"> 
+                <label for="addRenfort">Renfort</label>
+            </form>
         </div>
       </div>
     </div>
