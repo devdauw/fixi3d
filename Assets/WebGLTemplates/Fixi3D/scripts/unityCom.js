@@ -233,6 +233,16 @@ function sub() {
 	}
 }
 
+function addRenfort() {
+	var value = 'false';
+	if (document.getElementById('addRenfort').checked) {
+		value = 'true';
+		gameInstance.SendMessage('WallCreator', 'AddRenfort', value);
+	} else {
+		gameInstance.SendMessage('WallCreator', 'AddRenfort', value);
+	}
+}
+
 function showLineRenderer() {
 	var value = 'true';
 	if (document.getElementById('lineRenderer').checked) {
