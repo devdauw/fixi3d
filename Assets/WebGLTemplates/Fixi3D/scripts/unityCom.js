@@ -355,6 +355,7 @@ function clearSelection() {
 	butAction.setAttribute('style', 'display: none;');
 	butSelect.setAttribute('style', 'display: none;');
 	butFixations.setAttribute('style', 'display: none;');
+	document.getElementById('fixControl').innerHTML = '';
 	gameInstance.SendMessage('WallCreator', 'Substract', 'false');
 	gameInstance.SendMessage('WallCreator', 'AddRenfort', 'false');
 }
