@@ -122,11 +122,16 @@ function mouseSelectAction(wallObject) {
 	console.log(wallObject);
 	var event = new MouseEvent('click');
 	wallObject = JSON.parse(wallObject);
+	var butProject = document.getElementById('butProjet');
+	if (butProject.getAttribute('class') == 'clickableCollapse active') butProject.dispatchEvent(event);
 	var butCreate = document.getElementById('butCreateWall');
 	if (butCreate.getAttribute('class') == 'clickableCollapse active') butCreate.dispatchEvent(event);
+	var butAction = document.getElementById('ActionController');
 	var butSelect = document.getElementById('butSelectWall');
 	var butFixations = document.getElementById('FixationsDisplayer');
+	butProject.setAttribute('style', 'display: none;');
 	butCreate.setAttribute('style', 'display: none;');
+	butAction.setAttribute('style', 'display: inline-block;');
 	butSelect.setAttribute('style', 'display: inline-block;');
 	butFixations.setAttribute('style', 'display: inline-block;');
 	let length = document.getElementById('input_edit_length');
@@ -225,16 +230,6 @@ function sub() {
 		gameInstance.SendMessage('WallCreator', 'Substract', value);
 	} else {
 		gameInstance.SendMessage('WallCreator', 'Substract', value);
-	}
-}
-
-function addRenfort() {
-	var value = 'false';
-	if (document.getElementById('addRenfort').checked) {
-		value = 'true';
-		gameInstance.SendMessage('WallCreator', 'AddRenfort', value);
-	} else {
-		gameInstance.SendMessage('WallCreator', 'AddRenfort', value);
 	}
 }
 
@@ -340,12 +335,17 @@ function handleWheel() {
 
 function clearSelection() {
 	var event = new MouseEvent('click');
+	var butProject = document.getElementById('butProjet');
 	var butCreate = document.getElementById('butCreateWall');
+	var butAction = document.getElementById('ActionController');
+	if (butAction.getAttribute('class') == 'clickableCollapse active') butAction.dispatchEvent(event);
 	var butSelect = document.getElementById('butSelectWall');
 	if (butSelect.getAttribute('class') == 'clickableCollapse active') butSelect.dispatchEvent(event);
 	var butFixations = document.getElementById('FixationsDisplayer');
 	if (butFixations.getAttribute('class') == 'clickableCollapse active') butFixations.dispatchEvent(event);
+	butProject.setAttribute('style', 'display: inline-block;');
 	butCreate.setAttribute('style', 'display: inline-block;');
+	butAction.setAttribute('style', 'display: none;');
 	butSelect.setAttribute('style', 'display: none;');
 	butFixations.setAttribute('style', 'display: none;');
 }

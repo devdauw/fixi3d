@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en-us">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -19,16 +20,17 @@
     }
   </script>
 </head>
+
 <body>
-<div class="webgl-content" id="webgl">
-  <div id="gameContainer"></div>
-</div>
+  <div class="webgl-content" id="webgl">
+    <div id="gameContainer"></div>
+  </div>
 
-<div id="sideBar" class="sidebar">
+  <div id="sideBar" class="sidebar">
 
-  <button class="clickableCollapse" id="butProjet" style="display: inline-block;">Projet</button>
-  <div id="projectSideBar" class="sidebarContent">
-    <div class="control is-horizontal">
+    <button class="clickableCollapse" id="butProjet" style="display: inline-block;">Projet</button>
+    <div id="projectSideBar" class="sidebarContent">
+      <div class="control is-horizontal">
         <div class="control-label">
           <label for="input_name" class="label">Nom: </label>
         </div>
@@ -54,121 +56,118 @@
           <input type="text" name="objectLength" id="input_user" class="input is-small" value="" />
         </div>
         <div>
-            <label for="butSaveProject">Sauvegarder Projet</label>
-            <button id="butSaveProject" onclick="saveProject()">Save</button>
+          <label for="butSaveProject">Sauvegarder Projet</label>
+          <button id="butSaveProject" onclick="saveProject()">Save</button>
         </div>
         <div>
-            <label for="pathLoader">Charger Projet</label>
-            <input type="file" id="pathLoader" accept="application/json"/>
+          <label for="pathLoader">Charger Projet</label>
+          <input type="file" id="pathLoader" accept="application/json" />
         </div>
+      </div>
     </div>
-  </div>
 
-  <button class="clickableCollapse" id="butCreateWall" style="display: inline-block;">Create Wall</button>
-  <div id="createSideBar" class="sidebarContent">
-    <div class="control is-horizontal">
-      <div class="control-label">
-        <label for="input_length" class="label">Longueur: </label>
+    <button class="clickableCollapse" id="butCreateWall" style="display: inline-block;">Create Wall</button>
+    <div id="createSideBar" class="sidebarContent">
+      <div class="control is-horizontal">
+        <div class="control-label">
+          <label for="input_length" class="label">Longueur: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectLength" id="input_length" class="input is-small" value="500" />
+        </div>
+        <div class="control-label">
+          <label for="input_height" class="label">Hauteur: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectHeight" id="input_height" class="input is-small" value="400" />
+        </div>
+        <div class="control-label">
+          <label for="input_width" class="label">Profondeur: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectWidth" id="input_width" class="input is-small" value="40" /> <br>
+        </div>
+        <button id="createWall" onclick="createWall()">Create Wall</button>
       </div>
-      <div class="control">
-        <input type="text" name="objectLength" id="input_length" class="input is-small" value="500" />
-      </div>
-      <div class="control-label">
-        <label for="input_height" class="label">Hauteur: </label>
-      </div>
-      <div class="control">
-        <input type="text" name="objectHeight" id="input_height" class="input is-small" value="400" />
-      </div>
-      <div class="control-label">
-        <label for="input_width" class="label">Profondeur: </label>
-      </div>
-      <div class="control">
-        <input type="text" name="objectWidth" id="input_width" class="input is-small" value="40" /> <br>
-      </div>
-      <button id="createWall" onclick="createWall()">Create Wall</button>
     </div>
-  </div>
 
-  <button id="ActionController" class="clickableCollapse" style="display: inline-block;">Actions</button> 
-  <div id="actionSideBar" class="sidebarContent">
+    <button id="ActionController" class="clickableCollapse" style="display: none;">Actions</button>
+    <div id="actionSideBar" class="sidebarContent">
       <div id="actionControl" class="control is-horizontal">
-          <div>
-              <label for="substract">Soustraire</label>
-              <input type="checkbox" id="substract" onclick="sub()">
-          </div>
-          <div>
-              <label for="addRenfort">Renfort</label>
-              <input type="checkbox" id="addRenfort" onclick="addRenfort()">
-          </div>
+        <div>
+          <label for="substract">Soustraire</label>
+          <input type="checkbox" id="substract" onclick="sub()">
+        </div>
       </div>
-  </div>
+    </div>
 
-  <button class="clickableCollapse" id="butSelectWall" style="display: none;">Selected Wall</button>
-  <div id="selectSideBar" class="sidebarContent">
-    <div class="control is-horizontal">
-      <div class="control-label">
-        <label for="input_edit_length" class="label">Longueur: </label>
-      </div>
-      <div class="control">
-        <input type="text" name="objectLength" id="input_edit_length" class="input is-small"/>
-      </div>
-      <div class="control-label">
-        <label for="input_edit_height" class="label">Hauteur: </label>
-      </div>
-      <div class="control">
-        <input type="text" name="objectHeight" id="input_edit_height" class="input is-small"/>
-      </div>
-      <div class="control-label">
-        <label for="input_edit_width" class="label">Profondeur: </label>
-      </div>
-      <div class="control">
-        <input type="text" name="objectWidth" id="input_edit_width" class="input is-small"/> <br>
-      </div>
-      <div class="control-label">
-        <label for="input_edit_posX" class="label">Position X: </label>
-      </div>
-      <div class="control">
-        <input type="text" name="objectPosX" id="input_edit_posX" class="input is-small"/> <br>
-      </div>
-      <div class="control-label">
-        <label for="input_edit_posY" class="label">Position Y: </label>
-      </div>
-      <div class="control">
-        <input type="text" name="objectPosY" id="input_edit_posY" class="input is-small"/> <br>
-      </div>
-      <div class="control-label">
-        <label for="input_edit_posZ" class="label">Position Z: </label>
-      </div>
-      <div class="control">
-        <input type="text" name="objectPosZ" id="input_edit_posZ" class="input is-small"/> <br>
-      </div>
-      <div class="control-label">
+    <button class="clickableCollapse" id="butSelectWall" style="display: none;">Selected Wall</button>
+    <div id="selectSideBar" class="sidebarContent">
+      <div class="control is-horizontal">
+        <div class="control-label">
+          <label for="input_edit_length" class="label">Longueur: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectLength" id="input_edit_length" class="input is-small" />
+        </div>
+        <div class="control-label">
+          <label for="input_edit_height" class="label">Hauteur: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectHeight" id="input_edit_height" class="input is-small" />
+        </div>
+        <div class="control-label">
+          <label for="input_edit_width" class="label">Profondeur: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectWidth" id="input_edit_width" class="input is-small" /> <br>
+        </div>
+        <div class="control-label">
+          <label for="input_edit_posX" class="label">Position X: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectPosX" id="input_edit_posX" class="input is-small" /> <br>
+        </div>
+        <div class="control-label">
+          <label for="input_edit_posY" class="label">Position Y: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectPosY" id="input_edit_posY" class="input is-small" /> <br>
+        </div>
+        <div class="control-label">
+          <label for="input_edit_posZ" class="label">Position Z: </label>
+        </div>
+        <div class="control">
+          <input type="text" name="objectPosZ" id="input_edit_posZ" class="input is-small" /> <br>
+        </div>
+        <div class="control-label">
           <label for="input_edit_distance" class="label">Décalage prochain mur :</label>
         </div>
         <div class="control">
-          <input type="text" name="objectDistance" id="input_edit_distance" class="input is-small" value="0.02"/> <br>
+          <input type="text" name="objectDistance" id="input_edit_distance" class="input is-small" value="0.02" /> <br>
         </div>
-    </div>
-    <button id="editWall" onclick="editWall()">Edit Wall</button>
-    <button id="removeWall" onclick="removeWall()">Remove Wall</button>
-    <button id="CopyPaste" onclick="copyWall()">Copy Paste</button>
-    <div>
+      </div>
+      <button id="editWall" onclick="editWall()">Edit Wall</button>
+      <button id="removeWall" onclick="removeWall()">Remove Wall</button>
+      <button id="CopyPaste" onclick="copyWall()">Copy Paste</button>
+      <div>
         <label for="substract">Afficher les quotes</label>
         <input type="checkbox" id="lineRenderer" checked onclick="showLineRenderer()">
+      </div>
+    </div>
+
+    <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Fixations</button>
+    <div id="fixationsSideBar" class="sidebarContent">
+      <div id="fixControl" class="control is-horizontal"></div>
+    </div>
+
+    <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Controle</button>
+    <div id="fixationsSideBar" class="sidebarContent">
+      <div id="fixControl" class="control is-horizontal"></div>
     </div>
   </div>
 
-  <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Fixations</button> 
-  <div id="fixationsSideBar" class="sidebarContent">
-      <div id="fixControl" class="control is-horizontal"></div>
-  </div>
-
-  <button id="FixationsDisplayer" class="clickableCollapse" style="display: none;">Controle</button> 
-  <div id="fixationsSideBar" class="sidebarContent">
-      <div id="fixControl" class="control is-horizontal"></div>
-  </div>
-</div>
-
-<script src="scripts/unityCom.js"></script>
+  <script src="scripts/unityCom.js"></script>
 </body>
+
 </html>
