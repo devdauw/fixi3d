@@ -223,6 +223,19 @@ public class WallCreator : Singleton<WallCreator>
         #endif
     }
 
+    public void PlaceFixation(string wallName)
+    {
+        var wall = modelSList.Where(x => x.Name == wallName);
+        if (wall.First().Model.transform.childCount == 0)
+            wall.First().InitFixations();
+        else
+            wall.First().EditFixations();
+
+        #if !UNITY_EDITOR && UNITY_WEBGL
+            SendWallsList();
+        #endif
+    }
+
     public void Substract(string value)
     {
         substract = Boolean.Parse(value);
@@ -286,6 +299,8 @@ public class WallCreator : Singleton<WallCreator>
         walls.First().Size = newSize;    
         walls.First().Model.GetComponent<WallSelector>().unSelect();
         walls.First().Model.GetComponent<WallSelector>().Select();
+        if (walls.First().Model.transform.childCount != 0)
+            PlaceFixation(walls.First().Name);
         #if !UNITY_EDITOR && UNITY_WEBGL
             SendWallsList();
         #endif

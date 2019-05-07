@@ -250,6 +250,11 @@ function showLineRenderer() {
 	}
 }
 
+function CalcFix() {
+	var name = wall.modelName;
+	gameInstance.SendMessage('WallCreator', 'PlaceFixation', name);
+}
+
 //Function to handlekey press, to use with an eventHandler
 function handleKeyDown(event) {
 	event.preventDefault();

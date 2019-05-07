@@ -72,49 +72,6 @@ public class Model3D
         outline.enabled = false;
 
         Model.transform.position = Position;
-
-        var fixPosX = Model.gameObject.transform.position.x;
-        var fixPosY = Model.gameObject.transform.position.y;
-        var fixPosZ = Model.gameObject.transform.position.z;
-
-        var suspXLenght = 0.60299994f;
-        var suspYLenght = 0.88800513f;
-        var distXLenght = 0.08148051f;
-        var distYLenght = 0.28499997f;
-
-        //Susp Left
-        var suspLeftX = fixPosX + (sizeX * 0.2f) + suspXLenght;
-        var suspLeftY = fixPosY + sizeY - 0.25f - suspYLenght;
-        InstantiateFixation("Susp", "Left Suspente", suspLeftX, suspLeftY, fixPosZ);
-
-        //Dist Top Left
-        var distTopLeftX = suspLeftX - 0.15f - suspXLenght;
-        var distTopLeftY = fixPosY + sizeY - 0.2f - (distXLenght / 2);
-        InstantiateFixation("DistM20", "TopLeft Distanceur", distTopLeftX, distTopLeftY, fixPosZ);
-
-        //Susp Right
-        var suspRightX = fixPosX + (sizeX * 0.8f);
-        var suspRightY = fixPosY + sizeY - 0.25f - suspYLenght;
-        InstantiateFixation("Susp", "Right Suspente", suspRightX, suspRightY, fixPosZ);
-
-        //Dist Top Right
-        var distTopRightX = suspRightX + 0.15f;
-        var distTopRightY = fixPosY + sizeY - 0.2f - (distXLenght / 2);
-        InstantiateFixation("DistM20", "TopRight Distanceur", distTopRightX, distTopRightY, fixPosZ);
-
-        //Dist Bottom Left
-        var distBottomLeftX = fixPosX + (sizeX * 0.2f) - 0.2f;
-        if (distBottomLeftX - fixPosX < 15)
-            distBottomLeftX = fixPosX + 0.15f;
-        var distBottomLeftY = fixPosY + 0.15f;
-        InstantiateFixation("DistM20", "BottomLeft Distanceur", distBottomLeftX, distBottomLeftY, fixPosZ);
-
-        //Dist Bottom Right
-        var distBottomRightX = fixPosX + (sizeX * 0.8f) + 0.2f;
-        if ((fixPosX + sizeX) - distBottomRightX < 15)
-            distBottomRightX = fixPosX + sizeX - 0.15f - distXLenght;
-        var distBottomRightY = fixPosY + 0.15f;
-        InstantiateFixation("DistM20", "BottomRight Distanceur", distBottomRightX, distBottomRightY, 0f);
     }
 
     public void CreateModel(float posX, float posY, float posZ, float sizeX, float sizeY, float sizeZ, string name, string materialName, string[] fixName, Vector3[] fixPos)
@@ -151,11 +108,6 @@ public class Model3D
         Model.AddComponent<Outline>();
         Model.transform.position = Position;
 
-        var suspXLenght = 0.60299994f;
-        var suspYLenght = 0.88800513f;
-        var distXLenght = 0.08148051f;
-        var distYLenght = 0.28499997f;
-
         for (var i = 0; i < fixName.Length; i++)
         {
             var type = fixName[i].Split(' ');
@@ -172,6 +124,98 @@ public class Model3D
                     break;
             }
         }
+    }
+
+    public void InitFixations()
+    {
+        var fixPosX = Model.gameObject.transform.position.x;
+        var fixPosY = Model.gameObject.transform.position.y;
+        var fixPosZ = Model.gameObject.transform.position.z;
+
+        var suspXLenght = 0.60299994f;
+        var suspYLenght = 0.88800513f;
+        var distXLenght = 0.08148051f;
+        var distYLenght = 0.28499997f;
+
+        //Susp Left
+        var suspLeftX = fixPosX + (Size.x * 0.2f) + suspXLenght;
+        var suspLeftY = fixPosY + Size.y - 0.25f - suspYLenght;
+        InstantiateFixation("Susp", "Left Suspente", suspLeftX, suspLeftY, fixPosZ);
+
+        //Dist Top Left
+        var distTopLeftX = suspLeftX - 0.15f - suspXLenght;
+        var distTopLeftY = fixPosY + Size.y - 0.2f - (distXLenght / 2);
+        InstantiateFixation("DistM20", "TopLeft Distanceur", distTopLeftX, distTopLeftY, fixPosZ);
+
+        //Susp Right
+        var suspRightX = fixPosX + (Size.x * 0.8f);
+        var suspRightY = fixPosY + Size.y - 0.25f - suspYLenght;
+        InstantiateFixation("Susp", "Right Suspente", suspRightX, suspRightY, fixPosZ);
+
+        //Dist Top Right
+        var distTopRightX = suspRightX + 0.15f;
+        var distTopRightY = fixPosY + Size.y - 0.2f - (distXLenght / 2);
+        InstantiateFixation("DistM20", "TopRight Distanceur", distTopRightX, distTopRightY, fixPosZ);
+
+        //Dist Bottom Left
+        var distBottomLeftX = fixPosX + (Size.x * 0.2f) - 0.2f;
+        if (distBottomLeftX - fixPosX < 15)
+            distBottomLeftX = fixPosX + 0.15f;
+        var distBottomLeftY = fixPosY + 0.15f;
+        InstantiateFixation("DistM20", "BottomLeft Distanceur", distBottomLeftX, distBottomLeftY, fixPosZ);
+
+        //Dist Bottom Right
+        var distBottomRightX = fixPosX + (Size.x * 0.8f) + 0.2f;
+        if ((fixPosX + Size.x) - distBottomRightX < 15)
+            distBottomRightX = fixPosX + Size.x - 0.15f - distXLenght;
+        var distBottomRightY = fixPosY + 0.15f;
+        InstantiateFixation("DistM20", "BottomRight Distanceur", distBottomRightX, distBottomRightY, 0f);
+    }
+
+    public void EditFixations()
+    {
+        var fixPosX = Model.gameObject.transform.position.x;
+        var fixPosY = Model.gameObject.transform.position.y;
+        var fixPosZ = Model.gameObject.transform.position.z;
+
+        var suspXLenght = 0.60299994f;
+        var suspYLenght = 0.88800513f;
+        var distXLenght = 0.08148051f;
+        var distYLenght = 0.28499997f;
+
+        var suspLeftX = fixPosX + (Size.x * 0.2f) + suspXLenght;
+        var suspLeftY = fixPosY + Size.y - 0.25f - suspYLenght;
+        var pos1 = new Vector3(suspLeftX , suspLeftY , fixPosZ - 0.23f);
+        Model.transform.GetChild(0).position = pos1;
+
+        var distTopLeftX = suspLeftX - 0.15f - suspXLenght;
+        var distTopLeftY = fixPosY + Size.y - 0.2f - (distXLenght / 2);
+        var pos2 = new Vector3(distTopLeftX + 0.046f, distTopLeftY + 0.0014f - 0.03f, fixPosZ + 0.086f);
+        Model.transform.GetChild(1).position = pos2;
+
+        var suspRightX = fixPosX + (Size.x * 0.8f);
+        var suspRightY = fixPosY + Size.y - 0.25f - suspYLenght;
+        var pos3 = new Vector3(suspRightX, suspRightY, fixPosZ - 0.23f);
+        Model.transform.GetChild(2).position = pos3;
+
+        var distTopRightX = suspRightX + 0.15f;
+        var distTopRightY = fixPosY + Size.y - 0.2f - (distXLenght / 2);
+        var pos4 = new Vector3(distTopRightX + 0.046f, distTopRightY + 0.0014f - 0.03f, fixPosZ + 0.086f);
+        Model.transform.GetChild(3).position = pos4;
+
+        var distBottomLeftX = fixPosX + (Size.x * 0.2f) - 0.2f;
+        if (distBottomLeftX - fixPosX < 15)
+            distBottomLeftX = fixPosX + 0.15f;
+        var distBottomLeftY = fixPosY + 0.15f;
+        var pos5 = new Vector3(distBottomLeftX + 0.046f, distBottomLeftY + 0.0014f - 0.03f, fixPosZ + 0.086f);
+        Model.transform.GetChild(4).position = pos5;
+
+        var distBottomRightX = fixPosX + (Size.x * 0.8f) + 0.2f;
+        if ((fixPosX + Size.x) - distBottomRightX < 15)
+            distBottomRightX = fixPosX + Size.x - 0.15f - distXLenght;
+        var distBottomRightY = fixPosY + 0.15f;
+        var pos6 = new Vector3(distBottomRightX + 0.046f, distBottomRightY + 0.0014f - 0.03f, 0f + 0.086f);
+        Model.transform.GetChild(5).position = pos6;
     }
 
     private void InstantiateFixation(string fixType, string name, float x , float y, float z)
